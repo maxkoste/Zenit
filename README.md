@@ -4,7 +4,7 @@ Zenit är en Java IDE byggd med JavaFX.
 
 ## Systemkrav
 
-- **Java JDK 21 
+- Java JDK 21 
 - **Internetanslutning** (för att ladda ner beroenden vid första körningen)
 
 ---
