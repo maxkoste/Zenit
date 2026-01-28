@@ -33,7 +33,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import main.java.zenit.ConsoleRedirect;
-import main.java.zenit.console.helpers.ConsoleHelpers;
 import main.java.zenit.ui.MainController;
 
 /**
