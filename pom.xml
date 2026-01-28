@@ -99,7 +99,7 @@
 				<version>0.0.8</version>
 
 				<configuration>
-					<mainClass>main.java.zenit.ui.TestUI</mainClass>
+					<mainClass>zenit.ui.TestUI</mainClass>
 				</configuration>
 			</plugin>
 

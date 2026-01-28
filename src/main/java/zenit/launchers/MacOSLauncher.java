@@ -1,7 +1,7 @@
-package main.java.zenit.launchers;
+package zenit.launchers;
 
 import javafx.stage.Stage;
-import main.java.zenit.ui.MainController;
+import zenit.ui.MainController;
 
 public class MacOSLauncher {
 	

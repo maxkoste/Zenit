@@ -1,4 +1,4 @@
-package main.java.zenit.zencodearea;
+package zenit.zencodearea;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
