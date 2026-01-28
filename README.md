@@ -63,7 +63,7 @@ mvn --version
 
 3. Kör applikationen:
    ```bash
-   mvn exec:java
+   mvn javafx:run
    ```
 
 **OBS:** Vid första körningen laddas alla beroenden ner automatiskt. Detta kan ta några minuter.
