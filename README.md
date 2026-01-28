@@ -1,6 +1,6 @@
 # Zenit IDE
 
-Zenit är en lättviktig Java IDE byggd med JavaFX.
+Zenit är en Java IDE byggd med JavaFX.
 
 ## Systemkrav
 
