@@ -119,6 +119,3 @@ zenit/
 
 ---
 
-## GitHub
-
-https://github.com/strazan/zenit
