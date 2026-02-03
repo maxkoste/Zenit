@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4b54340f-f3f5-4a1d-a29f-886bd23503fe" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="4b54340f-f3f5-4a1d-a29f-886bd23503fe" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,6 +26,8 @@
     "Application.TestUI.executor": "Run",
     "Application.Unnamed.executor": "Run",
     "Application.Zenit.executor": "Run",
+    "Maven.zenit [clean].executor": "Run",
+    "Maven.zenit [compile].executor": "Run",
     "Maven.zenit [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "newPom",
@@ -41,7 +41,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.TestUI">
+  <component name="RunManager">
     <configuration name="TestUI" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="zenit.ui.TestUI" />
       <module name="zenit" />
@@ -94,7 +94,7 @@
       <updated>1769614629309</updated>
       <workItem from="1769614630378" duration="3391000" />
       <workItem from="1769678815316" duration="5049000" />
-      <workItem from="1770122967716" duration="351000" />
+      <workItem from="1770122967716" duration="941000" />
     </task>
     <servers />
   </component>
