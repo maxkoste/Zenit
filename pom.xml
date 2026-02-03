@@ -103,10 +103,10 @@
 					<options>
 						<option>--add-opens=javafx.graphics/javafx.scene.text=ALL-UNNAMED</option>
 						<option>--add-exports=javafx.graphics/com.sun.javafx.text=ALL-UNNAMED</option>
-						<option>--add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED</option>
-						<option>--add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED</option>
-						<option>--add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED</option>
-						<option>--add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED</option>
+						<option>--add-opens=javafx.graphics/com.sun.javafx.text=ALL-UNNAMED</option>
+						<option>--add-exports=javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED</option>
+						<option>--add-exports=javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED</option>
+						<option>--add-exports=javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED</option>
 						<option>-Dprism.allowhidpi=true</option>
 					</options>
 				</configuration>
