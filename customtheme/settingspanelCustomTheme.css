@@ -3,26 +3,26 @@
 }
 
 #spAnchorPane {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 	-fx-padding: 0.0;
 	-fx-background-insets: 0.0, 0.0;
   	-fx-border-width: 0.0;
-  	-fx-background-color: #1A1A1A;
+  	-fx-background-color: #B3661A;
 }
 
 #spAnchorPane .button {
-	-fx-background-color: #666666;
+	-fx-background-color: #B3B3B3;
 	-fx-text-fill: #F2F2F2;
 }
 
 #mainAnchorPane {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 		-fx-border-width: 0.0;
 }
 
 /* Text Appearance pane */
 #pnlTextAppearance {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 	-fx-text-fill: #F2F2F2;
 }
 
@@ -43,7 +43,7 @@
 }
 
 #chcbxNewFont .context-menu {	
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 
 #chcbxNewFont .menu-item:focused {
@@ -70,7 +70,7 @@
  
  /* Java Home pane */
 #pnlJavaHome {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 
 #pnlJavaHome .label {
@@ -80,7 +80,7 @@
 /* Theme pane */
 
 #pnlTheme {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 
 #pnlTheme #lblDarkModeTxt {
@@ -106,38 +106,38 @@
 
 /* Custom CSS pane */
 #pnlCustomCSS {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 #lblAddCustomCssLines {
 	-fx-text-fill: #F2F2F2;
 }
 #fldCustomCSSInput {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 	-fx-border-color: rgba(255,255,255,0.4);
 	-fx-text-fill: #009911;
 }
 
 #scrollPaneAddedCSS{
-	  -fx-background-color: #1A1A1A;
+	  -fx-background-color: #B3661A;
 	  -fx-border-color: transparent;
 }
 
 #listViewAddedCSS {
-	 -fx-background-color: #1A1A1A;
+	 -fx-background-color: #B3661A;
 	 -fx-border-color: transparent;
 }
 #listViewAddedCSS .list-cell { 
-	-fx-background-color: #1A1A1A; /* 5 */
+	-fx-background-color: #B3661A; /* 5 */
 	-fx-text-fill: #F2F2F2;
 	
 }
 
 #listViewAddedCSS .list-cell:even {
-	 -fx-background-color: #666666;
+	 -fx-background-color: #B3B3B3;
 }
 
 #scrollPaneAddedCSS .scroll-pane {
-    -fx-background-color: #1A1A1A;
+    -fx-background-color: #B3661A;
 }
 
 #scrollPaneAddedCSS .scroll-bar:vertical{
@@ -183,8 +183,8 @@
 }
 
 #btnAddCSSLine {
-	-fx-background-color: #666666;
-	-fx-text-fill: #1A1A1A;
+	-fx-background-color: #B3B3B3;
+	-fx-text-fill: #B3661A;
 }
 
 /*
@@ -193,7 +193,7 @@
  * 
  */
  #pnlCustomTheme {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 
  #pnlCustomTheme .color-picker {
@@ -213,7 +213,7 @@
  
 /* Support pane */
 #pnlSupport {
-	-fx-background-color: #1A1A1A;
+	-fx-background-color: #B3661A;
 }
 
 #pnlSupport .hyperlink {
@@ -224,7 +224,7 @@
 }
 
 #pnlSupport .hyperlink:hover {
-	-fx-text-fill: #1A1A1A;
+	-fx-text-fill: #B3661A;
 }
 
 .paneHeader {

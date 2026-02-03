@@ -171,7 +171,7 @@
 																		<FontIcon fx:id="iconRun" iconLiteral="fa-play-circle" iconColor="green" iconSize="24"/>
 																	</graphic>
 																</Button>
-																<Button id="btnStop" fx:id="btnStop" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0">																	onMouseEntered="#onMouseEvent" onMouseExited="#onMouseEvent" prefHeight="0.0" prefWidth="15.0">
+																<Button id="btnStop" fx:id="btnStop" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0"> onMouseEntered="#onMouseEvent" onMouseExited="#onMouseEvent" prefHeight="0.0" prefWidth="15.0">
 																	<padding>
 																		<Insets top="1.0" />
 																	</padding>
