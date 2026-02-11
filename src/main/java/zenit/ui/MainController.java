@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
@@ -52,9 +49,9 @@ import zenit.ui.tree.FileTreeItem;
 import zenit.ui.tree.TreeClickListener;
 import zenit.ui.tree.TreeContextMenu;
 import zenit.util.Tuple;
-import zenit.ui.FileTab;
 import zenit.ui.projectinfo.ProjectMetadataController;
 import zenit.zencodearea.ZenCodeArea;
+import zenit.ui.tree.FileTreeDragAndDrop;
 
 /**
  * The controller part of the main GUI.
@@ -324,7 +321,9 @@ public class MainController extends VBox implements ThemeCustomizable {
 		TreeClickListener tcl = new TreeClickListener(this, treeView);
 		treeView.setContextMenu(tcm);
 		treeView.setOnMouseClicked(tcl);
-		
+
+		FileTreeDragAndDrop.attach(treeView);
+
 		rootItem.getChildren().sort((o1,o2)->{
 			FileTreeItem<String> t1 = (FileTreeItem<String>) o1;
 			FileTreeItem<String> t2 = (FileTreeItem<String>) o2;
