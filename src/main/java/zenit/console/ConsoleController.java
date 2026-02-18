@@ -5,6 +5,7 @@ import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.config.TerminalConfig;
+import com.pty4j.PtyProcess;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -242,8 +244,23 @@ public class ConsoleController implements Initializable {
 	 *  AnchorPane and puts it as an option in the
 	 * choiceBox.
 	 */
-	public void newTerminal() {		
-		Terminal terminal = new Terminal(createTerminalConfig(), FileSystems.getDefault().getPath(".").toAbsolutePath());
+	public void newTerminal() {
+		TerminalConfig config = createTerminalConfig();
+
+		String os = System.getProperty("os.name").toLowerCase();
+		if (os.contains("win")) {
+			System.out.println("You're on windows");
+			config.setFontFamily("Consolas");
+		} else if (os.contains("mac")) {
+			System.out.println("[DEBUGG] You're on Mac - setting correct shell");
+			config.setUnixTerminalStarter("/bin/zsh");  // THIS MUST BE HERE
+			config.setFontFamily("Menlo");
+		} else {
+			config.setFontFamily("Courier New"); // Linux fallback
+		}
+
+		Terminal terminal = new Terminal(config, FileSystems.getDefault().getPath(".").toAbsolutePath());
+
 		terminal.setId("Terminal ("+terminalList.size()+")");
 		terminalAnchorPane = new AnchorPane();
 		terminalAnchorPane.setStyle("-fx-background-color:black");
@@ -251,31 +268,36 @@ public class ConsoleController implements Initializable {
 		terminal.setMinHeight(5);
 		fillAnchor(terminal);
 		fillAnchor(terminalAnchorPane);
-		
+
 		terminalAnchorPane.getChildren().add(terminal);
 		rootAnchor.getChildren().add(terminalAnchorPane);
 		terminalList.add(terminal);
 		terminalChoiceBox.getItems().add(terminal);
 		terminalChoiceBox.getSelectionModel().select(terminal);
+
+		// [DEBUGG WILL REMOVE LATER]
+		boolean ok = false;
+		System.out.println("[DEBUGG] attempting to call echo hello world");
+		terminal.onTerminalFxReady(() -> {
+			System.out.println("[DEBUGG] Calling echo hello world");
+			terminal.command("echo hello world!"); // fails, getOutputWriter() is null
+		});
+		//END DEBUGG
 		
 		showTerminalTabs();
-		
 	}
 	
 	private TerminalConfig createTerminalConfig() {
-		TerminalConfig windowsConfig = new TerminalConfig();
-		windowsConfig.setBackgroundColor(Color.BLACK);
-		windowsConfig.setForegroundColor(Color.WHITE);
-		windowsConfig.setCursorBlink(true);
-		windowsConfig.setCursorColor(Color.WHITE);
-		windowsConfig.setFontFamily("consolas");
-		windowsConfig.setFontSize(12);
-		windowsConfig.setScrollbarVisible(false);
-		
-		//TODO Non-windows config (if needed).
-		
-		
-		return (System.getProperty("os.name").startsWith("W") ? windowsConfig : new TerminalConfig());
+		TerminalConfig config = new TerminalConfig();
+		config.setBackgroundColor(Color.BLACK);
+		config.setForegroundColor(Color.WHITE);
+		config.setCursorBlink(true);
+		config.setCursorColor(Color.WHITE);
+
+		config.setFontSize(12);
+		config.setScrollbarVisible(false);
+
+		return config;
 	}
 	
 

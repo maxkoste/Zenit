@@ -26,7 +26,7 @@
 }
 
 #btnClearConsole > *:hover {
-	-fx-fill: #B3B3B3;
+	-fx-fill: #E699B3;
 	-fx-cursor: hand;
 }
 
@@ -38,36 +38,36 @@
 }
 
 #menuBar, #menuBar * {
-	-fx-background-color: #B3661A;
-	-fx-text-fill: #F2F2F2;
+	-fx-background-color: #CC3333;
+	-fx-text-fill: #B399FF;
 }
 
 #menuBar .arrow {
-	-fx-background-color: #F2F2F2;
+	-fx-background-color: #B399FF;
 }
 
 .menu-item:hover, .menu-item:hover > * {
-	-fx-background-color: #B3B3B3 !important;
+	-fx-background-color: #E699B3 !important;
 }
 
 .menu {
-	-fx-fill: #F2F2F2;
+	-fx-fill: #B399FF;
 }
 
 .menu:hover, .menu:hover > .label {
-	-fx-background-color: #B3B3B3 !important;
+	-fx-background-color: #E699B3 !important;
 }
 
 #cmiDarkMode:focused:checked > .left-container > .check {
-    -fx-background-color: #F2F2F2;
+    -fx-background-color: #B399FF;
 }
 
 #cmiDarkMode:hover > .left-container {
-	-fx-background-color: #B3B3B3 !important;
+	-fx-background-color: #E699B3 !important;
 }
 
 #splitPane {
-	-fx-background-color: #B3B3B3;
+	-fx-background-color: #E699B3;
 	-fx-border-width: 0;
 	-fx-padding: 0;
 }
@@ -78,8 +78,8 @@
 }
 
 #tabPane {
-	-fx-background-color: #B3661A;
-	-fx-fill: #F2F2F2;
+	-fx-background-color: #CC3333;
+	-fx-fill: #B399FF;
 	-fx-border-width: 0;
 	-fx-padding: 0;
 }
@@ -90,19 +90,19 @@
 }
 
 #treeView * {
-	-fx-background-color: #B3661A;
-	-fx-fill: #F2F2F2aa;
+	-fx-background-color: #CC3333;
+	-fx-fill: #B399FFaa;
 }
 
 #treeView .arrow  {
-	-fx-background-color: #F2F2F2bb;
+	-fx-background-color: #B399FFbb;
 }
 
 .split-pane:horizontal > .split-pane-divider {
-   -fx-background-color: #B3B3B3;
+   -fx-background-color: #E699B3;
 }
 .split-pane:vertical > .split-pane-divider {
-   -fx-background-color: #B3B3B3;
+   -fx-background-color: #E699B3;
 }
 
 .split-pane > .split-pane-divider {  
@@ -122,15 +122,15 @@
  
  
  .tree-cell:hover {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
  }
  
  #treeView .thumb {
- 	-fx-background-color: #F2F2F2EE;
+ 	-fx-background-color: #B399FFEE;
  }
  
  #treeView .thumb:hover, #treeView .thumb:pressed {
- 	-fx-background-color: #F2F2F2;
+ 	-fx-background-color: #B399FF;
  }
  
  #treeView .increment-button, #treeView .decrement-button {
@@ -155,7 +155,7 @@
 }
 
 #tabPane .tab-header-area .tab-header-background {
-	-fx-background-color: #B3B3B3;
+	-fx-background-color: #E699B3;
 }
 
 #tabPane * {
@@ -163,7 +163,7 @@
 }
 
 #tabPane .tab {
-	-fx-background-color: #B3661A88;
+	-fx-background-color: #CC333388;
 }
 
 #tabPane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -171,68 +171,68 @@
 }
 
 #tabPane .tab .tab-label {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 #tabPane .tab:selected {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #tabPane .tab-content-area * {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #consolePane {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 #consolePane .title {
-	-fx-background-color: #B3B3B3;
-	-fx-text-fill: #F2F2F2;
+	-fx-background-color: #E699B3;
+	-fx-text-fill: #B399FF;
 	-fx-border-radius: 0;
 }
 
 #consolePane .content {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 	-fx-border-width: 0;
-	-fx-border-color: #B3661A;
+	-fx-border-color: #CC3333;
 }
 
 #consolePane .content * {
-	-fx-text-fill: #F2F2F2;
-	-fx-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
+	-fx-fill: #B399FF;
 	-fx-border-width: 0;
 	-fx-padding: 0;
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #consolePane .content .thumb {
-	-fx-background-color: #F2F2F2AA;
+	-fx-background-color: #B399FFAA;
 }
 
 #consolePane .content .scroll-bar:vertical, #consolePane .content .corner {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 	-fx-pref-width: 14;
     -fx-padding: 3;
     -fx-border-width: 0;
-    -fx-border-color: #B3661A;
+    -fx-border-color: #CC3333;
 }
 
 #consolePane .content .scroll-bar:horizontal {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 	-fx-pref-height: 14;
 	-fx-padding: 3;
 	-fx-border-width: 0;
-	-fx-border-color: #B3661A;
+	-fx-border-color: #CC3333;
 }
 
  #consolePane .content .thumb:hover, #consolePane .content .thumb:pressed {
- 	-fx-background-color: #F2F2F2;
+ 	-fx-background-color: #B399FF;
  }
 
 #HBox, #HBox * {
-	-fx-background-color: #B3B3B3;
-	-fx-fill: #B3661A;
+	-fx-background-color: #E699B3;
+	-fx-fill: #CC3333;
 	-fx-border-width: 0;
 }
 

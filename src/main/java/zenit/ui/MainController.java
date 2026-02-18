@@ -46,6 +46,7 @@ import zenit.javacodecompiler.JavaSourceCodeCompiler;
 import zenit.javacodecompiler.ProcessBuffer;
 import zenit.settingspanel.SettingsPanelController;
 import zenit.settingspanel.ThemeCustomizable; // Implements
+import zenit.terminal.TerminalController;
 import zenit.searchinfile.Search;
 import zenit.ui.tree.FileTree;
 import zenit.ui.tree.FileTreeItem;
@@ -204,6 +205,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
 			
+
 			stage.setOnCloseRequest(event -> quit());
 
 		} catch (Exception e) {

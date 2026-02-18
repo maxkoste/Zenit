@@ -35,7 +35,6 @@ public class TerminalController {
 		TerminalBuilder builder = new TerminalBuilder(darkConfig);
 		TerminalTab terminalTab = builder.newTerminal();
 		tabPane.getTabs().add(terminalTab);
-		
 	}
 }
 

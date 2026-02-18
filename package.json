@@ -1,0 +1,24 @@
+{
+  "name": "zenit",
+  "version": "1.0.0",
+  "description": "Zenit är en Java IDE byggd med JavaFX.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxkoste/Zenit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maxkoste/Zenit/issues"
+  },
+  "homepage": "https://github.com/maxkoste/Zenit#readme"
+}

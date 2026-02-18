@@ -3,38 +3,38 @@
 }
 
 #spAnchorPane {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 	-fx-padding: 0.0;
 	-fx-background-insets: 0.0, 0.0;
   	-fx-border-width: 0.0;
-  	-fx-background-color: #B3661A;
+  	-fx-background-color: #CC3333;
 }
 
 #spAnchorPane .button {
-	-fx-background-color: #B3B3B3;
-	-fx-text-fill: #F2F2F2;
+	-fx-background-color: #E699B3;
+	-fx-text-fill: #B399FF;
 }
 
 #mainAnchorPane {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 		-fx-border-width: 0.0;
 }
 
 /* Text Appearance pane */
 #pnlTextAppearance {
-	-fx-background-color: #B3661A;
-	-fx-text-fill: #F2F2F2;
+	-fx-background-color: #CC3333;
+	-fx-text-fill: #B399FF;
 }
 
 #pnlTextAppearance .label {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 #pnlTextAppearance #lblTxtAppeaSize {
-	-fx-text-fill: #4D66CC;
+	-fx-text-fill: #666600;
 }
 #pnlTextAppearance #lblTxtAppeaFont {
-	-fx-text-fill: #4D66CC;
+	-fx-text-fill: #666600;
 }
 
 #chcbxNewFont {
@@ -43,7 +43,7 @@
 }
 
 #chcbxNewFont .context-menu {	
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #chcbxNewFont .menu-item:focused {
@@ -51,16 +51,16 @@
 }
 
 #chcbxNewFont .menu-item > .label {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 #chcbxNewFont > .label {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
  
 #fldNewSize {
  	-fx-background-color: rgba(100,100,100,0.4);
- 	-fx-text-fill: #F2F2F2;
+ 	-fx-text-fill: #B399FF;
  }
  
 #sldrNewSize > .track {	
@@ -70,17 +70,17 @@
  
  /* Java Home pane */
 #pnlJavaHome {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #pnlJavaHome .label {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 /* Theme pane */
 
 #pnlTheme {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #pnlTheme #lblDarkModeTxt {
@@ -106,38 +106,38 @@
 
 /* Custom CSS pane */
 #pnlCustomCSS {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 #lblAddCustomCssLines {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 #fldCustomCSSInput {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 	-fx-border-color: rgba(255,255,255,0.4);
 	-fx-text-fill: #009911;
 }
 
 #scrollPaneAddedCSS{
-	  -fx-background-color: #B3661A;
+	  -fx-background-color: #CC3333;
 	  -fx-border-color: transparent;
 }
 
 #listViewAddedCSS {
-	 -fx-background-color: #B3661A;
+	 -fx-background-color: #CC3333;
 	 -fx-border-color: transparent;
 }
 #listViewAddedCSS .list-cell { 
-	-fx-background-color: #B3661A; /* 5 */
-	-fx-text-fill: #F2F2F2;
+	-fx-background-color: #CC3333; /* 5 */
+	-fx-text-fill: #B399FF;
 	
 }
 
 #listViewAddedCSS .list-cell:even {
-	 -fx-background-color: #B3B3B3;
+	 -fx-background-color: #E699B3;
 }
 
 #scrollPaneAddedCSS .scroll-pane {
-    -fx-background-color: #B3661A;
+    -fx-background-color: #CC3333;
 }
 
 #scrollPaneAddedCSS .scroll-bar:vertical{
@@ -150,7 +150,7 @@
 }
 
 #scrollPaneAddedCSS .scroll-bar:vertical .thumb {
-    -fx-background-color: #F2F2F2;
+    -fx-background-color: #B399FF;
     -fx-background-radius: 5em;
 }
 
@@ -165,7 +165,7 @@
 }
 
 .lblCSSText {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
 
 #btnRemoveCSS {
@@ -183,8 +183,8 @@
 }
 
 #btnAddCSSLine {
-	-fx-background-color: #B3B3B3;
-	-fx-text-fill: #B3661A;
+	-fx-background-color: #E699B3;
+	-fx-text-fill: #CC3333;
 }
 
 /*
@@ -193,7 +193,7 @@
  * 
  */
  #pnlCustomTheme {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
  #pnlCustomTheme .color-picker {
@@ -203,32 +203,32 @@
  
  #pnlCustomTheme .color-picker .color-picker-label{
 
--fx-text-fill: #F2F2F2;
+-fx-text-fill: #B399FF;
 }
 
 .lblMainColor {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 }
  
  
 /* Support pane */
 #pnlSupport {
-	-fx-background-color: #B3661A;
+	-fx-background-color: #CC3333;
 }
 
 #pnlSupport .hyperlink {
-	-fx-text-fill: #F2F2F2;
+	-fx-text-fill: #B399FF;
 	-fx-border-color: transparent;
     -fx-padding: 4 0 4 0;
     -fx-underline: false;
 }
 
 #pnlSupport .hyperlink:hover {
-	-fx-text-fill: #B3661A;
+	-fx-text-fill: #CC3333;
 }
 
 .paneHeader {
-	-fx-text-fill: #4D66CC;
+	-fx-text-fill: #666600;
 	-fx-font-size: 16px;
 }
 
