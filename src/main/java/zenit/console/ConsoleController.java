@@ -219,7 +219,7 @@ public class ConsoleController implements Initializable {
 
 		showTerminalTabs();
 		engine.getLoadWorker().stateProperty().addListener((obs, old, state) -> {
-			if (state == Worker.State.SUCCEEDED) {
+			if (state == Worker.State.SUCCEEDED) { //webpage loaded
 
 				TerminalSession session = new TerminalSession(engine);
 				session.start();
@@ -230,11 +230,6 @@ public class ConsoleController implements Initializable {
 				window.setMember("javaConnector", bridge);
 			}
 		});
-		// Test
-		new Thread(()->{
-			TerminalSession session = new TerminalSession(engine);
-			session.start();
-		}).start();
 	}
 
 	/**
