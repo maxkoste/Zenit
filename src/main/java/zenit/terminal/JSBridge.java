@@ -2,7 +2,7 @@ package zenit.terminal;
 
 import com.pty4j.PtyProcess;
 
-
+// Author Max Koste
 public class JSBridge {
 	private final PtyProcess process;
 	

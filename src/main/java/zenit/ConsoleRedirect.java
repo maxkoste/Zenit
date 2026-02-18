@@ -30,11 +30,6 @@ public class ConsoleRedirect {
 
 			System.setOut(outPrintStream);
 			System.setErr(errPrintStream);
-
-			/* 
-			 * TODO
-			 * System.setIn(in);
-			 */
 			
 		} catch (Exception e) {
 			e.printStackTrace();

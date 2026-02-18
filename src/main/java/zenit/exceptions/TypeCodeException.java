@@ -7,7 +7,6 @@ package zenit.exceptions;
  */
 @SuppressWarnings("serial")
 public class TypeCodeException extends Exception {
-	
 	public TypeCodeException() {
 		super();
 	}

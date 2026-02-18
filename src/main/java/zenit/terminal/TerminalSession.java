@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
+//Author Max Koste
 public class TerminalSession {
 
 	private WebEngine engine;
@@ -21,12 +22,12 @@ public class TerminalSession {
 	public void start() {
 		try {
 			String[] shell = System.getProperty("os.name").toLowerCase().contains("win")
-				? new String[] { "cmd.exe" } //måste testa detta
-				: new String[] { "/bin/bash" }; //funkar fett bra på mac
+				? new String[] { "cmd.exe" } //TODO: Test on windows
+				: new String[] { "/bin/bash" };
 
 			PtyProcessBuilder builder = new PtyProcessBuilder(shell)
 				.setEnvironment(System.getenv())
-				.setDirectory(System.getProperty("user.home")); //this should be defaulted to the workspace folder
+				.setDirectory(System.getProperty("user.home")); //TODO: Should default to the workspace folder
 
 			process = builder.start();
 
