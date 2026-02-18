@@ -5,43 +5,12 @@
 	<!-- should be resizable -->
     <style>
         body { margin: 0; }
-        #terminal { height: 100vh; width: 100vw; }
+        #terminal { height: 800vh; width: 100vw; }
     </style>
 </head>
 <body>
     <div id="terminal"></div>
-
     <script src="xterm.js"></script>
-    <script>
-		const container = document.getElementById('terminal');
-
-		window.term = new Terminal({
-			cursorBlink: true
-		});
-
-		term.open(container);
-
-		// Make div focusable
-		container.setAttribute("tabindex", "0");
-
-		window.addEventListener("load", () => {
-			container.focus();
-			term.focus();
-		});
-
-		container.addEventListener("click", () => {
-			term.focus();
-		});
-
-		term.onData((data) => {
-			if (window.javaConnector) {
-				window.javaConnector.sendInput(data);
-			}
-		});
-
-		function writeFromJava(output) {
-			term.write(output);
-		}
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

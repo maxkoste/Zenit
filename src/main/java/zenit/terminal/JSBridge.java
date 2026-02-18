@@ -1,6 +1,7 @@
 package zenit.terminal;
 
 import com.pty4j.PtyProcess;
+import com.pty4j.WinSize;
 
 // Author Max Koste
 public class JSBridge {
@@ -19,4 +20,8 @@ public class JSBridge {
 		}
 	}
 
+	public void resize(int cols, int rows){
+		System.out.printf("Resizing Window: Cols: %d Rows: %d \n", cols,  rows);
+		process.setWinSize(new WinSize(cols, rows));
+	}
 }

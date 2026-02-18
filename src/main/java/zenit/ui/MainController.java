@@ -46,7 +46,6 @@ import zenit.javacodecompiler.JavaSourceCodeCompiler;
 import zenit.javacodecompiler.ProcessBuffer;
 import zenit.settingspanel.SettingsPanelController;
 import zenit.settingspanel.ThemeCustomizable; // Implements
-import zenit.terminal.TerminalController;
 import zenit.searchinfile.Search;
 import zenit.ui.tree.FileTree;
 import zenit.ui.tree.FileTreeItem;
