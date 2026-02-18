@@ -1,8 +1,6 @@
 package zenit.terminal;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
@@ -23,8 +21,8 @@ public class TerminalSession {
 	public void start() {
 		try {
 			String[] shell = System.getProperty("os.name").toLowerCase().contains("win")
-				? new String[] { "cmd.exe" }
-				: new String[] { "/bin/bash" };
+				? new String[] { "cmd.exe" } //måste testa detta
+				: new String[] { "/bin/bash" }; //funkar fett bra på mac
 
 			PtyProcessBuilder builder = new PtyProcessBuilder(shell)
 				.setEnvironment(System.getenv())
@@ -41,8 +39,7 @@ public class TerminalSession {
 
 	private void startOutputThread() {
 		Thread outputThread = new Thread(() -> {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-
+			try  {
 				byte[] buffer = new byte[8192];
 				int n;
 				while ((n = process.getInputStream().read(buffer)) != -1) {
