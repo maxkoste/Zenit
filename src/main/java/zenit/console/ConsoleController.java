@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import zenit.terminal.JSBridge;
 import zenit.terminal.TerminalSession;
 
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -21,8 +23,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 import zenit.ConsoleRedirect;
 import zenit.ui.MainController;
+import javafx.concurrent.Worker;
 
 /**
  * The controller class for ConsoleArea
@@ -187,11 +191,15 @@ public class ConsoleController implements Initializable {
 	 * choiceBox.
 	 */
 	public void newTerminal() {
+
 		System.out.println("[DEBUGGING] creating a new terminal");
 		AnchorPane terminalPane = new AnchorPane();
 		fillAnchor(terminalPane);
 
 		WebView webView = new WebView();
+		webView.setFocusTraversable(true);
+		webView.requestFocus();
+
 		fillAnchor(webView);
 
 		WebEngine engine = webView.getEngine();
@@ -210,13 +218,23 @@ public class ConsoleController implements Initializable {
 		terminalPane.toFront();
 
 		showTerminalTabs();
+		engine.getLoadWorker().stateProperty().addListener((obs, old, state) -> {
+			if (state == Worker.State.SUCCEEDED) {
 
+				TerminalSession session = new TerminalSession(engine);
+				session.start();
+
+				JSBridge bridge = new JSBridge(session.getProcess());
+
+				JSObject window = (JSObject) engine.executeScript("window");
+				window.setMember("javaConnector", bridge);
+			}
+		});
 		// Test
 		new Thread(()->{
 			TerminalSession session = new TerminalSession(engine);
 			session.start();
 		}).start();
-
 	}
 
 	/**

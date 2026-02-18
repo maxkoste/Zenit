@@ -12,9 +12,35 @@
 
     <script src="xterm.js"></script>
     <script>
-        const term = new Terminal();
-        term.open(document.getElementById('terminal'));
-        term.write('Hello from xterm.js\r\n');
+		const container = document.getElementById('terminal');
+
+		window.term = new Terminal({
+			cursorBlink: true
+		});
+
+		term.open(container);
+
+		// Make div focusable
+		container.setAttribute("tabindex", "0");
+
+		window.addEventListener("load", () => {
+			container.focus();
+			term.focus();
+		});
+
+		container.addEventListener("click", () => {
+			term.focus();
+		});
+
+		term.onData((data) => {
+			if (window.javaConnector) {
+				window.javaConnector.sendInput(data);
+			}
+		});
+
+		function writeFromJava(output) {
+			term.write(output);
+		}
     </script>
 </body>
 </html>

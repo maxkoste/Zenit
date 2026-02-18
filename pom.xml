@@ -124,7 +124,6 @@
 					</options>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

@@ -3,15 +3,14 @@ package zenit.terminal;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
 
+import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
-
-// TODO: Spawn a shell process using PtyProcess
-// TODO: Handle in/out streams
-// TODO: Manage process lifecycle
+import netscape.javascript.JSObject;
 
 public class TerminalSession {
 
@@ -19,39 +18,76 @@ public class TerminalSession {
 	private PtyProcess process;
 	private Thread outputThread;
 
-	public TerminalSession(WebEngine engine){
+	public TerminalSession(WebEngine engine) {
 		this.engine = engine;
 	}
 
-	public void start(){
-        try {
-			String[] shell = System.getProperty("os.name").toLowerCase().contains("win") 
-			? new String[]{"cmd.exe"} 
-			: new String[]{"/bin/bash"};
+	public void start() {
+		try {
+			String[] shell = System.getProperty("os.name").toLowerCase().contains("win")
+					? new String[] { "cmd.exe" }
+					: new String[] { "/bin/bash" };
 
-            PtyProcessBuilder builder = new PtyProcessBuilder(shell)
-                    .setEnvironment(System.getenv())
-                    .setDirectory(System.getProperty("user.home"));
+			PtyProcessBuilder builder = new PtyProcessBuilder(shell)
+					.setEnvironment(System.getenv())
+					.setDirectory(System.getProperty("user.home"));
 
-            process = builder.start();
+			process = builder.start();
 
-            startOutputThread();
+			startOutputThread();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-	private void startOutputThread(){
-		new Thread(() ->{
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))){
-				String line;
-				while((line = reader.readLine()) != null) {
-					System.out.println(line);
+	private void startOutputThread() {
+		Thread outputThread = new Thread(() -> {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+
+				byte[] buffer = new byte[8192];
+				int n;
+				while ((n = process.getInputStream().read(buffer)) != -1) {
+					String text = new String(buffer, 0, n);
+
+					Platform.runLater(() -> {
+						JSObject window = (JSObject) engine.executeScript("window");
+						window.call("writeFromJava", text);
+					});
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}).start();
+		});
+
+		outputThread.setDaemon(true);
+		outputThread.start();
 	}
+
+	public void writeTest(String cmd) {
+		try {
+			if (process != null) {
+				OutputStream out = process.getOutputStream();
+				out.write((cmd + "\n").getBytes());
+				out.flush();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void writeToFrontend(String line) {
+		String escaped = line
+			.replace("\\", "\\\\")
+			.replace("'", "\\'")
+			.replace("\n", "\\r\\n");
+
+		Platform.runLater(() -> {
+			engine.executeScript("term.write('" + escaped + "')");
+		});
+	}
+
+    public PtyProcess getProcess() {
+		return this.process;
+    }
 }
