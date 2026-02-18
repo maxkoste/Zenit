@@ -1,35 +1,24 @@
 package zenit.console;
 
 import java.net.URL;
-import java.nio.file.FileSystems;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
+import zenit.terminal.TerminalSession;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import zenit.ConsoleRedirect;
@@ -74,7 +63,6 @@ public class ConsoleController implements Initializable {
 	private FontIcon iconTerminateProcess;
 	@FXML
 	private FontIcon iconCloseTerminalInstance;
-	private AnchorPane terminalAnchorPane;
 	private AnchorPane consoleAnchorPane;
 	private ConsoleArea activeConsole;
 	private AnchorPane noConsolePane;
@@ -222,6 +210,13 @@ public class ConsoleController implements Initializable {
 		terminalPane.toFront();
 
 		showTerminalTabs();
+
+		// Test
+		new Thread(()->{
+			TerminalSession session = new TerminalSession(engine);
+			session.start();
+		}).start();
+
 	}
 
 	/**
