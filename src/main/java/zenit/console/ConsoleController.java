@@ -11,10 +11,6 @@ import java.util.Set;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import com.kodedu.terminalfx.Terminal;
-import com.kodedu.terminalfx.config.TerminalConfig;
-import com.pty4j.PtyProcess;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,6 +30,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import zenit.ConsoleRedirect;
 import zenit.ui.MainController;
 
@@ -49,91 +47,62 @@ import zenit.ui.MainController;
  */
 public class ConsoleController implements Initializable {
 
-	/*
-	 * These HashMaps are ugly.
-	 */
-//	private HashMap<ConsoleArea, Process> consoleList = new HashMap<ConsoleArea, Process>();
 	private ArrayList<ConsoleArea> consoleList = new ArrayList<ConsoleArea>();
-	private ArrayList<Terminal> terminalList = new ArrayList<Terminal>();
-	
-	@FXML 
+	private ArrayList<AnchorPane> terminalList = new ArrayList<>();
+	private AnchorPane activeTerminal;
+	@FXML
 	private TabPane consoleTabPane;
-
 	@FXML
 	private Button btnTerminal;
-
 	@FXML
 	private Button btnConsole;
-
 	@FXML
-	private ChoiceBox<ConsoleArea> consoleChoiceBox; 
-
-	@FXML
-	private ChoiceBox<Terminal> terminalChoiceBox;
-	
+	private ChoiceBox<ConsoleArea> consoleChoiceBox;
 	@FXML
 	private AnchorPane rootAnchor;
-	
 	@FXML
 	private AnchorPane rootNode;
-
 	@FXML
 	private Button btnNewTerminal;
-	
 	@FXML
 	private Button btnNewConsole;
-	
 	@FXML
 	private Button btnClearConsole;
-	
 	@FXML
 	private FontIcon iconCloseConsoleInstance;
-	
 	@FXML
 	private FontIcon iconTerminateProcess;
-	
 	@FXML
 	private FontIcon iconCloseTerminalInstance;
-		
-	private AnchorPane terminalAnchorPane; 
-	
+	private AnchorPane terminalAnchorPane;
 	private AnchorPane consoleAnchorPane;
-	
 	private ConsoleArea activeConsole;
-	
-	private Terminal activeTerminal;
-	
 	private AnchorPane noConsolePane;
-		
 	private MainController mainController;
-	
+
 	public void setMainController(MainController mainController) {
 		this.mainController = mainController;
-		
+
 	}
-	
+
 	public List<String> getStylesheets() {
 		return rootNode.getStylesheets();
 	}
-	
-	
+
 	/**
-	 * Shows the choiceBox with console areas, and sets the choiceBox with terminal tabs to not 
+	 * Shows the choiceBox with console areas, and sets the choiceBox with terminal
+	 * tabs to not
 	 * visible. Also sets text color of the labels.
 	 */
-	
 
 	public void showConsoleTabs() {
-		
+
 		btnTerminal.setStyle("");
 		btnConsole.setStyle("-fx-text-fill:white; -fx-border-color:#666; -fx-border-width: 0 0 2 0;");
-		
 
-		terminalChoiceBox.setVisible(false);
-		terminalChoiceBox.setDisable(true);
 		consoleChoiceBox.setVisible(true);
 		consoleChoiceBox.setDisable(false);
-		btnNewTerminal.setVisible(false);
+		btnNewTerminal.setVisible(true);
 		btnNewConsole.setVisible(true);
 		btnClearConsole.setDisable(false);
 		btnClearConsole.setVisible(true);
@@ -143,23 +112,20 @@ public class ConsoleController implements Initializable {
 		iconCloseConsoleInstance.setDisable(false);
 		iconCloseTerminalInstance.setVisible(false);
 		iconCloseTerminalInstance.setDisable(true);
-		
-			
+
 		if (consoleAnchorPane != null) {
-				consoleAnchorPane.toFront();
+			consoleAnchorPane.toFront();
 		}
-		
-		if(consoleList.size() == 0) {
+
+		if (consoleList.size() == 0) {
 			createEmptyConsolePane();
 		}
-		
-	
-		
+
 	}
-	
-	
+
 	/*
-	 * Creates and displays an anchorPane when there is no console to display in the console-window
+	 * Creates and displays an anchorPane when there is no console to display in the
+	 * console-window
 	 */
 	private void createEmptyConsolePane() {
 		noConsolePane = new AnchorPane();
@@ -176,29 +142,18 @@ public class ConsoleController implements Initializable {
 		rootAnchor.getChildren().add(noConsolePane);
 		noConsolePane.toFront();
 	}
-	
-	
+
 	/**
-	 * Shows the choiceBox with terminal panes, and sets the choiceBox with console tabs to not 
+	 * Shows the choiceBox with terminal panes, and sets the choiceBox with console
+	 * tabs to not
 	 * visible. Also sets text color of the labels.
 	 */
 	public void showTerminalTabs() {
 		btnConsole.setStyle("");
 		btnTerminal.setStyle("-fx-text-fill:white; -fx-border-color:#666; -fx-border-width: 0 0 2 0;");
-		
-		
-		if(terminalList.size() == 0) {
-			newTerminal();
-		}
-		else {
-			terminalAnchorPane.toFront();
-		}
-		
-		
+
 		consoleChoiceBox.setVisible(false);
 		consoleChoiceBox.setDisable(true);
-		terminalChoiceBox.setVisible(true);
-		terminalChoiceBox.setDisable(false);
 		btnNewTerminal.setVisible(true);
 		btnNewConsole.setVisible(false);
 		btnClearConsole.setDisable(true);
@@ -209,100 +164,68 @@ public class ConsoleController implements Initializable {
 		iconCloseConsoleInstance.setDisable(true);
 		iconCloseTerminalInstance.setVisible(true);
 		iconCloseTerminalInstance.setDisable(false);
-				
+
 	}
 
 	/**
-	 * Creates a new ConsoleArea, adds it to the console AnchorPane and puts it as an option in the
+	 * Creates a new ConsoleArea, adds it to the console AnchorPane and puts it as
+	 * an option in the
 	 * choiceBox.
 	 */
-	
+
 	public void newConsole(ConsoleArea consoleArea) {
+		System.out.println("[DEBUGGING] Creating a new console");
 		consoleAnchorPane = new AnchorPane();
 		consoleArea.setId("consoleArea");
 		consoleAnchorPane.setId("consoleAnchor");
 		fillAnchor(consoleArea);
 		fillAnchor(consoleAnchorPane);
-		
-		
-		
+
 		consoleAnchorPane.getChildren().add(consoleArea);
 		rootAnchor.getChildren().add(consoleAnchorPane);
-		
+
 		consoleList.add(consoleArea);
-		
+
 		consoleChoiceBox.getItems().add(consoleArea);
 		consoleChoiceBox.getSelectionModel().select(consoleArea);
-		
-		new ConsoleRedirect(consoleArea);	
+
+		new ConsoleRedirect(consoleArea);
 		showConsoleTabs();
 	}
 
-	
 	/*
 	 * Creates a new Terminal, adds it to the terminal
-	 *  AnchorPane and puts it as an option in the
+	 * AnchorPane and puts it as an option in the
 	 * choiceBox.
 	 */
 	public void newTerminal() {
-		TerminalConfig config = createTerminalConfig();
+		System.out.println("[DEBUGGING] creating a new terminal");
+		AnchorPane terminalPane = new AnchorPane();
+		fillAnchor(terminalPane);
 
-		String os = System.getProperty("os.name").toLowerCase();
-		if (os.contains("win")) {
-			System.out.println("You're on windows");
-			config.setFontFamily("Consolas");
-		} else if (os.contains("mac")) {
-			System.out.println("[DEBUGG] You're on Mac - setting correct shell");
-			config.setUnixTerminalStarter("/bin/zsh");  // THIS MUST BE HERE
-			config.setFontFamily("Menlo");
-		} else {
-			config.setFontFamily("Courier New"); // Linux fallback
-		}
+		WebView webView = new WebView();
+		fillAnchor(webView);
 
-		Terminal terminal = new Terminal(config, FileSystems.getDefault().getPath(".").toAbsolutePath());
+		WebEngine engine = webView.getEngine();
+		engine.load(
+			getClass()
+			.getResource("/xterm/index.html")
+			.toExternalForm()
+		);
 
-		terminal.setId("Terminal ("+terminalList.size()+")");
-		terminalAnchorPane = new AnchorPane();
-		terminalAnchorPane.setStyle("-fx-background-color:black");
-		
-		terminal.setMinHeight(5);
-		fillAnchor(terminal);
-		fillAnchor(terminalAnchorPane);
+		terminalPane.getChildren().add(webView);
+		rootAnchor.getChildren().add(terminalPane);
 
-		terminalAnchorPane.getChildren().add(terminal);
-		rootAnchor.getChildren().add(terminalAnchorPane);
-		terminalList.add(terminal);
-		terminalChoiceBox.getItems().add(terminal);
-		terminalChoiceBox.getSelectionModel().select(terminal);
+		terminalList.add(terminalPane);
+		activeTerminal = terminalPane;
 
-		// [DEBUGG WILL REMOVE LATER]
-		boolean ok = false;
-		System.out.println("[DEBUGG] attempting to call echo hello world");
-		terminal.onTerminalFxReady(() -> {
-			System.out.println("[DEBUGG] Calling echo hello world");
-			terminal.command("echo hello world!"); // fails, getOutputWriter() is null
-		});
-		//END DEBUGG
-		
+		terminalPane.toFront();
+
 		showTerminalTabs();
 	}
-	
-	private TerminalConfig createTerminalConfig() {
-		TerminalConfig config = new TerminalConfig();
-		config.setBackgroundColor(Color.BLACK);
-		config.setForegroundColor(Color.WHITE);
-		config.setCursorBlink(true);
-		config.setCursorColor(Color.WHITE);
-
-		config.setFontSize(12);
-		config.setScrollbarVisible(false);
-
-		return config;
-	}
-	
 
 	/**
-	 * sets the anchor of a node to fill parent 
+	 * sets the anchor of a node to fill parent
 	 * 
 	 * @param node to fill to parent anchor
 	 */
@@ -312,110 +235,87 @@ public class ConsoleController implements Initializable {
 		AnchorPane.setBottomAnchor(node, 0.0);
 		AnchorPane.setLeftAnchor(node, 0.0);
 	}
-	
-	
+
 	/**
 	 * Clears the active consoleArea
 	 */
 	public void clearConsole() {
 		activeConsole.clear();
 	}
-	
-	
+
 	public void closeComponent() {
 		mainController.closeConsoleComponent();
 	}
-	
-	
+
 	public void changeAllConsoleAreaColors(String color) {
-		for(ConsoleArea c : consoleList) {
+		for (ConsoleArea c : consoleList) {
 			c.setBackgroundColor(color);
 		}
 	}
-	
+
 	/**
 	 * Performs initialization steps.
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		consoleChoiceBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
-						
-			if(newValue != null) {
-				for(ConsoleArea console : consoleList) {
-					if(newValue.equals(console)) {
+		consoleChoiceBox.getSelectionModel().selectedItemProperty().addListener((v, oldValue, newValue) -> {
+
+			if (newValue != null) {
+				for (ConsoleArea console : consoleList) {
+					if (newValue.equals(console)) {
 						console.getParent().toFront();
 						activeConsole = console;
 					}
 				}
 			}
-			
+
 		});
-				
-					
-				
-		terminalChoiceBox.getSelectionModel().selectedItemProperty().addListener( (v, oldValue, newValue) -> {
-			if(newValue != null) {
-				for(Terminal t : terminalList) {
-					if(newValue.equals(t)) {
-						t.getParent().toFront();
-						activeTerminal = t;
-						t.onTerminalFxReady(()-> {
-							t.focusCursor();
-						});
+
+		showConsoleTabs();
+
+		// Console
+		iconCloseConsoleInstance.setOnMouseClicked(e -> {
+			rootAnchor.getChildren().remove(activeConsole.getParent());
+			consoleList.remove(activeConsole);
+			consoleChoiceBox.getItems().remove(activeConsole);
+			consoleChoiceBox.getSelectionModel().selectLast();
+
+			if (consoleList.size() == 0) {
+				createEmptyConsolePane();
+			}
+		});
+
+		btnNewConsole.setOnMouseClicked(e -> {
+			if (mainController.isDarkmode()) {
+				newConsole(new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#444"));
+			} else {
+				newConsole(
+						new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
+			}
+
+		});
+
+		iconTerminateProcess.setOnMouseClicked(e -> {
+			for (var item : consoleList) {
+				if (item.equals(activeConsole)) {
+					if (item != null) {
+						item.getProcess().destroy();
 					}
 				}
 			}
 		});
-		
-		showConsoleTabs();
-		
-		//Console
-		iconCloseConsoleInstance.setOnMouseClicked(e -> {
-				rootAnchor.getChildren().remove(activeConsole.getParent());
-				consoleList.remove(activeConsole);
-				consoleChoiceBox.getItems().remove(activeConsole);
-				consoleChoiceBox.getSelectionModel().selectLast();
 
-				if(consoleList.size() == 0) {
-					createEmptyConsolePane();
-				}
-		});
-		
-		//Terminal
-		iconCloseTerminalInstance.setOnMouseClicked(e ->{
-			
-			if(terminalList.size() > 1) {
-				rootAnchor.getChildren().remove(activeTerminal.getParent());
+		iconCloseTerminalInstance.setOnMouseClicked(e -> {
+			if (activeTerminal != null) {
+				rootAnchor.getChildren().remove(activeTerminal);
 				terminalList.remove(activeTerminal);
-				terminalChoiceBox.getItems().remove(activeTerminal);
-				terminalChoiceBox.getSelectionModel().selectLast();
-			}
-			
-			
-		});
-		
-		
-		btnNewConsole.setOnMouseClicked(e -> {
-			if(mainController.isDarkmode()) {
-				newConsole(new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#444"));
-			}else {
-				newConsole(new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
-			}
-			
-		});
-		
-		iconTerminateProcess.setOnMouseClicked(e -> {
-			for(var item : consoleList) {
-				if(item.equals(activeConsole)) {
-					if(item != null) {
-						item.getProcess().destroy();
-					}	
+
+				if (!terminalList.isEmpty()) {
+					activeTerminal = terminalList.get(terminalList.size() - 1);
+					activeTerminal.toFront();
 				}
 			}
-							
 		});
-		
-		
 	}
 }

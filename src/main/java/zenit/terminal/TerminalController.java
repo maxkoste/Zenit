@@ -1,13 +1,11 @@
 package zenit.terminal;
 
-import com.kodedu.terminalfx.TerminalBuilder;
-import com.kodedu.terminalfx.TerminalTab;
-import com.kodedu.terminalfx.config.TerminalConfig;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 public class TerminalController {
 
@@ -21,20 +19,24 @@ public class TerminalController {
 	public void initialize() {
 		
 		addTerminalTab();
+		
 	}
 	
 	private void addTerminalTab() {
-		TerminalConfig darkConfig = new TerminalConfig();
-		darkConfig.setBackgroundColor(Color.BLACK);
-		darkConfig.setForegroundColor(Color.WHITE);
-		darkConfig.setCursorBlink(true);
-		darkConfig.setCursorColor(Color.WHITE);
-		darkConfig.setFontFamily("consolas");
-		
-		
-		TerminalBuilder builder = new TerminalBuilder(darkConfig);
-		TerminalTab terminalTab = builder.newTerminal();
-		tabPane.getTabs().add(terminalTab);
+		WebView webView = new WebView();
+		WebEngine engine = webView.getEngine();
+
+		engine.load(
+			getClass()
+				.getResource("/xterm/index.html")
+				.toExternalForm()
+		);
+
+		System.out.println("[DEBUGGING] Loaded index.html");
+
+		Tab tab = new Tab("Terminal");
+		tab.setContent(webView);
+		tabPane.getTabs().add(tab);
 	}
 }
 

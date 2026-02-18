@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/maxkoste/Zenit/issues"
   },
-  "homepage": "https://github.com/maxkoste/Zenit#readme"
+  "homepage": "https://github.com/maxkoste/Zenit#readme",
+  "dependencies": {
+    "@xterm/xterm": "^6.0.0"
+  }
 }

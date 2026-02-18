@@ -38,7 +38,6 @@ public class ConsoleArea extends InlineCssTextArea {
 		this.ID = identity;
 		this.process = process;
 		
-		// TODO maybe remove this one and add to main.css
 		getStylesheets().add(getClass().getResource("/zenit/console/consoleStyle.css").toString());
 		this.setStyle(backgroundColor);
 		this.setEditable(false);
