@@ -3,7 +3,6 @@ package zenit.terminal;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
@@ -16,7 +15,6 @@ public class TerminalSession {
 
 	private WebEngine engine;
 	private PtyProcess process;
-	private Thread outputThread;
 
 	public TerminalSession(WebEngine engine) {
 		this.engine = engine;
@@ -25,12 +23,12 @@ public class TerminalSession {
 	public void start() {
 		try {
 			String[] shell = System.getProperty("os.name").toLowerCase().contains("win")
-					? new String[] { "cmd.exe" }
-					: new String[] { "/bin/bash" };
+				? new String[] { "cmd.exe" }
+				: new String[] { "/bin/bash" };
 
 			PtyProcessBuilder builder = new PtyProcessBuilder(shell)
-					.setEnvironment(System.getenv())
-					.setDirectory(System.getProperty("user.home"));
+				.setEnvironment(System.getenv())
+				.setDirectory(System.getProperty("user.home")); //this should be defaulted to the workspace folder
 
 			process = builder.start();
 
@@ -62,29 +60,6 @@ public class TerminalSession {
 
 		outputThread.setDaemon(true);
 		outputThread.start();
-	}
-
-	public void writeTest(String cmd) {
-		try {
-			if (process != null) {
-				OutputStream out = process.getOutputStream();
-				out.write((cmd + "\n").getBytes());
-				out.flush();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void writeToFrontend(String line) {
-		String escaped = line
-			.replace("\\", "\\\\")
-			.replace("'", "\\'")
-			.replace("\n", "\\r\\n");
-
-		Platform.runLater(() -> {
-			engine.executeScript("term.write('" + escaped + "')");
-		});
 	}
 
     public PtyProcess getProcess() {
