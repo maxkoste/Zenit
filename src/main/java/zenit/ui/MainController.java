@@ -9,8 +9,6 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.SplitPane.Divider;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TreeView;
@@ -52,7 +49,6 @@ import zenit.ui.tree.FileTreeItem;
 import zenit.ui.tree.TreeClickListener;
 import zenit.ui.tree.TreeContextMenu;
 import zenit.util.Tuple;
-import zenit.ui.FileTab;
 import zenit.ui.projectinfo.ProjectMetadataController;
 import zenit.zencodearea.ZenCodeArea;
 
@@ -182,7 +178,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 			setFileController(fileController);
 
 			if (workspace != null) {
-				// TODO: Log this
 				fileController.changeWorkspace(workspace);
 			}
 
@@ -834,10 +829,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			// TODO: handle exception
 		}
-	
 	
 	}
 
@@ -1057,7 +1049,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 	@Override
 	public String getActiveStylesheet() {
-		// TODO Auto-generated method stub
 		return activeStylesheet;
 	}
 	

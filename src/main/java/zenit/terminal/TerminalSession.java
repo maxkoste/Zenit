@@ -9,7 +9,9 @@ import javafx.application.Platform;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
-//Author Max Koste
+/**
+ * @author Max Koste
+ */
 public class TerminalSession {
 
 	private WebEngine engine;
