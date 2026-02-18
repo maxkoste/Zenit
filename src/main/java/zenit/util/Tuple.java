@@ -63,6 +63,6 @@ public class Tuple<T1, T2> {
 	 */
 	@Override
 	public String toString() {
-		return String.format("(%s, %s", fst, snd);
+		return String.format("(%s, %s)", fst, snd);
 	}
 }

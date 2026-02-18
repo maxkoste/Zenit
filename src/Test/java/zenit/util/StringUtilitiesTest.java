@@ -66,7 +66,7 @@ class StringUtilitiesTest {
         assertEquals(0, result, "Should only count LEADING spaces, not trailing");
     }
 
-    // ============ count() tests ============
+    //  count() tests
 
     @Test
     @DisplayName("Should return 0 for null haystack")
@@ -125,7 +125,7 @@ class StringUtilitiesTest {
                 "Should count exclamation marks");
     }
 
-    // ============ Edge Cases ============
+    //  Edge Cases
 
     @Test
     @DisplayName("Recursive countLeadingSpaces should handle many spaces")
@@ -134,8 +134,6 @@ class StringUtilitiesTest {
         int result = StringUtilities.countLeadingSpaces(manySpaces);
         assertEquals(100, result, "Should handle 100 leading spaces");
     }
-
-    // I StringUtilitiesTest.java - LÄGG TILL:
 
     @Test
     @DisplayName("Should handle tabs correctly")

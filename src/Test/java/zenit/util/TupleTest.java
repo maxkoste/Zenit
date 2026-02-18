@@ -100,7 +100,7 @@ class TupleTest {
         Tuple<String, Integer> tuple = new Tuple<>("test", 1);
         String result = tuple.toString();
 
-        // This test FAILS - documenting the bug
+        // This test FAILS -
 
         assertFalse(result.endsWith(")"),
                 "BUG FOUND: toString() is missing closing parenthesis. " +
