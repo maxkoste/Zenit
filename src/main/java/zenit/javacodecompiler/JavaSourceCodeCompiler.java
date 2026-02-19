@@ -135,10 +135,28 @@ public class JavaSourceCodeCompiler {
 		 * @return Executed process.
 		 */
 		protected Process compile() {
-
 			CommandBuilder cb = new CommandBuilder(CommandBuilder.COMPILE);
 			cb.setJDK(JDKPath);
-			cb.setRunPath(file.getPath());
+
+			// FIX: Hitta alla .java filer i samma directory som den valda filen
+			File parentDir = file.getParentFile();
+			File[] javaFiles = parentDir.listFiles((dir, name) -> name.endsWith(".java"));
+
+			// Bygg en sträng med alla .java filer separerade med mellanslag
+			StringBuilder filesToCompile = new StringBuilder();
+
+			if (javaFiles != null && javaFiles.length > 0) {
+				for (int i = 0; i < javaFiles.length; i++) {
+					filesToCompile.append(javaFiles[i].getPath());
+					if (i < javaFiles.length - 1) {
+						filesToCompile.append(" ");
+					}
+				}
+				cb.setRunPath(filesToCompile.toString());
+			} else {
+				// Fallback: Om inga filer hittas, använd bara den valda filen
+				cb.setRunPath(file.getPath());
+			}
 
 			String command = cb.generateCommand();
 			Process process = executeCommand(command, null);
