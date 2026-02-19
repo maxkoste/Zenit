@@ -10,13 +10,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import zenit.Zenit;
 
 public class JREVersions {
 
 	public static void createNew() {
-
 		try {
 			File file = new File("res/JDK/JDK.dat");
 
@@ -122,11 +122,24 @@ public class JREVersions {
 		
 		return success;
 	}
+
+	//Checks the JAVA_HOME variable
+	//TODO: Implement this as a better JDK check
+	public static Optional<File> getJavaHomeFromEnv(){
+		String javaHome = System.getenv("JAVA_HOME");
+		if(javaHome!=null && !javaHome.isBlank()){
+			File dir = new File(javaHome);
+			if(dir.exists()){
+				return Optional.of(dir);
+			}
+		}
+		return Optional.empty();
+	}
 	
 	public static File getJVMDirectory() {
 		String OS = Zenit.OS;
 		if (OS.equals("Mac OS X")) {
-			return new File("/library/java/javavirtualmachines");
+			return new File("/opt/homebrew/opt/openjdk");
 		} else if (OS.equals("Linux")) {
 			return new File("/usr/lib/jvm");
 		} else if (OS.equals("Windows")) {
