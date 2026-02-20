@@ -121,6 +121,7 @@ zenit/
 If the code doesn't compile you may need this extra dependency.
 Download the jar : https://repo1.maven.org/maven2/org/jetbrains/pty4j/pty4j/0.13.12/pty4j-0.13.12.jar
 
+After downloading run the following command in your terminal. Make sure to include the correct path to the jar file:
 ```
  mvn install:install-file \
   -Dfile=/path/to/pty4j-0.13.12.jar \
