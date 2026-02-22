@@ -123,12 +123,8 @@ public class FileController {
 			return builder.toString();
 		} catch (FileNotFoundException ex) {
 			ex.printStackTrace();
-
-			// TODO: give the user feedback that the file could not be found
 		} catch (IOException ex) {
 			ex.printStackTrace();
-
-			// TODO: handle IO exception
 		}
 		return null;
 	}
@@ -370,7 +366,6 @@ public class FileController {
 				return true;
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

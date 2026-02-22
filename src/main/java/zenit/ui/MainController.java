@@ -179,7 +179,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 			setFileController(fileController);
 
 			if (workspace != null) {
-				// TODO: Log this
 				fileController.changeWorkspace(workspace);
 			}
 
@@ -201,6 +200,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
 			
+
 			stage.setOnCloseRequest(event -> quit());
 
 		} catch (Exception e) {
@@ -832,10 +832,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			
-			// TODO: handle exception
 		}
-	
 	
 	}
 
@@ -1055,7 +1052,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 	@Override
 	public String getActiveStylesheet() {
-		// TODO Auto-generated method stub
 		return activeStylesheet;
 	}
 	

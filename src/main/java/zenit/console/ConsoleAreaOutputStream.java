@@ -25,8 +25,7 @@ public class ConsoleAreaOutputStream extends OutputStream {
 		try {
 			super.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

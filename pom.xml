@@ -23,7 +23,35 @@
 			<artifactId>javafx-controls</artifactId>
 			<version>${javafx.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.pty4j</groupId>
+			<artifactId>pty4j</artifactId>
+			<version>0.13.12</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>5.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib</artifactId>
+			<version>1.9.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>2.0.9</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>5.13.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
@@ -67,10 +95,11 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.kordamp.ikonli</groupId>
-			<artifactId>ikonli-fontawesome-pack</artifactId>
-			<version>11.3.3</version>
-		</dependency>
+	        <groupId>org.kordamp.ikonli</groupId>
+	        <artifactId>ikonli-javafx</artifactId>
+	        <version>11.3.3</version>
+	    </dependency>
+		
 
 		<dependency>
 			<groupId>com.kodedu.terminalfx</groupId>
@@ -78,13 +107,6 @@
 			<version>1.0.9</version>
 		</dependency>
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>terminalfx-repo</id>
-			<url>https://github.com/javaterminal/terminalfx/raw/master/releases</url>
-		</repository>
-	</repositories>
 
 	<build>
 		<plugins>
@@ -103,7 +125,6 @@
 					<mainClass>zenit.ui.TestUI</mainClass>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 

@@ -26,7 +26,6 @@ public class TextAreaOutputStream extends OutputStream {
 		try {
 			super.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
