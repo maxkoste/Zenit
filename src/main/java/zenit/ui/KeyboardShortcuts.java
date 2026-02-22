@@ -39,6 +39,8 @@ public final class KeyboardShortcuts {
 	 * 
 	 * @param scene      The scene to be used.
 	 * @param controller The controller to call methods from.
+	 * @param clipboard  The file tree clipboard for copy/cut/paste operations.
+	 * @param treeView   The file tree view.
 	 */
 	public static final void setupMain(Scene scene, MainController controller, FileTreeClipboard clipboard, TreeView<String> treeView) {
 //		add(scene, KeyCode.S, KeyCombination.SHORTCUT_DOWN, () -> controller.saveFile(null));
