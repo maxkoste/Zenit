@@ -51,6 +51,7 @@ import zenit.ui.tree.TreeContextMenu;
 import zenit.util.Tuple;
 import zenit.ui.projectinfo.ProjectMetadataController;
 import zenit.zencodearea.ZenCodeArea;
+import zenit.ui.tree.FileTreeDragAndDrop;
 
 /**
  * The controller part of the main GUI.
@@ -320,7 +321,9 @@ public class MainController extends VBox implements ThemeCustomizable {
 		TreeClickListener tcl = new TreeClickListener(this, treeView);
 		treeView.setContextMenu(tcm);
 		treeView.setOnMouseClicked(tcl);
-		
+
+		FileTreeDragAndDrop.attach(treeView);
+
 		rootItem.getChildren().sort((o1,o2)->{
 			FileTreeItem<String> t1 = (FileTreeItem<String>) o1;
 			FileTreeItem<String> t2 = (FileTreeItem<String>) o2;
