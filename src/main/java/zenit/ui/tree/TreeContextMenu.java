@@ -25,6 +25,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	
 	private MainController controller;
 	private TreeView<String> treeView;
+	private FileTreeClipboard clipboard;
 	
 	private Menu createItem = new Menu("New...");
 	private MenuItem createClass = new MenuItem("New class");
@@ -34,6 +35,9 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	private MenuItem deleteItem = new MenuItem("Delete");
 	private MenuItem importJar = new MenuItem("Import jar");
 	private MenuItem properties = new MenuItem("Properties");
+	private MenuItem copyItem = new MenuItem("Copy");
+	private MenuItem cutItem  = new MenuItem("Cut");
+	private MenuItem pasteItem = new MenuItem("Paste");
 	
 	/**
 	 * Creates a new {@link TreeContextMenu} that can manipulate a specific {@link
@@ -44,10 +48,11 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	 * @param treeView The {@link javafx.scene.control.TreeView TreeView} instance which will
 	 * be manipulated
 	 */
-	public TreeContextMenu(MainController controller, TreeView<String> treeView) {
+	public TreeContextMenu(MainController controller, TreeView<String> treeView, FileTreeClipboard clipboard) {
 		super();
 		this.controller = controller;
 		this.treeView = treeView;
+		this.clipboard = clipboard;
 		initContextMenu();
 	}
 	
@@ -60,6 +65,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		String deleteItemTitle = String.format("Delete \"%s\"", selectedNode);
 		renameItem.setText(renameItemTitle);
 		deleteItem.setText(deleteItemTitle);
+		pasteItem.setDisable(!clipboard.hasContent());
 				
 		if (selectedNode.equals("src") && !createItem.getItems().contains(createPackage)) {
 			createItem.getItems().add(createPackage);
@@ -99,7 +105,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	private void initContextMenu() {
 		createItem.getItems().add(createClass);
 		createItem.getItems().add(createInterface);
-		getItems().addAll(createItem, renameItem, deleteItem);
+		getItems().addAll(createItem, renameItem, deleteItem, copyItem, cutItem, pasteItem);
 		createClass.setOnAction(this);
 		createInterface.setOnAction(this);
 		renameItem.setOnAction(this);
@@ -107,6 +113,10 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		createPackage.setOnAction(this);
 		importJar.setOnAction(this);
 		properties.setOnAction(this);
+		copyItem.setOnAction(this);
+		cutItem.setOnAction(this);
+		pasteItem.setOnAction(this);
+
 	}
 	
 	/**
@@ -159,6 +169,12 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		} else if (actionEvent.getSource().equals(properties) && selectedItem.getType() == FileTreeItem.PROJECT) {
 			ProjectFile projectFile = new ProjectFile(selectedFile.getPath());
 			controller.showProjectProperties(projectFile);
+		} else if (actionEvent.getSource().equals(copyItem)) {
+			clipboard.copy(selectedItem);
+		} else if (actionEvent.getSource().equals(cutItem)) {
+			clipboard.cut(selectedItem);
+		} else if (actionEvent.getSource().equals(pasteItem)) {
+			clipboard.paste(selectedItem, treeView);
 		}
 	}
 }

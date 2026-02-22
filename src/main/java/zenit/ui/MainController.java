@@ -44,14 +44,10 @@ import zenit.javacodecompiler.ProcessBuffer;
 import zenit.settingspanel.SettingsPanelController;
 import zenit.settingspanel.ThemeCustomizable; // Implements
 import zenit.searchinfile.Search;
-import zenit.ui.tree.FileTree;
-import zenit.ui.tree.FileTreeItem;
-import zenit.ui.tree.TreeClickListener;
-import zenit.ui.tree.TreeContextMenu;
+import zenit.ui.tree.*;
 import zenit.util.Tuple;
 import zenit.ui.projectinfo.ProjectMetadataController;
 import zenit.zencodearea.ZenCodeArea;
-import zenit.ui.tree.FileTreeDragAndDrop;
 
 /**
  * The controller part of the main GUI.
@@ -149,6 +145,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 	
 	@FXML
 	private FXMLLoader loader;
+
+	private FileTreeClipboard clipboard;
 	
 
 	/**
@@ -196,7 +194,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 			initialize();
 			
 			stage.show();
-			KeyboardShortcuts.setupMain(scene, this);
+			KeyboardShortcuts.setupMain(scene, this, clipboard, treeView);
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
 			
@@ -317,7 +315,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 		}
 		treeView.setRoot(rootItem);
 		treeView.setShowRoot(false);
-		TreeContextMenu tcm = new TreeContextMenu(this, treeView);
+		clipboard = new FileTreeClipboard();
+		TreeContextMenu tcm = new TreeContextMenu(this, treeView, clipboard);
 		TreeClickListener tcl = new TreeClickListener(this, treeView);
 		treeView.setContextMenu(tcm);
 		treeView.setOnMouseClicked(tcl);
