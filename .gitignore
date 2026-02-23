@@ -1,4 +1,5 @@
 #Class files
+.idea/*
 bin/*
 *.class
 
