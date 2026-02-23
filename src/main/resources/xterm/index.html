@@ -4,8 +4,15 @@
     <link rel="stylesheet" href="xterm.css" />
 	<!-- should be resizable -->
     <style>
-        body { margin: 0; }
-        #terminal { height: 800vh; width: 100vw; }
+        html, body { 
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			width: 100%;
+			background: black;
+			overflow: hidden;
+		}
+        #terminal { height: 100%; width: 100%; }
     </style>
 </head>
 <body>

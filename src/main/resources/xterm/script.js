@@ -1,8 +1,10 @@
-
 const container = document.getElementById('terminal');
 
 window.term = new Terminal({
-	cursorBlink: true
+	cursorBlink: true,
+	theme: {
+		background:"#000000"
+	}
 });
 
 term.open(container);
