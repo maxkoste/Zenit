@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import zenit.terminal.JSBridge;
+import zenit.terminal.TerminalInstance;
 import zenit.terminal.TerminalSession;
 
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -41,8 +42,8 @@ import javafx.concurrent.Worker;
 public class ConsoleController implements Initializable {
 
 	private ArrayList<ConsoleArea> consoleList = new ArrayList<ConsoleArea>();
-	private ArrayList<AnchorPane> terminalList = new ArrayList<>();
-	private AnchorPane activeTerminal;
+	private ArrayList<TerminalInstance> terminalList = new ArrayList<>();
+	private TerminalInstance activeTerminal;
 	@FXML
 	private TabPane consoleTabPane;
 	@FXML
@@ -157,6 +158,11 @@ public class ConsoleController implements Initializable {
 		iconCloseTerminalInstance.setVisible(true);
 		iconCloseTerminalInstance.setDisable(false);
 
+		if (terminalList.isEmpty()) {
+			newTerminal();
+		} else {
+			activeTerminal.getContainer().toFront();
+		}
 	}
 
 	/**
@@ -212,8 +218,10 @@ public class ConsoleController implements Initializable {
 		terminalPane.getChildren().add(webView);
 		rootAnchor.getChildren().add(terminalPane);
 
-		terminalList.add(terminalPane);
-		activeTerminal = terminalPane;
+		TerminalInstance currentTerminal = new TerminalInstance(terminalPane, webView);
+
+		terminalList.add(currentTerminal);
+		activeTerminal = currentTerminal;
 
 		terminalPane.toFront();
 
@@ -222,6 +230,8 @@ public class ConsoleController implements Initializable {
 			if (state == Worker.State.SUCCEEDED) { //webpage loaded
 
 				TerminalSession session = new TerminalSession(engine);
+				currentTerminal.setSession(session);
+
 				session.start();
 
 				JSBridge bridge = new JSBridge(session.getProcess());
@@ -316,12 +326,13 @@ public class ConsoleController implements Initializable {
 
 		iconCloseTerminalInstance.setOnMouseClicked(e -> {
 			if (activeTerminal != null) {
-				rootAnchor.getChildren().remove(activeTerminal);
+				activeTerminal.getSession().stop();
+				rootAnchor.getChildren().remove(activeTerminal.getContainer());
 				terminalList.remove(activeTerminal);
 
 				if (!terminalList.isEmpty()) {
 					activeTerminal = terminalList.get(terminalList.size() - 1);
-					activeTerminal.toFront();
+					activeTerminal.getContainer().toFront();
 				}
 			}
 		});

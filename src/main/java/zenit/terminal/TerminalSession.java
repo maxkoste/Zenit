@@ -65,4 +65,10 @@ public class TerminalSession {
     public PtyProcess getProcess() {
 		return this.process;
     }
+
+	public void stop() {
+		if (this.process != null && this.process.isAlive()) {
+			this.process.destroy();
+		}
+	}
 }
