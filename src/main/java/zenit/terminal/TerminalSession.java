@@ -24,7 +24,7 @@ public class TerminalSession {
 	public void start() {
 		try {
 			String[] shell = System.getProperty("os.name").toLowerCase().contains("win")
-				? new String[] { "cmd.exe" } //TODO: Test on windows
+				? new String[] { "cmd.exe" }
 				: new String[] { "/bin/bash" };
 
 			PtyProcessBuilder builder = new PtyProcessBuilder(shell)

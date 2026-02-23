@@ -3,6 +3,11 @@ package zenit.terminal;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
+/**
+ * Wrapper class for the terminal
+ *
+ * @author Max Koste
+ */
 public class TerminalInstance {
 
 	private AnchorPane container;

@@ -35,10 +35,6 @@ import javafx.concurrent.Worker;
  * @author siggelabor
  *
  */
-/**
- * @author Admin
- *
- */
 public class ConsoleController implements Initializable {
 
 	private ArrayList<ConsoleArea> consoleList = new ArrayList<ConsoleArea>();
@@ -52,6 +48,8 @@ public class ConsoleController implements Initializable {
 	private Button btnConsole;
 	@FXML
 	private ChoiceBox<ConsoleArea> consoleChoiceBox;
+	@FXML
+	private ChoiceBox<TerminalInstance> terminalChoiceBox;
 	@FXML
 	private AnchorPane rootAnchor;
 	@FXML
@@ -75,7 +73,6 @@ public class ConsoleController implements Initializable {
 
 	public void setMainController(MainController mainController) {
 		this.mainController = mainController;
-
 	}
 
 	public List<String> getStylesheets() {
@@ -93,6 +90,8 @@ public class ConsoleController implements Initializable {
 		btnTerminal.setStyle("");
 		btnConsole.setStyle("-fx-text-fill:white; -fx-border-color:#666; -fx-border-width: 0 0 2 0;");
 
+		terminalChoiceBox.setVisible(false);
+		terminalChoiceBox.setDisable(true);
 		consoleChoiceBox.setVisible(true);
 		consoleChoiceBox.setDisable(false);
 		btnNewTerminal.setVisible(true);
@@ -147,6 +146,8 @@ public class ConsoleController implements Initializable {
 
 		consoleChoiceBox.setVisible(false);
 		consoleChoiceBox.setDisable(true);
+		terminalChoiceBox.setVisible(true);
+		terminalChoiceBox.setDisable(false);
 		btnNewTerminal.setVisible(true);
 		btnNewConsole.setVisible(false);
 		btnClearConsole.setDisable(true);
@@ -191,10 +192,11 @@ public class ConsoleController implements Initializable {
 		showConsoleTabs();
 	}
 
-	/*
+	/**
 	 * Creates a new Terminal, adds it to the terminal
 	 * AnchorPane and puts it as an option in the
 	 * choiceBox.
+	 * @author Max Koste
 	 */
 	public void newTerminal() {
 
@@ -224,6 +226,9 @@ public class ConsoleController implements Initializable {
 		activeTerminal = currentTerminal;
 
 		terminalPane.toFront();
+
+		terminalChoiceBox.getItems().add(currentTerminal);
+		terminalChoiceBox.getSelectionModel().select(currentTerminal);
 
 		showTerminalTabs();
 		engine.getLoadWorker().stateProperty().addListener((obs, old, state) -> {
@@ -290,6 +295,17 @@ public class ConsoleController implements Initializable {
 
 		});
 
+		terminalChoiceBox.getSelectionModel().selectedItemProperty().addListener((v,oldValue,newValue) -> {
+			if (newValue != null) {
+				for (TerminalInstance t : terminalList) {
+					if (newValue.equals(t)) {
+						t.getContainer().toFront();
+						activeTerminal = t;
+					}
+				}
+			}
+		});
+
 		showConsoleTabs();
 
 		// Console
@@ -329,6 +345,8 @@ public class ConsoleController implements Initializable {
 				activeTerminal.getSession().stop();
 				rootAnchor.getChildren().remove(activeTerminal.getContainer());
 				terminalList.remove(activeTerminal);
+				terminalChoiceBox.getItems().remove(activeTerminal);
+				terminalChoiceBox.getSelectionModel().selectLast();
 
 				if (!terminalList.isEmpty()) {
 					activeTerminal = terminalList.get(terminalList.size() - 1);
