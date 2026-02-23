@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="117e7bb5-4afc-4413-94c1-973e045bf665" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Test/java/zenit/filesystem/RunnableClassTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Test/java/zenit/javacodecompiler/DebugErrorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "develop",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Zenit$DebugErrorTest.ic" NAME="DebugErrorTest Coverage Results" MODIFIED="1771236247470" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>zenit.javacodecompiler.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Zenit$RunnableClassTest.ic" NAME="RunnableClassTest Coverage Results" MODIFIED="1771236267519" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>zenit.filesystem.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Zenit$TupleTest.ic" NAME="TupleTest Coverage Results" MODIFIED="1770898304124" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>zenit.util.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Zenit$StringUtilitiesTest.ic" NAME="StringUtilitiesTest Coverage Results" MODIFIED="1770900387620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>zenit.util.*</FILTER>
+    </SUITE>
+  </component>
+</project>
