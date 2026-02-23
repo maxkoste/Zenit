@@ -3,12 +3,15 @@ package zenit.ui;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyCombination.Modifier;
 import javafx.scene.input.KeyEvent;
 
+import zenit.ui.tree.FileTreeClipboard;
+import zenit.ui.tree.FileTreeItem;
 /**
  * Static methods for interacting with a scene's accelerators.
  * 
@@ -36,8 +39,10 @@ public final class KeyboardShortcuts {
 	 * 
 	 * @param scene      The scene to be used.
 	 * @param controller The controller to call methods from.
+	 * @param clipboard  The file tree clipboard for copy/cut/paste operations.
+	 * @param treeView   The file tree view.
 	 */
-	public static final void setupMain(Scene scene, MainController controller) {
+	public static final void setupMain(Scene scene, MainController controller, FileTreeClipboard clipboard, TreeView<String> treeView) {
 //		add(scene, KeyCode.S, KeyCombination.SHORTCUT_DOWN, () -> controller.saveFile(null));
 //		add(scene, KeyCode.O, KeyCombination.SHORTCUT_DOWN, () -> controller.openFile((Event) null));
 //		add(scene, KeyCode.N, KeyCombination.SHORTCUT_DOWN, controller::addTab);
@@ -67,6 +72,27 @@ public final class KeyboardShortcuts {
 				if (event.getCode() == KeyCode.DELETE) {
 					controller.deleteFileFromTreeView();
 				}
+			}
+		});
+
+		// File tree: Copy / Cut / Paste
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			if (!treeView.isFocused()) return;
+
+			FileTreeItem<String> selected = (FileTreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+			if (selected == null) return;
+
+			boolean isShortcut = event.isShortcutDown();
+
+			if (isShortcut && event.getCode() == KeyCode.C) {
+				clipboard.copy(selected);
+				event.consume();
+			} else if (isShortcut && event.getCode() == KeyCode.X) {
+				clipboard.cut(selected);
+				event.consume();
+			} else if (isShortcut && event.getCode() == KeyCode.V) {
+				clipboard.paste(selected, treeView);
+				event.consume();
 			}
 		});
 	}
