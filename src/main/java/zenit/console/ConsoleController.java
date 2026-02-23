@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import zenit.terminal.JSBridge;
+import zenit.terminal.TerminalInstance;
 import zenit.terminal.TerminalSession;
 
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -34,15 +35,11 @@ import javafx.concurrent.Worker;
  * @author siggelabor
  *
  */
-/**
- * @author Admin
- *
- */
 public class ConsoleController implements Initializable {
 
 	private ArrayList<ConsoleArea> consoleList = new ArrayList<ConsoleArea>();
-	private ArrayList<AnchorPane> terminalList = new ArrayList<>();
-	private AnchorPane activeTerminal;
+	private ArrayList<TerminalInstance> terminalList = new ArrayList<>();
+	private TerminalInstance activeTerminal;
 	@FXML
 	private TabPane consoleTabPane;
 	@FXML
@@ -51,6 +48,8 @@ public class ConsoleController implements Initializable {
 	private Button btnConsole;
 	@FXML
 	private ChoiceBox<ConsoleArea> consoleChoiceBox;
+	@FXML
+	private ChoiceBox<TerminalInstance> terminalChoiceBox;
 	@FXML
 	private AnchorPane rootAnchor;
 	@FXML
@@ -74,7 +73,6 @@ public class ConsoleController implements Initializable {
 
 	public void setMainController(MainController mainController) {
 		this.mainController = mainController;
-
 	}
 
 	public List<String> getStylesheets() {
@@ -92,6 +90,8 @@ public class ConsoleController implements Initializable {
 		btnTerminal.setStyle("");
 		btnConsole.setStyle("-fx-text-fill:white; -fx-border-color:#666; -fx-border-width: 0 0 2 0;");
 
+		terminalChoiceBox.setVisible(false);
+		terminalChoiceBox.setDisable(true);
 		consoleChoiceBox.setVisible(true);
 		consoleChoiceBox.setDisable(false);
 		btnNewTerminal.setVisible(true);
@@ -146,6 +146,8 @@ public class ConsoleController implements Initializable {
 
 		consoleChoiceBox.setVisible(false);
 		consoleChoiceBox.setDisable(true);
+		terminalChoiceBox.setVisible(true);
+		terminalChoiceBox.setDisable(false);
 		btnNewTerminal.setVisible(true);
 		btnNewConsole.setVisible(false);
 		btnClearConsole.setDisable(true);
@@ -157,6 +159,11 @@ public class ConsoleController implements Initializable {
 		iconCloseTerminalInstance.setVisible(true);
 		iconCloseTerminalInstance.setDisable(false);
 
+		if (terminalList.isEmpty()) {
+			newTerminal();
+		} else {
+			activeTerminal.getContainer().toFront();
+		}
 	}
 
 	/**
@@ -185,10 +192,11 @@ public class ConsoleController implements Initializable {
 		showConsoleTabs();
 	}
 
-	/*
+	/**
 	 * Creates a new Terminal, adds it to the terminal
 	 * AnchorPane and puts it as an option in the
 	 * choiceBox.
+	 * @author Max Koste
 	 */
 	public void newTerminal() {
 
@@ -212,16 +220,23 @@ public class ConsoleController implements Initializable {
 		terminalPane.getChildren().add(webView);
 		rootAnchor.getChildren().add(terminalPane);
 
-		terminalList.add(terminalPane);
-		activeTerminal = terminalPane;
+		TerminalInstance currentTerminal = new TerminalInstance(terminalPane, webView);
+
+		terminalList.add(currentTerminal);
+		activeTerminal = currentTerminal;
 
 		terminalPane.toFront();
+
+		terminalChoiceBox.getItems().add(currentTerminal);
+		terminalChoiceBox.getSelectionModel().select(currentTerminal);
 
 		showTerminalTabs();
 		engine.getLoadWorker().stateProperty().addListener((obs, old, state) -> {
 			if (state == Worker.State.SUCCEEDED) { //webpage loaded
 
 				TerminalSession session = new TerminalSession(engine);
+				currentTerminal.setSession(session);
+
 				session.start();
 
 				JSBridge bridge = new JSBridge(session.getProcess());
@@ -280,6 +295,17 @@ public class ConsoleController implements Initializable {
 
 		});
 
+		terminalChoiceBox.getSelectionModel().selectedItemProperty().addListener((v,oldValue,newValue) -> {
+			if (newValue != null) {
+				for (TerminalInstance t : terminalList) {
+					if (newValue.equals(t)) {
+						t.getContainer().toFront();
+						activeTerminal = t;
+					}
+				}
+			}
+		});
+
 		showConsoleTabs();
 
 		// Console
@@ -316,12 +342,15 @@ public class ConsoleController implements Initializable {
 
 		iconCloseTerminalInstance.setOnMouseClicked(e -> {
 			if (activeTerminal != null) {
-				rootAnchor.getChildren().remove(activeTerminal);
+				activeTerminal.getSession().stop();
+				rootAnchor.getChildren().remove(activeTerminal.getContainer());
 				terminalList.remove(activeTerminal);
+				terminalChoiceBox.getItems().remove(activeTerminal);
+				terminalChoiceBox.getSelectionModel().selectLast();
 
 				if (!terminalList.isEmpty()) {
 					activeTerminal = terminalList.get(terminalList.size() - 1);
-					activeTerminal.toFront();
+					activeTerminal.getContainer().toFront();
 				}
 			}
 		});
