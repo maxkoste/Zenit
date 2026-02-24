@@ -209,6 +209,34 @@ public class MainController extends VBox implements ThemeCustomizable {
 	public FXMLLoader getFXMLLoader() {
 		return loader;
 	}
+
+	private void checkJDKConfiguration() {
+		String effectiveJDK = zenit.filesystem.jreversions.JREVersions.getEffectiveJDKPath(null);
+
+		if (effectiveJDK != null) {
+			return;
+		}
+
+		// No JDK available at all - prompt user
+		Platform.runLater(() -> {
+			int choice = DialogBoxes.twoChoiceDialog(
+					"JDK Configuration Required",
+					"Zenit needs a JDK to work properly",
+					"No JDK found.\n\n" +
+							"Zenit couldn't find:\n" +
+							"  • A configured default JDK\n" +
+							"  • JAVA_HOME environment variable\n\n" +
+							"Would you like to add a JDK now?\n\n" +
+							"You can also do this later via File → JRE Versions",
+					"Yes, configure now",
+					"Skip for now"
+			);
+
+			if (choice == 1) {
+				openJREVersions();
+			}
+		});
+	}
 	
 	/**
 	 * Setter for FileController instance. Used to access the file system.
@@ -243,6 +271,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 		btnStop.setOnAction(event -> terminate());
 		initTree();
 		consoleController.setMainController(this);
+
+		checkJDKConfiguration();
 	}
 
 	/**
