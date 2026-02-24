@@ -325,9 +325,8 @@ public class ConsoleController implements Initializable {
 				newConsole(new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#444"));
 			} else {
 				newConsole(
-						new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
+					new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
 			}
-
 		});
 
 		iconTerminateProcess.setOnMouseClicked(e -> {
