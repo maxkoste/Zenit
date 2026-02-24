@@ -48,7 +48,8 @@ public class JREVersions {
 	}
 
 	public static List<File> read() {
-		
+		ensureJDKDirectoryExists();
+
 		ArrayList<File> JDKs = new ArrayList<File>();
 		File file;
 		
@@ -130,7 +131,10 @@ public class JREVersions {
 		if(javaHome!=null && !javaHome.isBlank()){
 			File dir = new File(javaHome);
 			if(dir.exists()){
-				return Optional.of(dir);
+				boolean valid = JDKVerifier.validJDK(dir);
+				if(valid) {
+					return Optional.of(dir);
+				}
 			}
 		}
 		return Optional.empty();
@@ -162,6 +166,7 @@ public class JREVersions {
 	}
 
 	public static void setDefaultJDKFile(File file) {
+		ensureJDKDirectoryExists();
 		File defaultJDK = new File("res/JDK/DefaultJDK.dat");
 			
 		try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(
@@ -227,8 +232,10 @@ public class JREVersions {
 		return null;
 	}
 
-	public static boolean hasValidDefaultJDK() {
-		File defaultJDK = getDefaultJDKFile();
-		return defaultJDK != null && defaultJDK.exists() && JDKVerifier.validJDK(defaultJDK);
+	private static void ensureJDKDirectoryExists() {
+		File jdkDir = new File("res/JDK");
+		if (!jdkDir.exists()) {
+			jdkDir.mkdirs();
+		}
 	}
 }
