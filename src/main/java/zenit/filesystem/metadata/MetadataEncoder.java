@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import zenit.filesystem.RunnableClass;
+import zenit.filesystem.jreversions.JREVersions;
 
 /**
  * Encodes a {@link Metadata} object to file.
@@ -49,13 +50,17 @@ public class MetadataEncoder {
 		
 		//JRE Version
 		line = metadata.getJREVersion();
-		if (line != null) {
-			lines.add("JRE VERSION");
-			lines.add(line);
-		} else {
-			lines.add("JRE VERSION");
-			lines.add("unknown");
+		if (line != null || line.equals("unknown")){
+			//Use default JDK
+			File defaultJDK = JREVersions.getDefaultJDKFile();
+			if (defaultJDK != null) {
+				line = defaultJDK.getName();
+			} else {
+				line = "unknown";
+			}
 		}
+		lines.add("JRE VERSION");
+		lines.add(line);
 		
 		//Runnable classes
 		RunnableClass[] runnableClasses = metadata.getRunnableClasses();

@@ -48,7 +48,8 @@ public class JREVersions {
 	}
 
 	public static List<File> read() {
-		
+		ensureJDKDirectoryExists();
+
 		ArrayList<File> JDKs = new ArrayList<File>();
 		File file;
 		
@@ -130,7 +131,10 @@ public class JREVersions {
 		if(javaHome!=null && !javaHome.isBlank()){
 			File dir = new File(javaHome);
 			if(dir.exists()){
-				return Optional.of(dir);
+				boolean valid = JDKVerifier.validJDK(dir);
+				if(valid) {
+					return Optional.of(dir);
+				}
 			}
 		}
 		return Optional.empty();
@@ -162,6 +166,7 @@ public class JREVersions {
 	}
 
 	public static void setDefaultJDKFile(File file) {
+		ensureJDKDirectoryExists();
 		File defaultJDK = new File("res/JDK/DefaultJDK.dat");
 			
 		try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(
@@ -190,5 +195,47 @@ public class JREVersions {
 			return null;
 		}
 		
+	}
+
+	public static String getEffectiveJDKPath(String jdkName) {
+		// PRIORITY 1: User's selected default JDK (overrides everything)
+		File defaultJDK = getDefaultJDKFile();
+		if (defaultJDK != null && defaultJDK.exists() && JDKVerifier.validJDK(defaultJDK)) {
+			return defaultJDK.getPath();
+		}
+
+		// PRIORITY 2: JAVA_HOME environment variable
+		Optional<File> javaHome = getJavaHomeFromEnv();
+		if (javaHome.isPresent() && JDKVerifier.validJDK(javaHome.get())) {
+			return javaHome.get().getPath();
+		}
+
+		// PRIORITY 3: Project-specific JDK from metadata (if explicitly set)
+		if (jdkName != null && !jdkName.equals("unknown") && !jdkName.trim().isEmpty()) {
+
+			// Check if it's already a valid full path
+			File jdkFile = new File(jdkName);
+			if (jdkFile.exists() && JDKVerifier.validJDK(jdkFile)) {
+				return jdkName;
+			}
+
+			// Look up by name in the JDK list
+			List<File> jdks = read();
+			for (File jdk : jdks) {
+				if (jdk.getName().equals(jdkName) && JDKVerifier.validJDK(jdk)) {
+					return jdk.getPath();
+				}
+			}
+		}
+
+		// No valid JDK found anywhere
+		return null;
+	}
+
+	private static void ensureJDKDirectoryExists() {
+		File jdkDir = new File("res/JDK");
+		if (!jdkDir.exists()) {
+			jdkDir.mkdirs();
+		}
 	}
 }
