@@ -1015,12 +1015,18 @@ public class MainController extends VBox implements ThemeCustomizable {
 		directoryChooser.setTitle("Select project to import");
 		File source = directoryChooser.showDialog(stage);
 
+		System.out.println("[DEBUGG] Importing project");
+
 		if (source != null) {
 			try {
 				File target = fileController.importProject(source);
-				FileTree.createParentNode((FileTreeItem<String>) treeView.getRoot(), target);
-				DialogBoxes.informationDialog("Import complete", "Project is imported to workspace");
+				if(target != null){
+					FileTree.createParentNode((FileTreeItem<String>) treeView.getRoot(), target);
+					DialogBoxes.informationDialog("Import complete", "Project is imported to workspace");
+				} else DialogBoxes.informationDialog("Import failed",
+					"The directory you tried to import is the current workspace");
 			} catch (IOException ex) {
+				System.out.println("[DEBUGG] An error occured");
 				DialogBoxes.errorDialog("Import failed", "Couldn't import project", ex.getMessage());
 			}
 		}
