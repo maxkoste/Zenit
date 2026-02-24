@@ -25,6 +25,7 @@ public class FileController {
 	 * Creates a new file controller to manipulate the file system
 	 */
 	public FileController(File workspace) {
+		System.out.println("[DEBUGG] Workspace is : " + workspace.toString());
 		this.workspace = workspace;
 	}
 	
@@ -261,8 +262,15 @@ public class FileController {
 	 * @return The copied File
 	 */
 	public File importProject(File source) throws IOException {
-			File target = ProjectHandler.importProject(source, workspace);
-			return target;
+		System.out.println("[DEBUGG] Source is located at : " + source.toString());
+		System.out.println("[DEBUGG] Workspace is located at : " + this.workspace.toString());
+
+		if (source.toString().equals(workspace.toString())) {
+			System.out.println("[DEBUGG] Source == to target, Can't import itself");
+			return null;
+		}
+		File target = ProjectHandler.importProject(source, workspace);
+		return target;
 	}
 	
 	//Library methods
