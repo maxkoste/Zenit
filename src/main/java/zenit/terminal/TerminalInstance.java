@@ -1,5 +1,7 @@
 package zenit.terminal;
 
+import java.io.File;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebView;
 
@@ -35,5 +37,12 @@ public class TerminalInstance {
 		if (this.session != null) {
 			return this.session;
 		} else return null;
+	}
+
+	public void setCurrWorkspace(File currWorkspace){
+		if (this.session != null) {
+			System.out.println("[DEBUG TerminalInstance] This session is null, can't set current workspace");
+			this.session.setCurrWorkspace(currWorkspace);
+		}
 	}
 }

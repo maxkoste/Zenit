@@ -1,5 +1,6 @@
 package zenit.console;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,13 +71,29 @@ public class ConsoleController implements Initializable {
 	private ConsoleArea activeConsole;
 	private AnchorPane noConsolePane;
 	private MainController mainController;
+	private File currWorkspace;
 
 	public void setMainController(MainController mainController) {
 		this.mainController = mainController;
+		this.currWorkspace = null;
 	}
 
 	public List<String> getStylesheets() {
 		return rootNode.getStylesheets();
+	}
+
+	public void setCurrWorkspace(File currWorkspace){
+		if (currWorkspace == null) {
+			System.out.println("[DEBUG CONSOLECONTROLER] Current workspace null setting to default home path");
+			this.currWorkspace = new File(System.getProperty("user.home"));
+		} else {
+			System.out.println("[DEBUG CONSOLECONTROLER] Setting the current Workspace to " + currWorkspace.toString());
+			this.currWorkspace = currWorkspace;
+		}
+	}
+
+	public File getCurrentWorkspace(){
+		return this.currWorkspace;
 	}
 
 	/**
@@ -236,6 +253,8 @@ public class ConsoleController implements Initializable {
 
 				TerminalSession session = new TerminalSession(engine);
 				currentTerminal.setSession(session);
+
+				currentTerminal.setCurrWorkspace(this.currWorkspace);
 
 				session.start();
 

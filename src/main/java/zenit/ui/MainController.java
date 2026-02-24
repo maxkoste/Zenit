@@ -147,6 +147,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private FXMLLoader loader;
 
 	private FileTreeClipboard clipboard;
+
+	private File workspace;
 	
 
 	/**
@@ -163,17 +165,17 @@ public class MainController extends VBox implements ThemeCustomizable {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/zenit/ui/Main.fxml"));
 			
-			File workspace = null;
+			this.workspace = null;
 
 			try {
-				workspace = WorkspaceHandler.readWorkspace();
+				this.workspace = WorkspaceHandler.readWorkspace();
 			} catch (IOException ex) {
 				DirectoryChooser directoryChooser = new DirectoryChooser();
 				directoryChooser.setTitle("Select new workspace folder");
-				workspace = directoryChooser.showDialog(stage);
+				this.workspace = directoryChooser.showDialog(stage);
 			}
 
-			FileController fileController = new FileController(workspace);
+			FileController fileController = new FileController(this.workspace);
 			setFileController(fileController);
 
 			if (workspace != null) {
@@ -271,6 +273,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 		btnStop.setOnAction(event -> terminate());
 		initTree();
 		consoleController.setMainController(this);
+		consoleController.setCurrWorkspace(this.workspace);
 
 		checkJDKConfiguration();
 	}
