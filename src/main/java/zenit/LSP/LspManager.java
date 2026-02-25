@@ -1,8 +1,10 @@
 package zenit.LSP;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
@@ -64,13 +66,56 @@ public class LspManager {
 			"-data", workspacePath);
 
 		pb.directory(baseDir);
-		pb.inheritIO(); // show logs in console
 
 		Process p = pb.start();
 		this.stdin = p.getOutputStream();
 		this.writer = new BufferedWriter(new OutputStreamWriter(stdin));
 
+		sendInitialize();
+
+		startReading(p);
+
 		return p;
+	}
+
+	public void startReading(Process p){
+		new Thread(()->{
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+				String line;
+				while ((line=reader.readLine()) != null) {
+					System.out.println("[LSP OUTPUT] " + line);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}).start();
+	}
+
+	public void sendInitialize() throws IOException {
+		String json = """
+		{
+		"jsonrpc": "2.0",
+		"id": 1,
+		"method": "initialize",
+		"params": {
+		"processId": %d,
+		"rootUri": "%s",
+		"capabilities": {}
+		}
+		}
+		""".formatted(
+			ProcessHandle.current().pid(),
+			workspace.toURI().toString()
+		);
+
+		String message = "Content-Length: " + json.getBytes().length + "\r\n\r\n" + json;
+
+		writer.write(message);
+		writer.flush();
+	}
+
+	public void readFile(){
+		//TODO: Read a file and see the diagnostics
 	}
 
 	public OutputStream getStdin() {
