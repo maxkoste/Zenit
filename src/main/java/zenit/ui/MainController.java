@@ -30,6 +30,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import zenit.Zenit;
+import zenit.LSP.LspManager;
 import zenit.console.ConsoleArea;
 import zenit.console.ConsoleController;
 import zenit.filesystem.FileController; // Aggregation
@@ -200,6 +201,9 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
 			
+			LspManager lspManager = new LspManager();
+			lspManager.setWorkspace(workspace);
+			lspManager.startServer();
 
 			stage.setOnCloseRequest(event -> quit());
 
