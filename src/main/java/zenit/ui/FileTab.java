@@ -13,7 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-
+import zenit.LSP.LspManager;
 import zenit.filesystem.FileController;
 import zenit.util.StringUtilities;
 import zenit.zencodearea.ZenCodeArea;
@@ -30,13 +30,15 @@ public class FileTab extends Tab {
 	private MainController mc;
 	
 	private ZenCodeArea zenCodeArea;
+	private LspManager lspManager;
 	
 	private boolean hasChanged;
 	
 	/**
 	 * Constructs a new FileTab without a file, setting the title to "Untitled".
 	 */
-	public FileTab(ZenCodeArea zenCodeArea, MainController mc) {
+	public FileTab(ZenCodeArea zenCodeArea, MainController mc, LspManager lspManager) {
+		this.lspManager = lspManager;
 		this.zenCodeArea = zenCodeArea;
 		this.mc = mc;
 		initialTitle = "Untitled";
@@ -232,6 +234,7 @@ public class FileTab extends Tab {
 	 */
 	public void update(File file) {
 		setFile(file, false);
+
 		hasChanged = false;
 		updateUI();
 	}
@@ -266,6 +269,12 @@ public class FileTab extends Tab {
 		setText(initialTitle);
 		
 		if (shouldSetContent && file != null) {
+			try {
+				System.out.println("[DEBUG] Sending this text to the LSP server: \n " + FileController.readFile(file));
+				this.lspManager.sendDidOpen(file.getAbsolutePath(), FileController.readFile(file));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			setFileText(FileController.readFile(file));
 		}
 	}

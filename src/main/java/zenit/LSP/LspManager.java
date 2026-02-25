@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
 
 public class LspManager {
 	private String serverPath;
@@ -116,6 +117,27 @@ public class LspManager {
 
 	public void readFile(){
 		//TODO: Read a file and see the diagnostics
+	}
+	public void sendDidOpen(String filePath, String content) throws IOException{
+		String json = """
+		{
+		"jsonrpc": "2.0",
+		"method": "textDocument/didOpen",
+		"params": {
+		"textDocument": {
+		"uri": "%s",
+		"languageId": "java",
+		"version": 1,
+		"text": "%s"
+		}
+		}
+		}
+		""".formatted(Path.of(filePath).toUri().toString(), content.replace("\n", "\\n").replace("\"", "\\\""));
+
+		String message = "Content-Length: " + json.getBytes().length + "\r\n\r\n" + json;
+
+		writer.write(message);
+		writer.flush();
 	}
 
 	public OutputStream getStdin() {

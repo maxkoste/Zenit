@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
+
 import java.util.LinkedList;
 import java.util.ArrayList;
 
@@ -150,6 +152,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private FileTreeClipboard clipboard;
 
 	private File workspace;
+
+	private LspManager lspManager;
 	
 
 	/**
@@ -201,7 +205,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
 			
-			LspManager lspManager = new LspManager();
+			this.lspManager = new LspManager();
 			lspManager.setWorkspace(workspace);
 			lspManager.startServer();
 
@@ -612,15 +616,16 @@ public class MainController extends VBox implements ThemeCustomizable {
 		if (file != null && getTabFromFile(file) == null) {
 
 			if (supportedFileFormat(file)) {
-			
-			FileTab selectedTab = addTab();
-			selectedTab.setFile(file, true);
+				System.out.println("[DEBUG] Opening file tab at " + file.getAbsolutePath());
 
-			selectedTab.setText(file.getName());
+				FileTab selectedTab = addTab();
+				selectedTab.setFile(file, true);
+
+				selectedTab.setText(file.getName());
 			} else {
 				String fileType = file.getName().substring(file.getName().lastIndexOf('.'));
 				DialogBoxes.errorDialog("Not supported", "File type not supported by Zenit", 
-						"The file type " + fileType + " is not yet supported by this application.");
+					"The file type " + fileType + " is not yet supported by this application.");
 			}
 		} else if (file != null && getTabFromFile(file) != null) { // Tab already open
 			tabPane.getSelectionModel().select(getTabFromFile(file));
@@ -924,7 +929,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @return The new Tab.
 	 */
 	public FileTab addTab() {
-		FileTab tab = new FileTab(createNewZenCodeArea(), this);
+		FileTab tab = new FileTab(createNewZenCodeArea(), this, this.lspManager);
 		tab.setOnCloseRequest(event -> closeTab(event));
 		tabPane.getTabs().add(tab);
 
