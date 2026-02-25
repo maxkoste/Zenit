@@ -9,6 +9,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 
+/**
+ * OBS! This code only works if you've downloaded and installed the
+ * jdt-language-server and unpacked it at the location specified by this code
+ * e.g /Users/maxkoste/Dev/Java/jdt-language-server
+ * @author maxkoste
+ */
+
 public class LspManager {
 	private String serverPath;
 	private File workspace;
@@ -16,7 +23,7 @@ public class LspManager {
 	private BufferedWriter writer;
 
 	public LspManager() {
-		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server";
+		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server"; //Hardcoded path for now!
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
@@ -115,9 +122,6 @@ public class LspManager {
 		writer.flush();
 	}
 
-	public void readFile(){
-		//TODO: Read a file and see the diagnostics
-	}
 	public void sendDidOpen(String filePath, String content) throws IOException{
 		String json = """
 		{
