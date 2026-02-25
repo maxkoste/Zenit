@@ -23,7 +23,8 @@ public class LspManager {
 	private BufferedWriter writer;
 
 	public LspManager() {
-		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server"; //Hardcoded path for now!
+		//TODO: Don't use a hardcoded path for the language server
+		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server";
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
