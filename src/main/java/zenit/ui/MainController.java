@@ -364,6 +364,77 @@ public class MainController extends VBox implements ThemeCustomizable {
 	}
 
 	/**
+	 * Refreshes the file tree starting from the selected item.
+	 * Rescans the file system and updates the tree while keeping expanded state of folders.
+	 * @param selectedItem The tree item to refresh. If null, refreshes from root.
+	 */
+	public void refreshFileTree(FileTreeItem<String> selectedItem) {
+		// If no item selected, use root
+		if (selectedItem == null) {
+			selectedItem = (FileTreeItem<String>) treeView.getRoot();
+		}
+
+		if (selectedItem == null) {
+			return;
+		}
+
+		File fileToRefresh = selectedItem.getFile();
+
+		if (fileToRefresh == null || !fileToRefresh.exists()) {
+			return;
+		}
+
+		List<String> expandedPaths = new ArrayList<>();
+		storeExpandedState(selectedItem, expandedPaths);
+
+		selectedItem.getChildren().clear();
+
+		if (fileToRefresh.isDirectory()) {
+			FileTree.createNodes(selectedItem, fileToRefresh);
+
+			selectedItem.getChildren().sort((o1, o2) -> {
+				FileTreeItem<String> t1 = (FileTreeItem<String>) o1;
+				FileTreeItem<String> t2 = (FileTreeItem<String>) o2;
+				return t1.getValue().compareTo(t2.getValue());
+			});
+		}
+
+		restoreExpandedState(selectedItem, expandedPaths);
+
+		treeView.refresh();
+	}
+
+	//Recursively stores the paths of all expanded tree items
+	private void storeExpandedState(FileTreeItem<String> item, List<String> expandedPaths) {
+		if (item == null || item.getFile() == null) {
+			return;
+		}
+
+		if (item.isExpanded()) {
+			expandedPaths.add(item.getFile().getAbsolutePath());
+		}
+
+		for (Object child : item.getChildren()) {
+			storeExpandedState((FileTreeItem<String>) child, expandedPaths);
+		}
+	}
+
+	//Recursively restores the expanded state of tree items
+	private void restoreExpandedState(FileTreeItem<String> item, List<String> expandedPaths) {
+		if (item == null || item.getFile() == null) {
+			return;
+		}
+
+		if (expandedPaths.contains(item.getFile().getAbsolutePath())) {
+			item.setExpanded(true);
+		}
+
+		for (Object child : item.getChildren()) {
+			restoreExpandedState((FileTreeItem<String>) child, expandedPaths);
+		}
+	}
+
+	/**
 	 * Input name from dialog box and creates a new file in specified parent folder.
 	 * 
 	 * @param parent The parent folder of the file to be created.
@@ -441,18 +512,58 @@ public class MainController extends VBox implements ThemeCustomizable {
 		}
 		
 		File file = tab.getFile();
+		boolean wasDeleted = false;
 
 		if (file == null) {
 			file = chooseFile();
+		}
+		else if(!file.exists()){
+			int choice = DialogBoxes.twoChoiceDialog(
+					"File Not Found",
+					"The file no longer exists",
+					"The file '" + file.getName() + "' has been deleted.\n\n" + "Would you like to recreate it and save your changes?",
+					"Save as new file",
+					"Discard changes"
+			);
+
+			if(choice==1){
+				try {
+					File parentDir = file.getParentFile();
+					if (parentDir != null && !parentDir.exists()) {
+						parentDir.mkdirs(); //Recreate parent directory if needed
+					}
+					file.createNewFile();
+					wasDeleted = true;
+				} catch (IOException ex) {
+					DialogBoxes.errorDialog(
+							"Cannot Create File",
+							"Failed to recreate the file",
+							ex.getMessage()
+					);
+					return false;
+				}
+			}
+			else {
+				//Discard changes, close the tab
+				tab.setFile(null, false);
+				return false;
+			}
 		}
 
 		boolean didWrite = fileController.writeFile(file, tab.getFileText());
 
 		if (didWrite) {
 			tab.update(file);
-			FileTree.createParentNode((FileTreeItem<String>) treeView.getRoot(), file);
+
+			if(wasDeleted) {
+				FileTree.removeFromFile((FileTreeItem<String>) treeView.getRoot(), file);
+				refreshFileTree((FileTreeItem<String>) treeView.getRoot());
+			}
+			else{
+				FileTree.createParentNode((FileTreeItem<String>) treeView.getRoot(), file);
+			}
 			
-			if (backgroundCompile) {
+			if (backgroundCompile && file.getName().endsWith(".java")) {
 				backgroundCompiling(file);
 			}
 		} else {
@@ -473,6 +584,20 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private boolean saveFile(boolean backgroundCompile, File file, String text) {
 		if (file == null) {
 			return saveFile(backgroundCompile);
+		}
+
+		if (!file.exists()) {
+			try {
+				file.getParentFile().mkdirs(); //Make sure parent directory exists
+				file.createNewFile();
+			} catch (IOException ex) {
+				DialogBoxes.errorDialog(
+						"Cannot Create File",
+						"Failed to create the file",
+						ex.getMessage()
+				);
+				return false;
+			}
 		}
 
 		boolean didWrite = fileController.writeFile(file, text);
@@ -690,9 +815,14 @@ public class MainController extends VBox implements ThemeCustomizable {
 //		fileHistory.add(0, file);
 //		historyIndex++;
 //		System.out.println(historyIndex);
-		
-		deletedFile.set(file, FileController.readFile(file));
-		
+
+		if (file.isFile()) {
+			deletedFile.set(file, FileController.readFile(file));
+		}
+		else{
+			deletedFile.set(file, null);
+		}
+
 		fileController.deleteFile(file);
 		
 		var tabs = tabPane.getTabs();
