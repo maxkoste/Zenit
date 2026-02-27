@@ -15,7 +15,9 @@ import java.util.Map;
 /**
  * OBS! This code only works if you've downloaded and installed the
  * jdt-language-server and unpacked it at the location specified by this code
- * e.g /Users/maxkoste/Dev/Java/jdt-language-server
+ * that means that you have to change the serverPath variable to match where
+ * you unpacked the jdt-language-server
+ *
  * @author maxkoste
  */
 
@@ -27,8 +29,10 @@ public class LspManager {
 	private Map<String, Integer> documentVersion = new HashMap<>();
 
 	public LspManager() {
-		//TODO: Don't use a hardcoded path for the language server
-		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server";
+		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server"; // Change this to the path where the
+																			// jdt-language-server is unpacked on your
+																			// computer
+
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
@@ -67,16 +71,20 @@ public class LspManager {
 
 		String workspacePath = workspace.getAbsolutePath();
 
+		String osVar = System.getProperty("os.name").toLowerCase().contains("win") 
+			? "/config_windows" 
+			: "/config_mac";
+
 		ProcessBuilder pb = new ProcessBuilder(
-			"java",
-			"-Declipse.application=org.eclipse.jdt.ls.core.id1",
-			"-Dosgi.bundles.defaultStartLevel=4",
-			"-Declipse.product=org.eclipse.jdt.ls.core.product",
-			"-Dlog.protocol=true",
-			"-Dlog.level=ALL",
-			"-jar", launcherJar.getAbsolutePath(),
-			"-configuration", baseDir.getAbsolutePath() + "/config_mac",
-			"-data", workspacePath);
+				"java",
+				"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+				"-Dosgi.bundles.defaultStartLevel=4",
+				"-Declipse.product=org.eclipse.jdt.ls.core.product",
+				"-Dlog.protocol=true",
+				"-Dlog.level=ALL",
+				"-jar", launcherJar.getAbsolutePath(),
+				"-configuration", baseDir.getAbsolutePath() + osVar,
+				"-data", workspacePath);
 
 		pb.directory(baseDir);
 
@@ -91,11 +99,11 @@ public class LspManager {
 		return p;
 	}
 
-	public void startReading(Process p){
-		new Thread(()->{
+	public void startReading(Process p) {
+		new Thread(() -> {
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
 				String line;
-				while ((line=reader.readLine()) != null) {
+				while ((line = reader.readLine()) != null) {
 					System.out.println("[LSP OUTPUT] " + line);
 				}
 			} catch (Exception e) {
@@ -106,32 +114,31 @@ public class LspManager {
 
 	public void sendInitialize() throws IOException {
 		String json = """
-		{
-		"jsonrpc": "2.0",
-		"id": 1,
-		"method": "initialize",
-		"params": {
-		"processId": %d,
-		"rootUri": "%s",
-		"capabilities": {}
-		}
-		}
-		""".formatted(
-			ProcessHandle.current().pid(),
-			workspace.toURI().toString()
-		);
+				{
+				"jsonrpc": "2.0",
+				"id": 1,
+				"method": "initialize",
+				"params": {
+				"processId": %d,
+				"rootUri": "%s",
+				"capabilities": {}
+				}
+				}
+				""".formatted(
+				ProcessHandle.current().pid(),
+				workspace.toURI().toString());
 
 		sendMessage(json);
 	}
 
 	public void sendInitialized() throws IOException {
 		String json = """
-		{
-		"jsonrpc": "2.0",
-		"method": "initialized",
-		"params": {}
-		}
-		""";
+				{
+				"jsonrpc": "2.0",
+				"method": "initialized",
+				"params": {}
+				}
+				""";
 		sendMessage(json);
 	}
 
@@ -144,51 +151,51 @@ public class LspManager {
 		documentVersion.put(uri, version);
 
 		String escaped = content
-			.replace("\\", "\\\\")
-            .replace("\"", "\\\"")
-            .replace("\n", "\\n")
-            .replace("\r", "");
+				.replace("\\", "\\\\")
+				.replace("\"", "\\\"")
+				.replace("\n", "\\n")
+				.replace("\r", "");
 
 		String json = """
-		{
-		"jsonrpc": "2.0",
-		"method": "textDocument/didChange",
-		"params": {
-		"textDocument": {
-		"uri": "%s",
-		"version": %d
-		},
-		"contentChanges": [
-		{
-		"text": "%s"
-		}
-		]
-		}
-		}
-		""".formatted(uri, version, escaped);
+				{
+				"jsonrpc": "2.0",
+				"method": "textDocument/didChange",
+				"params": {
+				"textDocument": {
+				"uri": "%s",
+				"version": %d
+				},
+				"contentChanges": [
+				{
+				"text": "%s"
+				}
+				]
+				}
+				}
+				""".formatted(uri, version, escaped);
 
 		sendMessage(json);
 	}
 
-	public void sendDidOpen(String filePath, String content) throws IOException{
-		
+	public void sendDidOpen(String filePath, String content) throws IOException {
+
 		String uri = Path.of(filePath).toUri().toString();
 		documentVersion.put(uri, 1);
 
 		String json = """
-		{
-		"jsonrpc": "2.0",
-		"method": "textDocument/didOpen",
-		"params": {
-		"textDocument": {
-		"uri": "%s",
-		"languageId": "java",
-		"version": 1,
-		"text": "%s"
-		}
-		}
-		}
-		""".formatted(Path.of(filePath).toUri().toString(), content.replace("\n", "\\n").replace("\"", "\\\""));
+				{
+				"jsonrpc": "2.0",
+				"method": "textDocument/didOpen",
+				"params": {
+				"textDocument": {
+				"uri": "%s",
+				"languageId": "java",
+				"version": 1,
+				"text": "%s"
+				}
+				}
+				}
+				""".formatted(Path.of(filePath).toUri().toString(), content.replace("\n", "\\n").replace("\"", "\\\""));
 
 		sendMessage(json);
 	}
@@ -199,7 +206,6 @@ public class LspManager {
 		writer.write(json);
 		writer.flush();
 	}
-
 
 	public OutputStream getStdin() {
 		return this.stdin;
