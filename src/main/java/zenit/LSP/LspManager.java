@@ -45,10 +45,10 @@ public class LspManager {
 	 */
 	public void setWorkspace(File workspace) {
 		if (workspace != null) {
-			this.workspace = new File(workspace, ".lsp-workspace");
+			this.workspace = new File(workspace, ".zenit");
 		} else {
 			// set defualt.
-			this.workspace = new File(System.getProperty("user.home"), ".lsp-workspace");
+			this.workspace = new File(System.getProperty("user.home"), ".zenit");
 		}
 	}
 
