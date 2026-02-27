@@ -2,8 +2,10 @@ package zenit.zencodearea;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import zenit.LSP.LspManager;
 import javafx.concurrent.Task;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import org.fxmisc.wellbehaved.event.InputMap;
 
 public class ZenCodeArea extends CodeArea {
 	private ExecutorService executor;
+	private LspManager lspManager;
 	// private int fontSize;
 	// private String font;
 
@@ -47,6 +50,8 @@ public class ZenCodeArea extends CodeArea {
 	private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
 	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
 
+	private File currentFile;
+
 	private static final Pattern PATTERN = Pattern.compile(
 		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
 		+ "|(?<PAREN>" + PAREN_PATTERN + ")"
@@ -56,16 +61,28 @@ public class ZenCodeArea extends CodeArea {
 		+ "|(?<STRING>" + STRING_PATTERN + ")"
 		+ "|(?<COMMENT>" + COMMENT_PATTERN + ")");
 
-	public ZenCodeArea() {
-		this(14, "Times new Roman");
+	public ZenCodeArea(LspManager lspManager, File file) {
+		this(14, "Times new Roman", lspManager, file);
 	}
 
-	public ZenCodeArea(int textSize, String font) {
+	public ZenCodeArea(int textSize, String font, LspManager lspManager, File file) {
+		this.currentFile= file;
+		System.out.println("[DEBUG] ZenCodeArea: current file " + this.currentFile.getAbsolutePath());
 		setParagraphGraphicFactory(LineNumberFactory.get(this));
 
 		multiPlainChanges().successionEnds(
-			Duration.ofMillis(100)).subscribe(
-				ignore -> setStyleSpans(0, computeHighlighting(getText())));
+			Duration.ofMillis(300)).subscribe( //changeing the ms here determines how fast the lsp server recieves msgs
+				ignore ->{
+					setStyleSpans(0, computeHighlighting(getText()));
+					try {
+						if (file != null || this.lspManager != null) {
+							System.out.println("[DEBUG] Sending didChange from ZenCodeArea");
+							lspManager.sendDidChange(file.getAbsolutePath(), getText());
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
 
 		executor = Executors.newSingleThreadExecutor();
 		setParagraphGraphicFactory(LineNumberFactory.get(this));
@@ -79,6 +96,7 @@ public class ZenCodeArea extends CodeArea {
 				}
 			}).subscribe(this::applyHighlighting);
 		computeHighlightingAsync();
+
 
 		// fontSize = textSize;
 		// this.font = font;

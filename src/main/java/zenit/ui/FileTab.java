@@ -43,7 +43,6 @@ public class FileTab extends Tab {
 		this.mc = mc;
 		initialTitle = "Untitled";
 		
-		
 		zenCodeArea.setOnMouseClicked(new UpdateDetector());
 		zenCodeArea.setOnKeyPressed(new UpdateDetector());
 		

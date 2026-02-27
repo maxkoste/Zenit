@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OBS! This code only works if you've downloaded and installed the
@@ -21,6 +24,7 @@ public class LspManager {
 	private File workspace;
 	private OutputStream stdin;
 	private BufferedWriter writer;
+	private Map<String, Integer> documentVersion = new HashMap<>();
 
 	public LspManager() {
 		//TODO: Don't use a hardcoded path for the language server
@@ -117,13 +121,60 @@ public class LspManager {
 			workspace.toURI().toString()
 		);
 
-		String message = "Content-Length: " + json.getBytes().length + "\r\n\r\n" + json;
+		sendMessage(json);
+	}
 
-		writer.write(message);
-		writer.flush();
+	public void sendInitialized() throws IOException {
+		String json = """
+		{
+		"jsonrpc": "2.0",
+		"method": "initialized",
+		"params": {}
+		}
+		""";
+		sendMessage(json);
+	}
+
+	public void sendDidChange(String filePath, String content) throws IOException {
+
+		System.out.println("[DEBUG] sendDidChange() triggered in LspManager");
+		String uri = Path.of(filePath).toUri().toString();
+
+		int version = documentVersion.getOrDefault(uri, 1) + 1;
+		documentVersion.put(uri, version);
+
+		String escaped = content
+			.replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "");
+
+		String json = """
+		{
+		"jsonrpc": "2.0",
+		"method": "textDocument/didChange",
+		"params": {
+		"textDocument": {
+		"uri": "%s",
+		"version": %d
+		},
+		"contentChanges": [
+		{
+		"text": "%s"
+		}
+		]
+		}
+		}
+		""".formatted(uri, version, escaped);
+
+		sendMessage(json);
 	}
 
 	public void sendDidOpen(String filePath, String content) throws IOException{
+		
+		String uri = Path.of(filePath).toUri().toString();
+		documentVersion.put(uri, 1);
+
 		String json = """
 		{
 		"jsonrpc": "2.0",
@@ -139,11 +190,16 @@ public class LspManager {
 		}
 		""".formatted(Path.of(filePath).toUri().toString(), content.replace("\n", "\\n").replace("\"", "\\\""));
 
-		String message = "Content-Length: " + json.getBytes().length + "\r\n\r\n" + json;
+		sendMessage(json);
+	}
 
-		writer.write(message);
+	private void sendMessage(String json) throws IOException {
+		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+		writer.write("Content-Length: " + bytes.length + "\r\n\r\n");
+		writer.write(json);
 		writer.flush();
 	}
+
 
 	public OutputStream getStdin() {
 		return this.stdin;

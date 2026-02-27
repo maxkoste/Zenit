@@ -80,6 +80,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 	
 	private Tuple<File, String> deletedFile = new Tuple<>();
 
+	private File currentFile;
+
 	@FXML
 	private AnchorPane consolePane;
 		
@@ -154,7 +156,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private File workspace;
 
 	private LspManager lspManager;
-	
 
 	/**
 	 * Loads a file Main.fxml, sets this MainController as its Controller, and loads
@@ -334,8 +335,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 		return stage;
 	}
 
-	public ZenCodeArea createNewZenCodeArea() {
-		ZenCodeArea zenCodeArea = new ZenCodeArea(zenCodeAreasTextSize, zenCodeAreasFontFamily);
+	public ZenCodeArea createNewZenCodeArea(File file) {
+		ZenCodeArea zenCodeArea = new ZenCodeArea(zenCodeAreasTextSize, zenCodeAreasFontFamily, this.lspManager, file);
 		activeZenCodeAreas.add(zenCodeArea);
 		return zenCodeArea;
 	}
@@ -613,8 +614,10 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @param file The file which content to be opened.
 	 */
 	public void openFile(File file) {
+
 		if (file != null && getTabFromFile(file) == null) {
 
+			this.currentFile = file;
 			if (supportedFileFormat(file)) {
 				System.out.println("[DEBUG] Opening file tab at " + file.getAbsolutePath());
 
@@ -929,7 +932,14 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @return The new Tab.
 	 */
 	public FileTab addTab() {
-		FileTab tab = new FileTab(createNewZenCodeArea(), this, this.lspManager);
+		if (this.currentFile == null) {
+			System.out.println("[DEBUG] current File is null");
+		}
+		ZenCodeArea codeArea = createNewZenCodeArea(this.currentFile);
+
+		FileTab tab = new FileTab(codeArea, this, this.lspManager);
+		File currOpenedFile = tab.getFile();
+
 		tab.setOnCloseRequest(event -> closeTab(event));
 		tabPane.getTabs().add(tab);
 
