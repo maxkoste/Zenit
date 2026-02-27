@@ -938,7 +938,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 		ZenCodeArea codeArea = createNewZenCodeArea(this.currentFile);
 
 		FileTab tab = new FileTab(codeArea, this, this.lspManager);
-		File currOpenedFile = tab.getFile();
+		tab.getFile();
 
 		tab.setOnCloseRequest(event -> closeTab(event));
 		tabPane.getTabs().add(tab);
