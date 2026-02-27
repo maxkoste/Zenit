@@ -29,10 +29,14 @@ public class LspManager {
 	private Map<String, Integer> documentVersion = new HashMap<>();
 
 	public LspManager() {
-		this.serverPath = "/Users/maxkoste/Dev/Java/jdt-language-server"; // Change this to the path where the
+		File serverDir = new File("jdt-language-server");
+		 
+		this.serverPath = serverDir.getAbsolutePath();
+		System.out.println("[DEBUG] Server is located at: " + serverPath);
 																			// jdt-language-server is unpacked on your
 																			// computer
 
+		//defualt
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
