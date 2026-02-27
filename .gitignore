@@ -35,6 +35,9 @@ target/classes/zenit/ui/mainStyle.css
 # JDT Language Server runtime/cache for mac
 jdt-language-server/config_*/org.eclipse.osgi/**
 !jdt-language-server/config_*/org.eclipse.osgi/.gitkeep
+jdt-language-server/config_*/org.eclipse.osgi/
+jdt-language-server/config_*/org.eclipse.core.runtime/
+jdt-language-server/config_*/org.eclipse.equinox.app/
 
 #for windows
 jdt-language-server/config_windows/org.eclipse.osgi/**
@@ -42,3 +45,4 @@ jdt-language-server/config_windows/org.eclipse.osgi/**
 
 # JDT Language Server workspace metadata
 jdt-language-server/.metadata/
+
