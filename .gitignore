@@ -47,3 +47,6 @@ jdt-language-server/config_*/org.eclipse.equinox.app/
 # JDT Language Server workspace metadata
 jdt-language-server/.metadata/
 
+# Zenit LSP workspace (generated per user)
+.lsp-workspace/
+

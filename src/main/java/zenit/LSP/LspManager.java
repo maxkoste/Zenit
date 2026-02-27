@@ -40,12 +40,15 @@ public class LspManager {
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
+	/**
+	 * @param workspace - The place where the server stores data related to the current workspace 
+	 */
 	public void setWorkspace(File workspace) {
 		if (workspace != null) {
-			this.workspace = workspace;
+			this.workspace = new File(workspace, ".lsp-workspace");
 		} else {
 			// set defualt.
-			this.workspace = new File(System.getProperty("user.home"));
+			this.workspace = new File(System.getProperty("user.home"), ".lsp-workspace");
 		}
 	}
 
