@@ -269,7 +269,6 @@ public class FileTab extends Tab {
 		
 		if (shouldSetContent && file != null) {
 			try {
-				System.out.println("[DEBUG] Sending this text to the LSP server: \n " + FileController.readFile(file));
 				this.lspManager.sendDidOpen(file.getAbsolutePath(), FileController.readFile(file));
 			} catch (Exception e) {
 				e.printStackTrace();
