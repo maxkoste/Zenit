@@ -76,7 +76,7 @@ public class LspManager {
 		String workspacePath = workspace.getAbsolutePath();
 
 		String osVar = System.getProperty("os.name").toLowerCase().contains("win") 
-			? "/config_windows" 
+			? "/config_win" 
 			: "/config_mac";
 
 		ProcessBuilder pb = new ProcessBuilder(
