@@ -32,7 +32,10 @@ target/classes/zenit/ui/mainStyle.css
 
 /node_modules
 
-# JDT Language Server runtime/cache
+# JDT Language Server runtime/cache for mac
 jdt-language-server/config_*/org.eclipse.osgi/**
 !jdt-language-server/config_*/org.eclipse.osgi/.gitkeep
 
+#for windows
+jdt-language-server/config_windows/org.eclipse.osgi/**
+!jdt-language-server/config_windows/org.eclipse.osgi/.gitkeep
