@@ -41,11 +41,13 @@ public class FolderHandler {
 			throw new IOException("Can't rename package to: " + newFolderName);
 		}
 		
-		File tempFile = FileNameHelpers.getFilepathWithoutTopFile(file); //Removes file name
+		File parentDir = file.getParentFile();
+		if(parentDir == null){
+			throw new IOException("Can't find parent directory");
+		}
 		
 		//Create new file
-		String newFilepath = tempFile.getPath() + "/" + newFolderName;
-		File newFile = new File(newFilepath);
+		File newFile = new File(parentDir, newFolderName);
 		
 		//Check if file exists
 		if (newFile.exists()) {

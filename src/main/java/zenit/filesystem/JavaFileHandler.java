@@ -123,12 +123,17 @@ public class JavaFileHandler extends FileHandler {
 	 * if file couldn't be renamed
 	 */
 	protected static File renameFile(File oldFile, String newFilename) throws IOException {
-		
-		File tempFile = FileNameHelpers.getFilepathWithoutTopFile(oldFile); //Removes file name
-		
+
+		File parentDir = oldFile.getParentFile();
+		if(parentDir == null){
+			throw new IOException("Can't find parent directory");
+		}
+
+		if (oldFile.getName().endsWith(".java") && !newFilename.endsWith(".java")) {
+			newFilename = newFilename + ".java";
+		}
 		//Create new file with new name
-		String newFilepath = tempFile.getPath() + "/" + newFilename;
-		File newFile = new File(newFilepath);
+		File newFile = new File(parentDir, newFilename);
 		
 		if (newFile.exists()) {
 			throw new IOException("File already exists");
