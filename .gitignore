@@ -39,3 +39,6 @@ jdt-language-server/config_*/org.eclipse.osgi/**
 #for windows
 jdt-language-server/config_windows/org.eclipse.osgi/**
 !jdt-language-server/config_windows/org.eclipse.osgi/.gitkeep
+
+# JDT Language Server workspace metadata
+jdt-language-server/.metadata/
