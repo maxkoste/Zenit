@@ -52,7 +52,7 @@ public class LspManager {
 	 * @param workspace - The place where the server stores data related to the current workspace 
 	 */
 	public void setWorkspace(File workspace) {
-<<<<<<< HEAD
+
 		this.workspace = (workspace != null) ? workspace
 				: new File(System.getProperty("user.home"));
 	}
@@ -63,14 +63,14 @@ public class LspManager {
 	 */
 	public void setDiagnosticsListener(DiagnosticsListener listener) {
 		this.diagnosticsListener = listener;
-=======
+
 		if (workspace != null) {
 			this.workspace = new File(workspace, ".zenit");
 		} else {
 			// set defualt.
 			this.workspace = new File(System.getProperty("user.home"), ".zenit");
 		}
->>>>>>> a7765e70eed24f7ceb3b25f261634bb5ef216dfb
+
 	}
 
 	public Process startServer() throws IOException {
