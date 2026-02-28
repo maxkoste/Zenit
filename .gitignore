@@ -32,10 +32,21 @@ target/classes/zenit/ui/mainStyle.css
 
 /node_modules
 
-# JDT Language Server runtime/cache for mac
+# JDT Language Server runtime/cache
 jdt-language-server/config_*/org.eclipse.osgi/**
 !jdt-language-server/config_*/org.eclipse.osgi/.gitkeep
+jdt-language-server/config_*/org.eclipse.osgi/
+jdt-language-server/config_*/org.eclipse.core.runtime/
+jdt-language-server/config_*/org.eclipse.equinox.app/
 
-#for windows
-jdt-language-server/config_windows/org.eclipse.osgi/**
-!jdt-language-server/config_windows/org.eclipse.osgi/.gitkeep
+# JDT Language Server runtime state (all OS configs)
+jdt-language-server/config_*/org.eclipse.osgi/
+jdt-language-server/config_*/org.eclipse.core.runtime/
+jdt-language-server/config_*/org.eclipse.equinox.app/
+
+# JDT Language Server workspace metadata
+jdt-language-server/.metadata/
+
+# Zenit LSP workspace (generated per user)
+.zenit/
+
