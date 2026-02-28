@@ -2,13 +2,13 @@ package zenit.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
+import zenit.LSP.LspDiagnostic;
+import zenit.LSP.DiagnosticsListener;
+
 
 import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
-
-import java.util.LinkedList;
-import java.util.ArrayList;
 
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -152,10 +152,10 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private FXMLLoader loader;
 
 	private FileTreeClipboard clipboard;
-
 	private File workspace;
-
 	private LspManager lspManager;
+	private Map<String, List<LspDiagnostic>> diagnosticsMap = new HashMap<>();
+
 
 	/**
 	 * Loads a file Main.fxml, sets this MainController as its Controller, and loads
@@ -205,10 +205,12 @@ public class MainController extends VBox implements ThemeCustomizable {
 			KeyboardShortcuts.setupMain(scene, this, clipboard, treeView);
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
-			
+
 			this.lspManager = new LspManager();
 			lspManager.setWorkspace(workspace);
+			lspManager.setDiagnosticsListener(this::handleLspDiagnostics); // <-- NY RAD
 			lspManager.startServer();
+
 
 			stage.setOnCloseRequest(event -> quit());
 
@@ -378,7 +380,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @param parent The parent folder of the file to be created.
 	 * @param typeCode The type of code snippet that should be implemented in the
 	 *                 file. Use constants from
-	 *                 {@link main.java.zenit.filesystem.helpers.CodeSnippets
+	 *                 {@link zenit.filesystem.helpers.CodeSnippets
 	 *                 CodeSnippets} class.
 	 * @return The File if created, otherwise null.
 	 */
@@ -518,6 +520,54 @@ public class MainController extends VBox implements ThemeCustomizable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Called by LspManager when new diagnostics arrive for a file.
+	 * Routes them to the correct FileTab and updates the diagnostics map.
+	 * Implements DiagnosticsListener.
+	 */
+
+	private void handleLspDiagnostics(String fileUri, List<LspDiagnostic> diagnostics) {
+		diagnosticsMap.put(fileUri, diagnostics);
+
+		// DEBUG 1 — printar alltid när diagnostics tas emot
+		System.out.println("[MAIN-DEBUG] handleLspDiagnostics called");
+		System.out.println("[MAIN-DEBUG] fileUri from LSP  : " + fileUri);
+		System.out.println("[MAIN-DEBUG] diagnostics count : " + diagnostics.size());
+		for (LspDiagnostic d : diagnostics) {
+			System.out.println("[MAIN-DEBUG]   -> " + d);
+		}
+
+		Platform.runLater(() -> {
+			System.out.println("[MAIN-DEBUG] tabPane tabs count: " + tabPane.getTabs().size());
+
+			for (Tab tab : tabPane.getTabs()) {
+				FileTab fileTab = (FileTab) tab;
+				String tabUri = fileTab.getFileUri();
+
+				// DEBUG 2 — jämför URI:er
+				System.out.println("[MAIN-DEBUG] tabUri   : " + tabUri);
+				System.out.println("[MAIN-DEBUG] normalized tab : " + (tabUri != null ? normalizeUri(tabUri) : "null"));
+				System.out.println("[MAIN-DEBUG] normalized lsp : " + normalizeUri(fileUri));
+
+				if (tabUri != null && normalizeUri(tabUri).equals(normalizeUri(fileUri))) {
+					System.out.println("[MAIN-DEBUG] MATCH FOUND — applying diagnostics to tab");
+					fileTab.applyDiagnostics(diagnostics);
+					return;
+				}
+			}
+			System.out.println("[MAIN-DEBUG] NO MATCH FOUND for fileUri: " + fileUri);
+		});
+	}
+
+	/**
+	 * Normalizes a file URI for comparison.
+	 */
+	private String normalizeUri(String uri) {
+		return uri.replace("file:///", "file:/")
+				.replace("%20", " ")
+				.toLowerCase();
 	}
 
 	/**
