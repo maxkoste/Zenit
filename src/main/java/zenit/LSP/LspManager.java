@@ -337,6 +337,10 @@ public class LspManager {
 	}
 
 	private void sendMessage(String json) throws IOException {
+		if (writer == null) {
+			System.err.println("[LSP] sendMessage skipped — server not started yet");
+			return;
+		}
 		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 		writer.write("Content-Length: " + bytes.length + "\r\n\r\n");
 		writer.write(json);

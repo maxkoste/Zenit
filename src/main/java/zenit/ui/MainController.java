@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
+
+import zenit.LSP.DiagnosticsFormatter;
 import zenit.LSP.LspDiagnostic;
 import zenit.LSP.DiagnosticsListener;
 
@@ -155,6 +157,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private File workspace;
 	private LspManager lspManager;
 	private Map<String, List<LspDiagnostic>> diagnosticsMap = new HashMap<>();
+	private final DiagnosticsFormatter diagnosticsFormatter = new DiagnosticsFormatter();
 
 
 	/**
@@ -208,7 +211,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 
 			this.lspManager = new LspManager();
 			lspManager.setWorkspace(workspace);
-			lspManager.setDiagnosticsListener(this::handleLspDiagnostics); // <-- NY RAD
+			lspManager.setDiagnosticsListener(this::handleLspDiagnostics);
 			lspManager.startServer();
 
 
@@ -527,40 +530,28 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * Routes them to the correct FileTab and updates the diagnostics map.
 	 * Implements DiagnosticsListener.
 	 */
-
 	private void handleLspDiagnostics(String fileUri, List<LspDiagnostic> diagnostics) {
 		diagnosticsMap.put(fileUri, diagnostics);
 
-		// DEBUG 1 — printar alltid när diagnostics tas emot
-		System.out.println("[MAIN-DEBUG] handleLspDiagnostics called");
-		System.out.println("[MAIN-DEBUG] fileUri from LSP  : " + fileUri);
-		System.out.println("[MAIN-DEBUG] diagnostics count : " + diagnostics.size());
-		for (LspDiagnostic d : diagnostics) {
-			System.out.println("[MAIN-DEBUG]   -> " + d);
-		}
-
 		Platform.runLater(() -> {
-			System.out.println("[MAIN-DEBUG] tabPane tabs count: " + tabPane.getTabs().size());
-
 			for (Tab tab : tabPane.getTabs()) {
 				FileTab fileTab = (FileTab) tab;
 				String tabUri = fileTab.getFileUri();
 
-				// DEBUG 2 — jämför URI:er
-				System.out.println("[MAIN-DEBUG] tabUri   : " + tabUri);
-				System.out.println("[MAIN-DEBUG] normalized tab : " + (tabUri != null ? normalizeUri(tabUri) : "null"));
-				System.out.println("[MAIN-DEBUG] normalized lsp : " + normalizeUri(fileUri));
-
 				if (tabUri != null && normalizeUri(tabUri).equals(normalizeUri(fileUri))) {
-					System.out.println("[MAIN-DEBUG] MATCH FOUND — applying diagnostics to tab");
+					// FUI403 — understrykning
 					fileTab.applyDiagnostics(diagnostics);
+
+					// FUI405 — formatera och skicka till Problems-panelen
+					String fileName = fileTab.getFile().getName();
+					List<String> formatted = diagnosticsFormatter.format(fileName, diagnostics);
+					consoleController.setProblemsItems(formatted);
+
 					return;
 				}
 			}
-			System.out.println("[MAIN-DEBUG] NO MATCH FOUND for fileUri: " + fileUri);
 		});
 	}
-
 	/**
 	 * Normalizes a file URI for comparison.
 	 */
