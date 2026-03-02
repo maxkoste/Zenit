@@ -113,12 +113,16 @@ public class SearchInFileController extends AnchorPane {
 		});
 		
 		btnReplaceAll.setPickOnBounds(true);
-		btnReplaceAll.setOnAction(event -> 
-			search.replaceAll(fldReplaceWord.getText()));
+		btnReplaceAll.setOnAction(event -> {
+			search.replaceAll(fldReplaceWord.getText());
+			makeNewSearch(fldInputField.getText());
+		});
 		
 		btnReplaceOne.setPickOnBounds(true);
-		btnReplaceOne.setOnAction(event -> 
-			search.replaceOne(fldReplaceWord.getText()));
+		btnReplaceOne.setOnAction(event -> {
+			search.replaceOne(fldReplaceWord.getText());
+			makeNewSearch(fldInputField.getText());
+		});
 		
 		btnUp.setPickOnBounds(true);
 		btnUp.setOnAction(event ->{
