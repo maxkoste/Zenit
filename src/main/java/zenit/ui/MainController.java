@@ -2,11 +2,15 @@ package zenit.ui;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 
-import java.util.LinkedList;
-import java.util.ArrayList;
+import zenit.LSP.DiagnosticsFormatter;
+import zenit.LSP.LspDiagnostic;
+import zenit.LSP.DiagnosticsListener;
+
+
+import com.ibm.icu.util.TimeZone.SystemTimeZoneType;
 
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -30,6 +34,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import zenit.Zenit;
+import zenit.LSP.LspManager;
 import zenit.console.ConsoleArea;
 import zenit.console.ConsoleController;
 import zenit.filesystem.FileController; // Aggregation
@@ -76,6 +81,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private Process process;
 	
 	private Tuple<File, String> deletedFile = new Tuple<>();
+
+	private File currentFile;
 
 	@FXML
 	private AnchorPane consolePane;
@@ -147,9 +154,11 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private FXMLLoader loader;
 
 	private FileTreeClipboard clipboard;
-
 	private File workspace;
-	
+	private LspManager lspManager;
+	private Map<String, List<LspDiagnostic>> diagnosticsMap = new HashMap<>();
+	private final DiagnosticsFormatter diagnosticsFormatter = new DiagnosticsFormatter();
+
 
 	/**
 	 * Loads a file Main.fxml, sets this MainController as its Controller, and loads
@@ -199,7 +208,12 @@ public class MainController extends VBox implements ThemeCustomizable {
 			KeyboardShortcuts.setupMain(scene, this, clipboard, treeView);
 
 			this.activeStylesheet = getClass().getResource("/zenit/ui/mainStyle.css").toExternalForm();
-			
+
+			this.lspManager = new LspManager();
+			lspManager.setWorkspace(workspace);
+			lspManager.setDiagnosticsListener(this::handleLspDiagnostics);
+			lspManager.startServer();
+
 
 			stage.setOnCloseRequest(event -> quit());
 
@@ -326,8 +340,8 @@ public class MainController extends VBox implements ThemeCustomizable {
 		return stage;
 	}
 
-	public ZenCodeArea createNewZenCodeArea() {
-		ZenCodeArea zenCodeArea = new ZenCodeArea(zenCodeAreasTextSize, zenCodeAreasFontFamily);
+	public ZenCodeArea createNewZenCodeArea(File file) {
+		ZenCodeArea zenCodeArea = new ZenCodeArea(zenCodeAreasTextSize, zenCodeAreasFontFamily, this.lspManager, file);
 		activeZenCodeAreas.add(zenCodeArea);
 		return zenCodeArea;
 	}
@@ -369,7 +383,7 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @param parent The parent folder of the file to be created.
 	 * @param typeCode The type of code snippet that should be implemented in the
 	 *                 file. Use constants from
-	 *                 {@link main.java.zenit.filesystem.helpers.CodeSnippets
+	 *                 {@link zenit.filesystem.helpers.CodeSnippets
 	 *                 CodeSnippets} class.
 	 * @return The File if created, otherwise null.
 	 */
@@ -512,6 +526,42 @@ public class MainController extends VBox implements ThemeCustomizable {
 	}
 
 	/**
+	 * Called by LspManager when new diagnostics arrive for a file.
+	 * Routes them to the correct FileTab and updates the diagnostics map.
+	 * Implements DiagnosticsListener.
+	 */
+	private void handleLspDiagnostics(String fileUri, List<LspDiagnostic> diagnostics) {
+		diagnosticsMap.put(fileUri, diagnostics);
+
+		Platform.runLater(() -> {
+			for (Tab tab : tabPane.getTabs()) {
+				FileTab fileTab = (FileTab) tab;
+				String tabUri = fileTab.getFileUri();
+
+				if (tabUri != null && normalizeUri(tabUri).equals(normalizeUri(fileUri))) {
+					// FUI403 — understrykning
+					fileTab.applyDiagnostics(diagnostics);
+
+					// FUI405 — formatera och skicka till Problems-panelen
+					String fileName = fileTab.getFile().getName();
+					List<String> formatted = diagnosticsFormatter.format(fileName, diagnostics);
+					consoleController.setProblemsItems(formatted);
+
+					return;
+				}
+			}
+		});
+	}
+	/**
+	 * Normalizes a file URI for comparison.
+	 */
+	private String normalizeUri(String uri) {
+		return uri.replace("file:///", "file:/")
+				.replace("%20", " ")
+				.toLowerCase();
+	}
+
+	/**
 	 * Collects errors from buffer and displays them in code area
 	 * @param buffer Buffer to collect errors from
 	 */
@@ -605,18 +655,21 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @param file The file which content to be opened.
 	 */
 	public void openFile(File file) {
+
 		if (file != null && getTabFromFile(file) == null) {
 
+			this.currentFile = file;
 			if (supportedFileFormat(file)) {
-			
-			FileTab selectedTab = addTab();
-			selectedTab.setFile(file, true);
+				System.out.println("[DEBUG] Opening file tab at " + file.getAbsolutePath());
 
-			selectedTab.setText(file.getName());
+				FileTab selectedTab = addTab();
+				selectedTab.setFile(file, true);
+
+				selectedTab.setText(file.getName());
 			} else {
 				String fileType = file.getName().substring(file.getName().lastIndexOf('.'));
 				DialogBoxes.errorDialog("Not supported", "File type not supported by Zenit", 
-						"The file type " + fileType + " is not yet supported by this application.");
+					"The file type " + fileType + " is not yet supported by this application.");
 			}
 		} else if (file != null && getTabFromFile(file) != null) { // Tab already open
 			tabPane.getSelectionModel().select(getTabFromFile(file));
@@ -920,7 +973,14 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 * @return The new Tab.
 	 */
 	public FileTab addTab() {
-		FileTab tab = new FileTab(createNewZenCodeArea(), this);
+		if (this.currentFile == null) {
+			System.out.println("[DEBUG] current File is null");
+		}
+		ZenCodeArea codeArea = createNewZenCodeArea(this.currentFile);
+
+		FileTab tab = new FileTab(codeArea, this, this.lspManager);
+		tab.getFile();
+
 		tab.setOnCloseRequest(event -> closeTab(event));
 		tabPane.getTabs().add(tab);
 
