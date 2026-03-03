@@ -35,6 +35,7 @@ public class LspManager {
 	private OutputStream stdin;
 	private BufferedWriter writer;
 	private Map<String, Integer> documentVersion = new HashMap<>();
+	private volatile boolean ready = false;
 
 	// Callback for parsed diagnostics — set by MainController
 	private DiagnosticsListener diagnosticsListener;
@@ -116,6 +117,8 @@ public class LspManager {
 		Process p = pb.start();
 		this.stdin  = p.getOutputStream();
 		this.writer = new BufferedWriter(new OutputStreamWriter(stdin));
+		this.writer = new BufferedWriter(new OutputStreamWriter(stdin));
+		this.ready = true;
 
 		sendInitialize();
 		startReading(p);   // <-- parsar nu JSON
@@ -337,8 +340,8 @@ public class LspManager {
 	}
 
 	private void sendMessage(String json) throws IOException {
-		if (writer == null) {
-			System.err.println("[LSP] sendMessage skipped — server not started yet");
+		if (writer == null || !ready) {
+			System.err.println("[LSP] sendMessage skipped — server not ready yet");
 			return;
 		}
 		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
@@ -355,6 +358,13 @@ public class LspManager {
 				.replace("\r", "");
 	}
 
-	public OutputStream getStdin()       { return this.stdin; }
-	public BufferedWriter getWriter()    { return this.writer; }
+	public OutputStream getStdin()       {
+		return this.stdin; }
+
+	public BufferedWriter getWriter()    {
+		return this.writer; }
+
+	public boolean isReady() {
+		return ready;
+	}
 }
