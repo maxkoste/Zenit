@@ -5,7 +5,6 @@ import java.io.File;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
 import zenit.launchers.MacOSLauncher;
 import zenit.setup.SetupController;
 import zenit.ui.MainController;
@@ -16,7 +15,7 @@ import zenit.ui.MainController;
  *
  */
 public class Zenit extends Application {
-	
+
 	public static final String OS = System.getProperty("os.name");
 	
 	@Override

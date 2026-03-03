@@ -90,6 +90,8 @@ public class JavaFileHandler extends FileHandler {
 				stringBuilder += currentString + "\n";
 				currentString = br.readLine();
 			}
+			System.out.println("[DEBUG] Opening a file at " + file.getAbsolutePath());
+			System.out.println(stringBuilder.toString());
 			return stringBuilder;
 			
 		} catch (IOException ex) {

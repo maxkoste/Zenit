@@ -1,10 +1,12 @@
 package zenit.console;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import zenit.terminal.JSBridge;
 import zenit.terminal.TerminalInstance;
 import zenit.terminal.TerminalSession;
@@ -28,6 +30,8 @@ import netscape.javascript.JSObject;
 import zenit.ConsoleRedirect;
 import zenit.ui.MainController;
 import javafx.concurrent.Worker;
+import zenit.LSP.LspDiagnostic;
+import javafx.scene.control.ListView;
 
 /**
  * The controller class for ConsoleArea
@@ -61,6 +65,8 @@ public class ConsoleController implements Initializable {
 	@FXML
 	private Button btnClearConsole;
 	@FXML
+	private Button btnProblems;
+	@FXML
 	private FontIcon iconCloseConsoleInstance;
 	@FXML
 	private FontIcon iconTerminateProcess;
@@ -70,13 +76,51 @@ public class ConsoleController implements Initializable {
 	private ConsoleArea activeConsole;
 	private AnchorPane noConsolePane;
 	private MainController mainController;
+	private File currWorkspace;
+	private AnchorPane problemsAnchorPane;
+	private ListView<String> problemsListView;
+
 
 	public void setMainController(MainController mainController) {
 		this.mainController = mainController;
+		this.currWorkspace = null;
 	}
 
 	public List<String> getStylesheets() {
 		return rootNode.getStylesheets();
+	}
+
+	public void setCurrWorkspace(File currWorkspace){
+		if (currWorkspace == null) {
+			System.out.println("[DEBUG CONSOLECONTROLER] Current workspace null setting to default home path");
+			this.currWorkspace = new File(System.getProperty("user.home"));
+		} else {
+			System.out.println("[DEBUG CONSOLECONTROLER] Setting the current Workspace to " + currWorkspace.toString());
+			this.currWorkspace = currWorkspace;
+		}
+	}
+
+	public File getCurrentWorkspace(){
+		return this.currWorkspace;
+	}
+
+	public void showProblemsTab() {
+		consoleChoiceBox.setVisible(false);
+		consoleChoiceBox.setDisable(true);
+		terminalChoiceBox.setVisible(false);
+		terminalChoiceBox.setDisable(true);
+		btnNewConsole.setVisible(false);
+		btnNewTerminal.setVisible(false);
+		btnClearConsole.setVisible(false);
+		iconTerminateProcess.setVisible(false);
+		iconCloseConsoleInstance.setVisible(false);
+		iconCloseTerminalInstance.setVisible(false);
+
+		btnConsole.setStyle("");
+		btnTerminal.setStyle("");
+		btnProblems.setStyle("-fx-text-fill:white; -fx-border-color:#666; -fx-border-width: 0 0 2 0;");
+
+		problemsAnchorPane.toFront();
 	}
 
 	/**
@@ -166,6 +210,12 @@ public class ConsoleController implements Initializable {
 		}
 	}
 
+	public void setProblemsItems(List<String> items) {  // ny
+		Platform.runLater(() -> {
+			problemsListView.getItems().setAll(items);
+		});
+	}
+
 	/**
 	 * Creates a new ConsoleArea, adds it to the console AnchorPane and puts it as
 	 * an option in the
@@ -236,6 +286,8 @@ public class ConsoleController implements Initializable {
 
 				TerminalSession session = new TerminalSession(engine);
 				currentTerminal.setSession(session);
+
+				currentTerminal.setCurrWorkspace(this.currWorkspace);
 
 				session.start();
 
@@ -353,5 +405,23 @@ public class ConsoleController implements Initializable {
 				}
 			}
 		});
+		problemsAnchorPane = new AnchorPane();
+		problemsAnchorPane.setStyle("-fx-background-color: #2b2b2b;");
+		fillAnchor(problemsAnchorPane);
+
+		problemsListView = new ListView<>();
+		problemsListView.setStyle(
+				"-fx-background-color: #2b2b2b;" +
+						"-fx-control-inner-background: #2b2b2b;" +
+						"-fx-font-size: 12px;"
+		);
+		Label placeholder = new Label("No problems detected");
+		placeholder.setTextFill(Color.web("#888"));
+		problemsListView.setPlaceholder(placeholder);
+		fillAnchor(problemsListView);
+		problemsAnchorPane.getChildren().add(problemsListView);
+		rootAnchor.getChildren().add(problemsAnchorPane);
+		problemsAnchorPane.toBack();
+
 	}
 }

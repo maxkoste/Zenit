@@ -9,6 +9,7 @@ import zenit.ConsoleRedirect;
 import zenit.console.ConsoleArea;
 import zenit.console.ConsoleController;
 import zenit.filesystem.RunnableClass;
+import zenit.filesystem.jreversions.JREVersions;
 import zenit.filesystem.metadata.Metadata;
 import zenit.ui.MainController;
 
@@ -120,8 +121,15 @@ public class JavaSourceCodeCompiler {
 		 */
 		protected void decodeMetadata() {
 			Metadata metadata = new Metadata(metadataFile);
-			
-			JDKPath = metadata.getJREVersion();
+
+			String metadataJRE = metadata.getJREVersion();
+			JDKPath = JREVersions.getEffectiveJDKPath(metadataJRE);
+
+			if (JDKPath == null || JDKPath.isEmpty()) {
+				// No JDK available - show error
+				System.err.println("No JDK configured. Please set a default JDK in File --> JRE Versions");
+				JDKPath = null;
+			}
 			directory = metadata.getDirectory();
 			sourcepath = metadata.getSourcepath();
 			internalLibraries = metadata.getInternalLibraries();

@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+import zenit.filesystem.jreversions.JDKVerifier;
 import zenit.filesystem.jreversions.JREVersions;
 
 public class JREVersionsController extends AnchorPane {
@@ -23,6 +26,12 @@ public class JREVersionsController extends AnchorPane {
 	
 	@FXML
 	private ListView<String> JDKList;
+
+	@FXML
+	private Label defaultJDKLabel = new Label();
+
+	@FXML
+	private Label statusLabel;
 	
 	public JREVersionsController(boolean darkmode) {
 		this.darkmode = darkmode;
@@ -74,11 +83,46 @@ public class JREVersionsController extends AnchorPane {
 			String defaultName = defaultJDK.getName() + " [default]";
 			JDKList.getItems().remove(defaultJDK.getName());
 			JDKList.getItems().add(defaultName);
+			defaultJDKLabel.setText("New projects will use: " + defaultJDK.getName());
+		}
+		else {
+			defaultJDKLabel.setText("No default JDK set - projects may fail to compile");
+		}
+
+		Optional<File> javaHome = JREVersions.getJavaHomeFromEnv();
+		if (javaHome.isPresent()) {
+			String javaHomeName = javaHome.get().getName() + " [JAVA_HOME - system]";
+			JDKList.getItems().add(javaHomeName);
 		}
 		
 		JDKList.getItems().sort((o1,o2)->{
 			return o1.compareTo(o2);
 		});
+
+		updateStatusLabel();
+	}
+
+	private void updateStatusLabel() {
+		if (statusLabel == null) {
+			return;
+		}
+
+		File defaultJDK = JREVersions.getDefaultJDKFile();
+		Optional<File> javaHome = JREVersions.getJavaHomeFromEnv();
+
+		if (defaultJDK != null && defaultJDK.exists() && JDKVerifier.validJDK(defaultJDK)) {
+			//User has set a default - priority over JAVA_HOME
+			statusLabel.setText("Default JDK: " + defaultJDK.getName() + " (overrides JAVA_HOME)");
+			statusLabel.setStyle("-fx-text-fill: #4CAF50;"); //Green
+		} else if (javaHome.isPresent() && JDKVerifier.validJDK(javaHome.get())) {
+			// No default set, using JAVA_HOME
+			statusLabel.setText("Using JAVA_HOME: " + javaHome.get().getName() + " (system default)");
+			statusLabel.setStyle("-fx-text-fill: #2196F3;"); //Blue
+		} else {
+			// No JDK at all
+			statusLabel.setText("No JDK configured - please add one");
+			statusLabel.setStyle("-fx-text-fill: #f44336;"); //Red
+		}
 	}
 	
 	@FXML
@@ -155,6 +199,13 @@ public class JREVersionsController extends AnchorPane {
 		if (selectedFile != null) {
 			JREVersions.setDefaultJDKFile(selectedFile);
 			updateList();
+
+			DialogBoxes.informationDialog("Default JDK updated",
+					"All projects will now use "+ selectedFile.getName()+" by default.\n\n" +
+					"This overrides the JAVA_HOME envionment variable");
+		}
+		else{
+			DialogBoxes.errorDialog("No JDK selected", "", "Select a JDK from the list to set as default.");
 		}
 	}
 	

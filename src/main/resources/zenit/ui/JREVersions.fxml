@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.Label?>
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="343.0" prefWidth="328.0" styleClass="pane">
@@ -17,6 +18,8 @@
                   <Button fx:id="addJRE" layoutX="14.0" layoutY="298.0" mnemonicParsing="false" onAction="#addJRE" text="Add JRE" />
                   <Button fx:id="removeJRE" layoutX="89.0" layoutY="298.0" mnemonicParsing="false" onAction="#removeJRE" text="Remove JRE" />
                   <Button layoutX="190.0" layoutY="298.0" mnemonicParsing="false" onAction="#selectDefaultJRE" text="Select default JRE" />
+                  <Label fx:id="statusLabel" layoutX="24.0" layoutY="330.0" prefHeight="40.0" prefWidth="287.0"
+                         styleClass="text" text="Checking JDK status..." wrapText="true" />
                </children>
             </AnchorPane>
          </children>
