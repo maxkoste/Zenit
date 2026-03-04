@@ -17,24 +17,27 @@ public class TerminalSession {
 
 	private WebEngine engine;
 	private PtyProcess process;
+
+
 	private File currentWorkspace;
 
 	public TerminalSession(WebEngine engine) {
 		this.engine = engine;
 	}
 
-	public void setCurrWorkspace(File workspace){
+	public String setCurrWorkspace(File workspace){
 		if (workspace != null) {
 			System.out.println("[DEBUG] TerminalSession setting the workspace");
 			this.currentWorkspace = workspace;
+			return this.currentWorkspace.getAbsolutePath().toString();
 		} else {
 			this.currentWorkspace = new File(System.getProperty("user.home"));
+			return this.currentWorkspace.getAbsolutePath().toString();
 		}
 	}
 
 	public void start() {
 		try {
-
 			if (currentWorkspace == null) {
 				this.currentWorkspace = new File(System.getProperty("user.home"));
 			}
@@ -77,13 +80,18 @@ public class TerminalSession {
 		outputThread.start();
 	}
 
+	public void setProcess(PtyProcess process) {
+		this.process = process;
+	}
+
     public PtyProcess getProcess() {
 		return this.process;
     }
 
-	public void stop() {
+	public int stop() {
 		if (this.process != null && this.process.isAlive()) {
 			this.process.destroy();
-		}
+			return 1;
+		} else return 0;
 	}
 }

@@ -1,6 +1,6 @@
 package zenit.filesystem;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.File;
