@@ -5,13 +5,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,13 +23,11 @@ import java.util.Map;
  *
  * @author maxkoste
  */
-
 public class LspManager {
 
 	private String serverPath;
 	private File workspace;
 	private OutputStream stdin;
-	private BufferedWriter writer;
 	private Map<String, Integer> documentVersion = new HashMap<>();
 	private volatile boolean ready = false;
 
@@ -50,17 +44,16 @@ public class LspManager {
 	}
 
 	/**
-	 * @param workspace - The place where the server stores data related to the current workspace 
+	 * @param workspace - The place where the server stores data related to the current workspace
 	 */
 	public void setWorkspace(File workspace) {
-
 		this.workspace = (workspace != null) ? workspace
 				: new File(System.getProperty("user.home"));
 	}
 
 	/**
 	 * Register a listener that will receive parsed diagnostics.
-	 * This calls BEFORE startServer().
+	 * Call this BEFORE startServer().
 	 */
 	public void setDiagnosticsListener(DiagnosticsListener listener) {
 		this.diagnosticsListener = listener;
@@ -68,10 +61,8 @@ public class LspManager {
 		if (workspace != null) {
 			this.workspace = new File(workspace, ".zenit");
 		} else {
-			// set defualt.
 			this.workspace = new File(System.getProperty("user.home"), ".zenit");
 		}
-
 	}
 
 	public Process startServer() throws IOException {
@@ -97,9 +88,9 @@ public class LspManager {
 		}
 
 		String workspacePath = workspace.getAbsolutePath();
-		String osVar = System.getProperty("os.name").toLowerCase().contains("win")
-				? "/config_win"
-				: "/config_mac";
+		boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
+		String configFolder = isWindows ? "config_win" : "config_mac";
+		String configPath = baseDir.getAbsolutePath() + File.separator + configFolder;
 
 		ProcessBuilder pb = new ProcessBuilder(
 				"java",
@@ -109,19 +100,17 @@ public class LspManager {
 				"-Dlog.protocol=true",
 				"-Dlog.level=ALL",
 				"-jar", launcherJar.getAbsolutePath(),
-				"-configuration", baseDir.getAbsolutePath() + osVar,
+				"-configuration", configPath,
 				"-data", workspacePath);
 
 		pb.directory(baseDir);
 
 		Process p = pb.start();
-		this.stdin  = p.getOutputStream();
-		this.writer = new BufferedWriter(new OutputStreamWriter(stdin));
-		this.writer = new BufferedWriter(new OutputStreamWriter(stdin));
-		this.ready = true;
+		this.stdin = p.getOutputStream();
+		this.ready = false;
 
 		sendInitialize();
-		startReading(p);   // <-- parsar nu JSON
+		startReading(p.getInputStream());
 
 		return p;
 	}
@@ -130,19 +119,15 @@ public class LspManager {
 	 * Reads LSP output on a background thread.
 	 * Reads raw bytes to handle Content-Length framing correctly on all platforms.
 	 */
-	public void startReading(Process p) {
+	public void startReading(java.io.InputStream is) {
 		new Thread(() -> {
 			try {
-				java.io.InputStream is = p.getInputStream(); // efektivare än BufferedReader
-
 				while (true) {
-					// --- Read headers byte by byte until \r\n\r\n ---
+					// Read headers byte by byte until \r\n\r\n
 					int contentLength = -1;
 					StringBuilder headerBuf = new StringBuilder();
 
-					int prev = -1;
 					int b;
-					// Read until we see blank line (\r\n\r\n or \n\n)
 					while ((b = is.read()) != -1) {
 						headerBuf.append((char) b);
 						String h = headerBuf.toString();
@@ -154,7 +139,8 @@ public class LspManager {
 					// Parse Content-Length from headers
 					for (String line : headerBuf.toString().split("\r?\n")) {
 						if (line.startsWith("Content-Length:")) {
-							contentLength = Integer.parseInt(line.substring("Content-Length:".length()).trim());
+							contentLength = Integer.parseInt(
+									line.substring("Content-Length:".length()).trim());
 						}
 					}
 
@@ -163,7 +149,7 @@ public class LspManager {
 						continue;
 					}
 
-					// --- Read exactly contentLength bytes ---
+					// Read exactly contentLength bytes
 					byte[] bodyBytes = new byte[contentLength];
 					int read = 0;
 					while (read < contentLength) {
@@ -181,18 +167,32 @@ public class LspManager {
 		}, "lsp-reader").start();
 	}
 
+	// Keep old signature for compatibility
+	public void startReading(Process p) {
+		boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
+		startReading(isWindows ? p.getErrorStream() : p.getInputStream());
+	}
+
 	private void handleMessage(String json) {
 		try {
 			JsonReader jsonReader = new JsonReader(new java.io.StringReader(json));
-			jsonReader.setLenient(true); // parseString() kraschade ibland
+			jsonReader.setLenient(true);
 			JsonObject obj = JsonParser.parseReader(jsonReader).getAsJsonObject();
 
 			String method = obj.has("method")
 					? obj.get("method").getAsString()
 					: "(response id=" + obj.get("id") + ")";
-			System.out.println("[LSP-METHOD] " + method); // DEBUG
+			System.out.println("[LSP-METHOD] " + method);
 
-			if (!obj.has("method")) return;
+			if (!obj.has("method")) {
+				// Svar (response) — kolla om det är initialize-svaret
+				if (obj.has("id") && obj.get("id").getAsInt() == 1) {
+					System.out.println("[LSP] Initialize response received — server ready");
+					this.ready = true;
+					try { sendInitialized(); } catch (IOException e) { e.printStackTrace(); }
+				}
+				return;
+			}
 
 			if ("textDocument/publishDiagnostics".equals(method)) {
 				parseDiagnostics(obj);
@@ -205,24 +205,6 @@ public class LspManager {
 
 	/**
 	 * Parses a publishDiagnostics notification and calls the listener.
-	 *
-	 * JSON structure:
-	 * {
-	 *   "method": "textDocument/publishDiagnostics",
-	 *   "params": {
-	 *     "uri": "file:///...",
-	 *     "diagnostics": [
-	 *       {
-	 *         "range": {
-	 *           "start": { "line": 0, "character": 8 },
-	 *           "end":   { "line": 0, "character": 12 }
-	 *         },
-	 *         "severity": 1,
-	 *         "message": "Syntax error..."
-	 *       }
-	 *     ]
-	 *   }
-	 * }
 	 */
 	private void parseDiagnostics(JsonObject obj) {
 		if (diagnosticsListener == null) return;
@@ -256,32 +238,28 @@ public class LspManager {
 	}
 
 	public void sendInitialize() throws IOException {
-		String json = """
-                {
-                "jsonrpc": "2.0",
-                "id": 1,
-                "method": "initialize",
-                "params": {
-                "processId": %d,
-                "rootUri": "%s",
-                "capabilities": {}
-                }
-                }
-                """.formatted(
-				ProcessHandle.current().pid(),
-				workspace.toURI().toString());
+		String rootUri = workspace.toURI().toString()
+				.replace("file:/", "file:///")
+				.replace("file:////", "file:///");
 
-		sendMessage(json);
+		String json = """
+            {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":%d,"rootUri":"%s","capabilities":{}}}
+            """.strip().formatted(ProcessHandle.current().pid(), rootUri);
+
+		System.out.println("[DEBUG] sendInitialize JSON: " + json);
+
+		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+		String header = "Content-Length: " + bytes.length + "\r\n\r\n";
+
+		stdin.write(header.getBytes(StandardCharsets.UTF_8));
+		stdin.write(bytes);
+		stdin.flush();
 	}
 
 	public void sendInitialized() throws IOException {
 		String json = """
-                {
-                "jsonrpc": "2.0",
-                "method": "initialized",
-                "params": {}
-                }
-                """;
+                {"jsonrpc":"2.0","method":"initialized","params":{}}
+                """.strip();
 		sendMessage(json);
 	}
 
@@ -292,19 +270,8 @@ public class LspManager {
 		String escaped = escapeJson(content);
 
 		String json = """
-                {
-                "jsonrpc": "2.0",
-                "method": "textDocument/didOpen",
-                "params": {
-                "textDocument": {
-                "uri": "%s",
-                "languageId": "java",
-                "version": 1,
-                "text": "%s"
-                }
-                }
-                }
-                """.formatted(uri, escaped);
+                {"jsonrpc":"2.0","method":"textDocument/didOpen","params":{"textDocument":{"uri":"%s","languageId":"java","version":1,"text":"%s"}}}
+                """.strip().formatted(uri, escaped);
 
 		sendMessage(json);
 	}
@@ -319,35 +286,22 @@ public class LspManager {
 		String escaped = escapeJson(content);
 
 		String json = """
-                {
-                "jsonrpc": "2.0",
-                "method": "textDocument/didChange",
-                "params": {
-                "textDocument": {
-                "uri": "%s",
-                "version": %d
-                },
-                "contentChanges": [
-                {
-                "text": "%s"
-                }
-                ]
-                }
-                }
-                """.formatted(uri, version, escaped);
+                {"jsonrpc":"2.0","method":"textDocument/didChange","params":{"textDocument":{"uri":"%s","version":%d},"contentChanges":[{"text":"%s"}]}}
+                """.strip().formatted(uri, version, escaped);
 
 		sendMessage(json);
 	}
 
 	private void sendMessage(String json) throws IOException {
-		if (writer == null || !ready) {
+		if (stdin == null || !ready) {
 			System.err.println("[LSP] sendMessage skipped — server not ready yet");
 			return;
 		}
 		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
-		writer.write("Content-Length: " + bytes.length + "\r\n\r\n");
-		writer.write(json);
-		writer.flush();
+		String header = "Content-Length: " + bytes.length + "\r\n\r\n";
+		stdin.write(header.getBytes(StandardCharsets.UTF_8));
+		stdin.write(bytes);
+		stdin.flush();
 	}
 
 	private String escapeJson(String text) {
@@ -358,13 +312,7 @@ public class LspManager {
 				.replace("\r", "");
 	}
 
-	public OutputStream getStdin()       {
-		return this.stdin; }
+	public OutputStream getStdin() { return this.stdin; }
 
-	public BufferedWriter getWriter()    {
-		return this.writer; }
-
-	public boolean isReady() {
-		return ready;
-	}
+	public boolean isReady() { return ready; }
 }
