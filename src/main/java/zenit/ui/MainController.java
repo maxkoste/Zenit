@@ -32,7 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import zenit.Zenit;
 import zenit.LSP.LspManager;
 import zenit.console.ConsoleArea;
@@ -163,7 +163,7 @@ public class MainController extends VBox {
 	 */
 	public MainController(Stage s) {
 		this.stage = s;
-		this.zenCodeAreasTextSize = 12;
+		this.zenCodeAreasTextSize = 16;
 		this.zenCodeAreasFontFamily = "Menlo";
 		this.activeZenCodeAreas = new LinkedList<ZenCodeArea>();
 
@@ -197,6 +197,8 @@ public class MainController extends VBox {
 			scene.getStylesheets().add(getClass().getResource("/zenit/ui/keywords.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setTitle("Zenit - " + workspace.getPath());
+			stage.initStyle(StageStyle.UNIFIED);
+			
 
 			initialize();
 			

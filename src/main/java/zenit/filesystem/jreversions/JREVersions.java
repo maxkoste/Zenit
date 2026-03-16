@@ -125,7 +125,6 @@ public class JREVersions {
 	}
 
 	//Checks the JAVA_HOME variable
-	//TODO: Implement this as a better JDK check
 	public static Optional<File> getJavaHomeFromEnv(){
 		String javaHome = System.getenv("JAVA_HOME");
 		if(javaHome!=null && !javaHome.isBlank()){
@@ -143,7 +142,7 @@ public class JREVersions {
 	public static File getJVMDirectory() {
 		String OS = Zenit.OS;
 		if (OS.equals("Mac OS X")) {
-			return new File("/opt/homebrew/opt/openjdk");
+			return new File("/opt/homebrew/opt/openjdk@21/bin/java");
 		} else if (OS.equals("Linux")) {
 			return new File("/usr/lib/jvm");
 		} else if (OS.equals("Windows")) {

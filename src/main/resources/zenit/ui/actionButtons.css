@@ -2,7 +2,7 @@
 .btn-run {
     -icon-paint: green;
     -fx-background-color: -icon-paint;
-    -size: 24;
+    -size: 14;
     -fx-min-height: -size;
     -fx-min-width: -size;
     -fx-max-height: -size;
@@ -19,7 +19,7 @@
 .btn-stop {
     -icon-paint: red;
     -fx-background-color: -icon-paint;
-    -size: 24;
+    -size: 14;
     -fx-min-height: -size;
     -fx-min-width: -size;
     -fx-max-height: -size;

@@ -1,100 +1,106 @@
-.styled-text-area .text {
-  -fx-fill: #fff;
+/* One Dark Pro palette:
+   Base:       #282c34
+   Surface:    #21252b
+   Overlay:    #2c313c
+   Text:       #abb2bf
+   Subtle:     #5c6370
+   Keyword:    #c678dd  (purple)
+   String:     #98c379  (green)
+   Number:     #d19a66  (orange)
+   Function:   #61afef  (blue)
+   Variable:   #e06c75  (red/pink)
+   Cyan:       #56b6c2
+   Yellow:     #e5c07b
+   Selection:  #3e4451
+*/
+.number {
+    -fx-fill: #d19a66 !important; /* Number — orange */
+}
+.annotation {
+    -fx-fill: #e5c07b !important; /* Yellow — annotations */
+    -fx-font-style: italic;
+}
+.classname {
+    -fx-fill: #c678dd !important;
+}
+.operator {
+    -fx-fill: #abb2bf; /* Text — operators subtle */
+    -fx-font-weight: regular;
+}
+.text {
+  -fx-fill: #abb2bf; /* Text */
+}
+.keyword {
+  -fx-fill: #c678dd; /* Keyword — purple */
+  -fx-font-weight: regular;
+}
+.semicolon {
+  -fx-font-weight: regular;
+}
+.paren {
+  -fx-fill: #e5c07b !important; /* Yellow */
+  -fx-font-weight: regular;
+}
+.bracket {
+  -fx-fill: #56b6c2; /* Cyan */
+  -fx-font-weight: regular;
+}
+.brace {
+  -fx-fill: #61afef; /* Function — blue */
+  -fx-font-weight: regular;
+}
+.string {
+  -fx-fill: #98c379; /* String — green */
+}
+.comment {
+  -fx-fill: #5c6370; /* Subtle — comments */
+  -fx-font-style: italic;
 }
 
-.styled-text-area .keyword {
-  /*-fx-fill: purple;*/
-  -fx-fill: #569cc3;
-  -fx-font-weight: bold;
+.method {
+    -fx-fill: #e06c75 !important; /* Variable — red/pink for method names */
 }
 
-.styled-text-area .semicolon {
-  -fx-font-weight: bold;
-}
-
-.styled-text-area .paren {
-  /*-fx-fill: firebrick;*/
-  -fx-fill: #d4c28f;
-  -fx-font-weight: bold;
-}
-
-.styled-text-area .bracket {
-  /*-fx-fill: darkgreen;*/
-  -fx-fill: lightgreen;
-  -fx-font-weight: bold;
-}
-
-.styled-text-area .brace {
-  -fx-fill: teal;
-  -fx-font-weight: bold;
-}
-
-.styled-text-area .string {
-  /*-fx-fill: blue;*/
-  -fx-fill: #c36537;
-}
-
-.styled-text-area .comment {
-  /*-fx-fill: cadetblue;*/
-  -fx-fill: #00ee00;
+.control {
+    -fx-fill: #6678dd !important; /* Same purple as keyword or use #e06c75 red/pink */
 }
 
 .paragraph-box:has-caret {
   -fx-border-width: 1px;
-  -fx-border-color: #ffffff1f;
+  -fx-border-color: #2c313c; /* Overlay */
   -fx-border-style: solid inside;
 }
-
 .paragraph-box {
-  -fx-background-color: #444;
+  -fx-background-color: #21252b; /* Surface */
   -fx-border-width: 1px;
   -fx-border-color: transparent;
   -fx-border-style: solid inside;
 }
-
 .styled-text-area .selection {
-  -fx-fill: #666 !important;
+  -fx-fill: #3e4451 !important; /* Selection */
 }
-
 .styled-text-area .lineno {
-  -fx-background-color: #333;
-  -fx-fill: #fff;
+  -fx-background-color: #282c34; /* Base */
+  -fx-fill: #5c6370;             /* Subtle */
   -fx-pref-width: 50px;
 }
-
 .caret {
-  -fx-stroke: #fff;
+  -fx-stroke: #abb2bf; /* Text */
 }
-
 .underline {
   -fx-underline: true;
 }
-
 .search-dark-mode {
-  -fx-effect: dropshadow(gaussian, grey, 3, 1, 0, 0);
+  -fx-effect: dropshadow(gaussian, #5c6370, 3, 1, 0, 0); /* Subtle */
 }
-
 .search-light-mode {
-  -fx-effect: dropshadow(gaussian, yellow, 3, 1, 0, 0);
+  -fx-effect: dropshadow(gaussian, #e5c07b, 3, 1, 0, 0); /* Yellow */
 }
-
-/* FUI403 — Error (severity 1): röd understrykning */
 .lsp-error {
-  -rtfx-underline-color: #ff4444;
+  -rtfx-underline-color: #e06c75; /* Variable — red/pink for errors */
   -rtfx-underline-width: 1.5px;
 }
-
-/* FUI403 — Warning (severity 2): gul understrykning */
 .lsp-warning {
-  -rtfx-underline-color: #ffaa00;
+  -rtfx-underline-color: #e5c07b; /* Yellow — warnings */
   -rtfx-underline-width: 1.5px;
-}
-
-.lsp-error {
-    -rtfx-underline-color: #cc0000;
-    -rtfx-underline-width: 1.5px;
-}
-.lsp-warning {
-    -rtfx-underline-color: #cc7700;
-    -rtfx-underline-width: 1.5px;
 }

@@ -1,10 +1,35 @@
 const container = document.getElementById('terminal');
 
 window.term = new Terminal({
-	cursorBlink: true,
-	theme: {
-		background:"#000000"
-	}
+    cursorBlink: true,
+    theme: {
+        background:      '#282c34', // Base
+        foreground:      '#abb2bf', // Text
+        cursor:          '#abb2bf', // Text
+        cursorAccent:    '#282c34', // Base
+        selectionForeground: '#abb2bf',
+        selectionBackground: '#3e4451', // Selection
+
+        // ANSI colors
+        black:           '#282c34', // Base
+        red:             '#e06c75', // Variable
+        green:           '#98c379', // String
+        yellow:          '#e5c07b', // Yellow
+        blue:            '#61afef', // Function
+        magenta:         '#c678dd', // Keyword
+        cyan:            '#56b6c2', // Cyan
+        white:           '#abb2bf', // Text
+
+        // Bright ANSI colors
+        brightBlack:     '#5c6370', // Subtle
+        brightRed:       '#e06c75', // Variable
+        brightGreen:     '#98c379', // String
+        brightYellow:    '#e5c07b', // Yellow
+        brightBlue:      '#61afef', // Function
+        brightMagenta:   '#c678dd', // Keyword
+        brightCyan:      '#56b6c2', // Cyan
+        brightWhite:     '#ffffff', // White
+    }
 });
 
 term.open(container);
