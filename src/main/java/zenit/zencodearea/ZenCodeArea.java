@@ -60,8 +60,7 @@ public class ZenCodeArea extends CodeArea {
 	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
 	private static final String NUMBER_PATTERN = "\\b(\\d+\\.?\\d*[fFdDlL]?|0[xX][0-9a-fA-F]+)\\b";
 	private static final String ANNOTATION_PATTERN = "@[\\w]+";
-	private static final String CLASS_NAME_PATTERN =
-	"(?<=\\bclass\\s{1,10}|\\bnew\\s{1,10}|\\bextends\\s{1,10}|\\bimplements\\s{1,10}|\\brecord\\s{1,10})[A-Z][a-zA-Z0-9]*";
+	private static final String CLASS_NAME_PATTERN = "\\b[A-Z][a-zA-Z0-9]*\\b";
 	private static final String OPERATOR_PATTERN = "\\+|-|\\*|/|%|==|!=|<=|>=|<|>|&&|\\|\\||!|=|\\+=|-=|\\*=|/=";
 	private static final String METHOD_PATTERN = 
 	"(?<!\\.)\\b(?!if|for|while|switch|catch|case|return|new|assert|throw)([a-z][a-zA-Z0-9]*)(?=\\s*\\()";

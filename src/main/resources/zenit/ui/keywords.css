@@ -21,7 +21,7 @@
     -fx-font-style: italic;
 }
 .classname {
-    -fx-fill: #c678dd !important;
+    -fx-fill: #e5c07b !important;
 }
 .operator {
     -fx-fill: #abb2bf; /* Text — operators subtle */
@@ -45,10 +45,12 @@
   -fx-fill: #56b6c2; /* Cyan */
   -fx-font-weight: regular;
 }
+
 .brace {
   -fx-fill: #61afef; /* Function — blue */
   -fx-font-weight: regular;
 }
+
 .string {
   -fx-fill: #98c379; /* String — green */
 }
