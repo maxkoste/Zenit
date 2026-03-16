@@ -65,7 +65,6 @@ class TerminalSessionTest{
 				}
 				bw.flush();
 
-				Thread.sleep(100);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
