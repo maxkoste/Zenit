@@ -1,4 +1,4 @@
-package zenit.TerminalTest;
+package zenit.terminalTests;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.WinSize;
