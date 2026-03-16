@@ -50,7 +50,7 @@ public class MetadataEncoder {
 		
 		//JRE Version
 		line = metadata.getJREVersion();
-		if (line != null || line.equals("unknown")){
+		if (line == null || line.equals("unknown")){
 			//Use default JDK
 			File defaultJDK = JREVersions.getDefaultJDKFile();
 			if (defaultJDK != null) {

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
+import zenit.exceptions.TypeCodeException;
 import zenit.filesystem.helpers.CodeSnippets;
 import zenit.filesystem.metadata.Metadata;
 
@@ -25,7 +26,6 @@ public class FileController {
 	 * Creates a new file controller to manipulate the file system
 	 */
 	public FileController(File workspace) {
-		System.out.println("[DEBUGG] Workspace is : " + workspace.toString());
 		this.workspace = workspace;
 	}
 	
@@ -53,6 +53,8 @@ public class FileController {
 				return JavaFileHandler.createFile(file, content, typeCode);
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage());
+			} catch (TypeCodeException ex) {
+				System.out.println("Invalid type code: " + typeCode);
 			}
 		}
 		return null;
@@ -210,6 +212,9 @@ public class FileController {
 	 * @return {@code true} if package was created, otherwise {@code false}
 	 */
 	public boolean createPackage(File file) {	
+		if (file == null) {
+			return false;
+		}
 		try {
 			PackageHandler.createPackage(file);
 			return true;
@@ -249,6 +254,9 @@ public class FileController {
 	 * @return True if changed, otherwise false.
 	 */
 	public boolean changeWorkspace(File workspace) {
+		if (workspace == null) {
+			return false;
+		}
 		boolean success = WorkspaceHandler.createWorkspace(workspace);
 		if (success) {
 			this.workspace = workspace;
@@ -367,6 +375,9 @@ public class FileController {
 	}
 	
 	public boolean containMainMethod(File classFile) {
+		if (classFile == null) {
+			return false;
+		}
 		String content;
 		try {
 			content = JavaFileHandler.readFile(classFile);
@@ -376,7 +387,7 @@ public class FileController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
 }
