@@ -1,4 +1,4 @@
-package zenit.TerminalTest;
+package zenit.terminalTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
