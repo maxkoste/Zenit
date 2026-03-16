@@ -68,33 +68,6 @@ mvn --version
 
 ---
 
-## Method 2: Running with Eclipse
-
-1. Open Eclipse
-2. Go to **File** → **Import...** → **General** → **Existing Projects into Workspace**
-3. Click **Browse...** and select the `zenit` project folder
-4. Click **Finish**
-5. Set the JRE System Library to **Java SE 21**:
-   - Right-click the project → **Properties** → **Java Build Path** → **Libraries**
-6. Configure VM arguments:
-   - Go to **Run** → **Run Configurations** → **Java Application** → **TestUI** → **Arguments**
-   - Add the following under **VM arguments**:
-```
-     --module-path lib/javafx-sdk-11.0.2/lib/
-     --add-modules=javafx.controls,javafx.fxml,javafx.web
-     --add-opens javafx.graphics/javafx.scene.text=ALL-UNNAMED
-     --add-exports javafx.graphics/com.sun.javafx.text=ALL-UNNAMED
-     --add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED
-     --add-exports javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED
-     --add-exports javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED
-     --add-exports javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED
-     -Dprism.allowhidpi=true
-```
-7. Uncheck **"Use the -XstartOnFirstThread argument when launching with SWT"**
-8. Run `src/main/java/zenit/ui/TestUI.java`
-
----
-
 ## Troubleshooting
 
 | Issue | Solution |
@@ -124,23 +97,4 @@ If the project fails to compile due to a missing `pty4j` dependency, install it 
 3. Then run a clean compile as normal:
 ```bash
    mvn clean compile
-```
-
----
-
-## Project Structure
-```
-zenit/
-├── src/
-│   ├── main/
-│   │   ├── java/zenit/
-│   │   │   ├── ui/              # User interface
-│   │   │   ├── console/         # Console management
-│   │   │   ├── terminal/        # Integrated terminal
-│   │   │   ├── filesystem/      # File management
-│   │   │   └── zencodearea/     # Code editor
-│   │   └── resources/           # FXML and CSS files
-│   └── test/
-│       └── java/zenit/          # Unit tests
-└── pom.xml                      # Maven configuration
 ```
