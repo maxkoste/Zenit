@@ -41,8 +41,9 @@ public class TerminalInstance {
 
 	public void setCurrWorkspace(File currWorkspace){
 		if (this.session != null) {
-			System.out.println("[DEBUG TerminalInstance] This session is null, can't set current workspace");
 			this.session.setCurrWorkspace(currWorkspace);
+		} else {
+			System.out.println("[DEBUG TerminalInstance] This session is null, can't set current workspace");
 		}
 	}
 }

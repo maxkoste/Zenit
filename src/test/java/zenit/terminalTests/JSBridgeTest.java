@@ -1,4 +1,4 @@
-package zenit.terminal;
+package zenit.terminalTests;
 
 import com.pty4j.PtyProcess;
 import com.pty4j.WinSize;
@@ -13,6 +13,7 @@ import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import zenit.terminal.*;
 
 /**
  * Unit tests for JSBridge

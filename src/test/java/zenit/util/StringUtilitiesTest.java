@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class StringUtilitiesTest {
 
-
     @Test
     @DisplayName("Should return 0 for null string")
     void testCountLeadingSpaces_nullString() {

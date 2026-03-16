@@ -38,7 +38,7 @@
 }
 
 #menuBar, #menuBar * {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-text-fill: #B399FF;
 }
 
@@ -78,7 +78,7 @@
 }
 
 #tabPane {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-fill: #B399FF;
 	-fx-border-width: 0;
 	-fx-padding: 0;
@@ -90,7 +90,7 @@
 }
 
 #treeView * {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-fill: #B399FFaa;
 }
 
@@ -122,7 +122,7 @@
  
  
  .tree-cell:hover {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
  }
  
  #treeView .thumb {
@@ -163,7 +163,7 @@
 }
 
 #tabPane .tab {
-	-fx-background-color: #CC333388;
+	-fx-background-color: #80000088;
 }
 
 #tabPane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -175,11 +175,11 @@
 }
 
 #tabPane .tab:selected {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 }
 
 #tabPane .tab-content-area * {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 }
 
 #consolePane {
@@ -193,9 +193,9 @@
 }
 
 #consolePane .content {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-border-width: 0;
-	-fx-border-color: #CC3333;
+	-fx-border-color: #800000;
 }
 
 #consolePane .content * {
@@ -203,7 +203,7 @@
 	-fx-fill: #B399FF;
 	-fx-border-width: 0;
 	-fx-padding: 0;
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 }
 
 #consolePane .content .thumb {
@@ -211,19 +211,19 @@
 }
 
 #consolePane .content .scroll-bar:vertical, #consolePane .content .corner {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-pref-width: 14;
     -fx-padding: 3;
     -fx-border-width: 0;
-    -fx-border-color: #CC3333;
+    -fx-border-color: #800000;
 }
 
 #consolePane .content .scroll-bar:horizontal {
-	-fx-background-color: #CC3333;
+	-fx-background-color: #800000;
 	-fx-pref-height: 14;
 	-fx-padding: 3;
 	-fx-border-width: 0;
-	-fx-border-color: #CC3333;
+	-fx-border-color: #800000;
 }
 
  #consolePane .content .thumb:hover, #consolePane .content .thumb:pressed {
@@ -232,7 +232,7 @@
 
 #HBox, #HBox * {
 	-fx-background-color: #E699B3;
-	-fx-fill: #CC3333;
+	-fx-fill: #800000;
 	-fx-border-width: 0;
 }
 

@@ -38,7 +38,7 @@
 }
 
 #menuBar, #menuBar * {
-	-fx-background-color: #444444;
+	-fx-background-color: #FFF444;
 	-fx-text-fill: #EEEEEE;
 }
 
@@ -53,6 +53,7 @@
 .menu {
 	-fx-fill: #EEEEEE;
 }
+
 
 .menu:hover, .menu:hover > .label {
 	-fx-background-color: #555555 !important;
