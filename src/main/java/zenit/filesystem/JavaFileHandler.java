@@ -36,7 +36,8 @@ public class JavaFileHandler extends FileHandler {
 	 * @throws IOException Throws IOException if file already exists or it couldn't
 	 * be created.
 	 */
-	protected static File createFile(File file, String content, int typeCode) throws IOException {
+	protected static File createFile(File file, String content, int typeCode) throws IOException, TypeCodeException {
+
 		try {
 			String fileName = file.getName();
 			//Adds .java if not already added
@@ -53,12 +54,9 @@ public class JavaFileHandler extends FileHandler {
 			file.createNewFile();
 			
 			//Write content to file
+			//throws TypeCodeException if the typeCode isn't correct
 			if (content == null) {
-				try {
-					content = CodeSnippets.newSnippet(typeCode, file.getName(), FileNameHelpers.getPackagenameFromFile(file));
-				} catch (TypeCodeException ex) {
-					ex.printStackTrace();
-				}
+				content = CodeSnippets.newSnippet(typeCode, file.getName(), FileNameHelpers.getPackagenameFromFile(file));
 			}
 			
 			try (BufferedWriter br = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), textEncoding))) {
