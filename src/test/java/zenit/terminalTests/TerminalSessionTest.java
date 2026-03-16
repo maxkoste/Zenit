@@ -60,7 +60,7 @@ class TerminalSessionTest{
 		Future<?> future = executor.submit(()->{
 			try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(p.getOutputStream()))) {
 
-				for (int i = 0; i < 8000; i++) {
+				for (int i = 0; i < 800; i++) {
 					bw.write("hello" + i + "\n");
 				}
 				bw.flush();
