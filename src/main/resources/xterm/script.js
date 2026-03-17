@@ -1,5 +1,3 @@
-import { FitAddon } from '@xterm/addon-fit';
-
 const container = document.getElementById('terminal');
 
 window.term = new Terminal({
