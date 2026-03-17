@@ -197,8 +197,6 @@ public class MainController extends VBox {
 			scene.getStylesheets().add(getClass().getResource("/zenit/ui/keywords.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setTitle("Zenit - " + workspace.getPath());
-			stage.initStyle(StageStyle.UNIFIED);
-			
 
 			initialize();
 			

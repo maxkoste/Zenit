@@ -1,6 +1,6 @@
 .root {
 	-fx-focus-color: transparent;
-	-fx-border-width: 0;
+	-fx-border-width: 10;
 }
 
 #btnRun {
@@ -87,17 +87,41 @@
 	-fx-padding: 0;
 }
 
-#treeView * {
+.tree-cell {
+	-fx-text-fill: #abb2bf;        /* Text */
 	-fx-background-color: #21252b; /* Surface */
-	-fx-fill: #abb2bfaa;           /* Text with opacity */
+	-fx-font-size: 16px;
+	-fx-font-family: "SF Mono", "Menlo", "Consolas", monospace;
 }
 
-#treeView *:selected {
-	-fx-background-color: #3e445166; /* Selection with opacity */
+.tree-cell:hover {
+	-fx-text-fill: #999999;        /* Text */
+	-fx-background-color: #2c313c; /* Overlay */
+	-fx-font-size: 16px;
+	-fx-font-family: "SF Mono", "Menlo", "Consolas", monospace;
+}
+
+.tree-cell:selected {
+	-fx-text-fill: #ffffff;
+	-fx-background-color: #3e4451; /* Selection */
 }
 
 #treeView .arrow {
 	-fx-background-color: #5c6370bb; /* Subtle with opacity */
+}
+
+#treeView .thumb {
+	-fx-background-color: #5c6370aa; /* Subtle with opacity */
+}
+
+#treeView .thumb:hover, #treeView .thumb:pressed {
+	-fx-background-color: #2c313c; /* Subtle */
+}
+
+#treeView .increment-button, #treeView .decrement-button {
+	-fx-background-color: transparent;
+	-fx-background-radius: 0em;
+	-fx-padding: 0 0 10 0;
 }
 
 .split-pane:horizontal > .split-pane-divider {
@@ -121,24 +145,6 @@
 .split-pane > * > .split-pane {
 	-fx-background-insets: 0, 0;
 	-fx-padding: 0;
-}
-
-.tree-cell:hover {
-	-fx-background-color: #2c313c; /* Overlay */
-}
-
-#treeView .thumb {
-	-fx-background-color: #5c6370aa; /* Subtle with opacity */
-}
-
-#treeView .thumb:hover, #treeView .thumb:pressed {
-	-fx-background-color: #5c6370; /* Subtle */
-}
-
-#treeView .increment-button, #treeView .decrement-button {
-	-fx-background-color: transparent;
-	-fx-background-radius: 0em;
-	-fx-padding: 0 0 10 0;
 }
 
 .scroll-bar:vertical .increment-arrow, .decrement-arrow {

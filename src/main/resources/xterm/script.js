@@ -1,8 +1,13 @@
+import { FitAddon } from '@xterm/addon-fit';
+
 const container = document.getElementById('terminal');
 
 window.term = new Terminal({
+	rows: 150,
+    cols: 120,
     cursorBlink: true,
     theme: {
+
         background:      '#282c34', // Base
         foreground:      '#abb2bf', // Text
         cursor:          '#abb2bf', // Text
@@ -31,6 +36,10 @@ window.term = new Terminal({
         brightWhite:     '#ffffff', // White
     }
 });
+
+term.options = {
+	fontSize: 16,
+};
 
 term.open(container);
 
