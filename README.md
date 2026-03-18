@@ -4,7 +4,7 @@ Zenit is a Java IDE built with JavaFX, designed for a streamlined development ex
 
 ![CI](https://github.com/maxkoste/Zenit/actions/workflows/ci.yml/badge.svg)
 
-<img width="1800" height="1169" alt="zenit" src="https://github.com/user-attachments/assets/242e73e1-8bba-4995-afa1-3ae2ba1b8170" />
+<img width="1798" height="1131" alt="image" src="https://github.com/user-attachments/assets/591db1db-7535-46fd-adcb-8a2040035360" />
 
 ---
 
