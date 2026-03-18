@@ -42,8 +42,6 @@ public class SettingsPanelController extends AnchorPane{
 
 	private int oldSize;
 	private String oldFont;
-	private File customThemeCSS;
-	private LinkedList<String> addedCSSLines;
 	
 	private Stage window;
 	private MainController mainController;
@@ -150,7 +148,6 @@ public class SettingsPanelController extends AnchorPane{
 		this.consoleController = consoleController;
 		oldSize = oldFontSize;
 		oldFont = oldFontFamily;
-		addedCSSLines = new LinkedList<String>();
 		
 		FXMLLoader loader = new FXMLLoader(
 			getClass().getResource("/zenit/settingspanel/SettingsPanel.fxml"
