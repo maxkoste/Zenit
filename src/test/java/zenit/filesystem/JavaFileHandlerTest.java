@@ -1,9 +1,10 @@
 package zenit.filesystem;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import zenit.exceptions.TypeCodeException;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +34,12 @@ public class JavaFileHandlerTest {
 
     private File tempDir;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         tempDir = Files.createTempDirectory("JavaFileHandlerTest").toFile();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         deleteRecursively(tempDir);
     }
@@ -61,7 +62,7 @@ public class JavaFileHandlerTest {
 
     @Test
     @DisplayName("Should create a .java file with provided content")
-    public void testCreateFileWithContent() throws IOException {
+    public void testCreateFileWithContent() throws IOException, TypeCodeException {
         File file = new File(tempDir, "MyClass.java");
         File created = JavaFileHandler.createFile(file, "public class MyClass {}", 0);
 
@@ -73,7 +74,7 @@ public class JavaFileHandlerTest {
 
     @Test
     @DisplayName("Should append .java extension if not already present")
-    public void testCreateFileAppendsJavaExtension() throws IOException {
+    public void testCreateFileAppendsJavaExtension() throws IOException, TypeCodeException {
         File created = JavaFileHandler.createFile(new File(tempDir, "NoExtension"), "public class NoExtension {}", 0);
 
         assertTrue(created.getName().endsWith(".java"), "File should have .java extension added automatically");
@@ -82,7 +83,7 @@ public class JavaFileHandlerTest {
 
     @Test
     @DisplayName("Should not double-append .java if extension is already present")
-    public void testCreateFileDoesNotDoubleAppendExtension() throws IOException {
+    public void testCreateFileDoesNotDoubleAppendExtension() throws IOException, TypeCodeException {
         File created = JavaFileHandler.createFile(new File(tempDir, "AlreadyHasExtension.java"), "public class AlreadyHasExtension {}", 0);
 
         assertEquals("AlreadyHasExtension.java", created.getName(),
@@ -102,7 +103,7 @@ public class JavaFileHandlerTest {
 
     @Test
     @DisplayName("Should create file using code snippet when content is null")
-    public void testCreateFileWithNullContentUsesSnippet() throws IOException {
+    public void testCreateFileWithNullContentUsesSnippet() throws IOException, TypeCodeException {
         File created = JavaFileHandler.createFile(new File(tempDir, "SnippetClass.java"), null, 0);
 
         assertTrue(created.exists(), "File should be created even when content is null");

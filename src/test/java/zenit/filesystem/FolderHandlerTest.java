@@ -1,8 +1,8 @@
 package zenit.filesystem;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import java.io.File;
@@ -31,12 +31,12 @@ public class FolderHandlerTest {
 
     private File tempDir;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         tempDir = Files.createTempDirectory("FolderHandlerTest").toFile();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         deleteRecursively(tempDir);
     }
