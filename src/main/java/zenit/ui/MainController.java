@@ -32,7 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import zenit.Zenit;
 import zenit.LSP.LspManager;
 import zenit.console.ConsoleArea;
@@ -47,7 +47,6 @@ import zenit.javacodecompiler.DebugErrorBuffer;
 import zenit.javacodecompiler.JavaSourceCodeCompiler;
 import zenit.javacodecompiler.ProcessBuffer;
 import zenit.settingspanel.SettingsPanelController;
-import zenit.settingspanel.ThemeCustomizable; // Implements
 import zenit.searchinfile.Search;
 import zenit.ui.tree.*;
 import zenit.util.Tuple;
@@ -60,7 +59,7 @@ import zenit.zencodearea.ZenCodeArea;
  * @author Pontus Laos, Oskar Molander, Alexander Libot
  *
  */
-public class MainController extends VBox implements ThemeCustomizable {
+public class MainController extends VBox {
 	private Stage stage;
 	
 	private FileController fileController;
@@ -73,8 +72,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 	private String activeStylesheet;
 	
 	private LinkedList<ZenCodeArea> activeZenCodeAreas;
-	
-	private File customThemeCSS;
 	
 	private boolean isDarkMode = true;
 	
@@ -166,10 +163,9 @@ public class MainController extends VBox implements ThemeCustomizable {
 	 */
 	public MainController(Stage s) {
 		this.stage = s;
-		this.zenCodeAreasTextSize = 12;
+		this.zenCodeAreasTextSize = 16;
 		this.zenCodeAreasFontFamily = "Menlo";
 		this.activeZenCodeAreas = new LinkedList<ZenCodeArea>();
-		this.customThemeCSS = new File("/customtheme/mainCustomTheme.css");
 
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/zenit/ui/Main.fxml"));
@@ -1126,13 +1122,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 	}
 
 	/**
-	 * @return the path to the stages custom theme stylesheet.
-	 */
-	public File getCustomThemeCSS() {
-		return this.customThemeCSS;
-	}
-		
-	/**
 	 * Opens the search panel if there is a selected tab.
 	 */
 	@FXML
@@ -1146,9 +1135,6 @@ public class MainController extends VBox implements ThemeCustomizable {
 		}
 	}
 
-
-
-	@Override
 	public String getActiveStylesheet() {
 		return activeStylesheet;
 	}
