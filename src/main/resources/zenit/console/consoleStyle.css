@@ -1,81 +1,61 @@
-/*   .TextArea {
-	-fx-background-color: rgba(255,255,255,0); 
-} */
-
 .choice-box .context-menu {
-	
-	-fx-background-color: #666;
+	-fx-background-color: #2c313c; /* Overlay */
 }
 /* Focused item background color in the list */
-
 .choice-box .menu-item:focused {
-	-fx-background-color: rgba(100,100,100,0.4);
+	-fx-background-color: #2c313c; /* Overlay */
 }
-/*  Text color of non-focused items in the list */
+/* Text color of non-focused items in the list */
 .choice-box .menu-item > .label {
-	-fx-text-fill: black;
+	-fx-text-fill: #abb2bf; /* Text */
 }
-/* Text color of focused item in the list*/
+/* Text color of focused item in the list */
 .choice-box .menu-item:focused > .label {
-	-fx-text-fill: black;
+	-fx-text-fill: #abb2bf; /* Text */
 }
-
-/*  Background color of the control itself*/
+/* Background color of the control itself */
 .choice-box {
-  -fx-background-color: rgba(255,255,255,0);
-  -fx-mark-color: black; /*  arrow color */
+	-fx-background-color: rgba(255,255,255,0);
+	-fx-mark-color: #5c6370; /* Subtle — arrow color */
 }
-
-/*  Selected item text color on the control itself*/
+/* Selected item text color on the control itself */
 .choice-box > .label {
- -fx-text-fill: #bbbbbb; }
- 
+	-fx-text-fill: #5c6370; /* Subtle */
+}
 .paragraph-box:has-caret {
-	 -fx-background-color: rgba(255,255,255,0);
+	-fx-background-color: rgba(255,255,255,0);
 }
-
 #rootNode {
-	-fx-border-color:black;
-	-fx-border-width:1px;
-	-fx-background-color: #333;
+	-fx-border-color: #2c313c;     /* Overlay */
+	-fx-border-width: 1px;
+	-fx-background-color: #282c34; /* Base */
 }
-
-#rootAnchor{
-	-fx-background-color:#444;
+#rootAnchor {
+	-fx-background-color: #21252b; /* Surface */
 }
-
-#btn{
-	 -fx-font-family: "Consolas", 'Courier New', monospace;
-	 -fx-background-color:transparent;
-	 -fx-text-fill:#666;
+#btn {
+	-fx-font-family: "Consolas", 'Courier New', monospace;
+	-fx-background-color: transparent;
+	-fx-text-fill: #5c6370; /* Subtle */
 }
-
-#btn:hover{
-    -fx-text-fill:white;
+#btn:hover {
+	-fx-text-fill: #abb2bf; /* Text */
 }
-
-#empty{
-	-fx-background-color:#444;
+#empty {
+	-fx-background-color: #21252b; /* Surface */
 }
-
-#consoleArea{
-	-fx-background-color:#444;
+#consoleArea {
+	-fx-background-color: #21252b; /* Surface */
 }
-
-#consoleAnchor{
-	-fx-background-color:#444;
+#consoleAnchor {
+	-fx-background-color: #21252b; /* Surface */
 }
-
-#btnIcon{
-	-fx-icon-color:#666;
+#btnIcon {
+	-fx-icon-color: #5c6370; /* Subtle */
 }
-
-#btnIcon:hover{
-	-fx-icon-color:#FFF;
+#btnIcon:hover {
+	-fx-icon-color: #abb2bf; /* Text */
 }
-
-#iconTerminate{
-	-fx-icon-color:#666;
+#iconTerminate {
+	-fx-icon-color: #e06c75; /* Variable — red for terminate */
 }
-
-

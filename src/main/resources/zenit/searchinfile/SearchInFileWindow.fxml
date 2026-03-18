@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root id="mainAnchorPane" minHeight="50.0" minWidth="200.0" prefHeight="80.0" prefWidth="350.0" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="mainAnchorPane" minHeight="50.0" minWidth="200.0" prefHeight="90.0" prefWidth="350.0" type="AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <TextField id="textFieldReplacementWord" fx:id="fldReplaceWord" prefHeight="40.0" prefWidth="187.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="45.0" />
       <TextField id="textFieldInputWord" fx:id="fldInputField" AnchorPane.bottomAnchor="45.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="5.0" />

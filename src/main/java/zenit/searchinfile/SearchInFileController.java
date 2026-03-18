@@ -72,7 +72,10 @@ public class SearchInFileController extends AnchorPane {
 		window = new Stage();
 		scene = new Scene(this);
 
-		window.initStyle(StageStyle.UNDECORATED);
+		// window.initStyle(StageStyle.UNDECORATED);
+		window.setResizable(false);
+
+		window.initStyle(StageStyle.UNIFIED);
 
 		window.setScene(scene);
 		
