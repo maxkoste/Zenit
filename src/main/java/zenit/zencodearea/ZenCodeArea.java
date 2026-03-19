@@ -75,8 +75,7 @@ public class ZenCodeArea extends CodeArea {
 				ignore ->{
 					setStyleSpans(0, computeHighlighting(getText()));
 					try {
-						if (file != null || this.lspManager != null) {
-							System.out.println("[DEBUG] Sending didChange from ZenCodeArea");
+						if (file != null && lspManager != null && file.length() <= 500_000) {
 							lspManager.sendDidChange(file.getAbsolutePath(), getText());
 						}
 					} catch (Exception e) {
