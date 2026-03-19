@@ -30,39 +30,62 @@ public class ZenCodeArea extends CodeArea {
 	// private String font;
 
 	private static final String[] KEYWORDS = new String[] {
-		"abstract", "assert", "boolean", "break", "byte",
+		"abstract", "assert", "boolean", "byte",
 		"case", "catch", "char", "class", "const",
-		"continue", "default", "do", "double", "else",
+		"default", "double",
 		"enum", "extends", "false", "final", "finally", "float",
-		"for", "goto", "if", "implements", "import",
+		"goto", "implements", "import",
 		"instanceof", "int", "interface", "long", "native",
-		"new", "package", "private", "protected", "public",
-		"return", "short", "static", "strictfp", "super",
-		"switch", "synchronized", "this", "throw", "throws",
-		"transient", "true", "try", "void", "volatile", "while"
+		"new", "null", "package", "private", "protected", "public",
+		"record", "return", "sealed", "short", "static", "strictfp", "super",
+		"synchronized", "throw", "throws",
+		"transient", "true", "try", "var", "void", "volatile",
+		"permits", "non-sealed", "yield"
+	};
+
+	private static final String[] CONTROL_KEYWORDS = new String[] {
+		"if", "else", "for", "while", "do", "switch",
+		"break", "continue",
+		"this"
 	};
 
 	private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+	private static final String CONTROL_PATTERN = "\\b(" + String.join("|", CONTROL_KEYWORDS) + ")\\b";
 	private static final String PAREN_PATTERN = "\\(|\\)";
 	private static final String BRACE_PATTERN = "\\{|\\}";
 	private static final String BRACKET_PATTERN = "\\[|\\]";
 	private static final String SEMICOLON_PATTERN = "\\;";
 	private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+	private static final String CHAR_PATTERN = "'([^'\\\\]|\\\\.)'";
 	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+	private static final String NUMBER_PATTERN = "\\b(\\d+\\.?\\d*[fFdDlL]?|0[xX][0-9a-fA-F]+)\\b";
+	private static final String ANNOTATION_PATTERN = "@[\\w]+";
+	private static final String CLASS_NAME_PATTERN = "\\b[A-Z][a-zA-Z0-9]*\\b";
+	private static final String OPERATOR_PATTERN = "\\+|-|\\*|/|%|==|!=|<=|>=|<|>|&&|\\|\\||!|=|\\+=|-=|\\*=|/=";
+	private static final String METHOD_PATTERN = 
+	"(?<!\\.)\\b(?!if|for|while|switch|catch|case|return|new|assert|throw)([a-z][a-zA-Z0-9]*)(?=\\s*\\()";
 
 	private File currentFile;
 
 	private static final Pattern PATTERN = Pattern.compile(
-		"(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+		"(?<COMMENT>" + COMMENT_PATTERN + ")"
+		+ "|(?<STRING>" + STRING_PATTERN + ")"
+		+ "|(?<CHAR>" + CHAR_PATTERN + ")"
+		+ "|(?<ANNOTATION>" + ANNOTATION_PATTERN + ")"
+		+ "|(?<CONTROL>" + CONTROL_PATTERN + ")"
+		+ "|(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+		+ "|(?<CLASSNAME>" + CLASS_NAME_PATTERN + ")"
+		+ "|(?<METHOD>" + METHOD_PATTERN + ")"
+		+ "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+		+ "|(?<OPERATOR>" + OPERATOR_PATTERN + ")"
 		+ "|(?<PAREN>" + PAREN_PATTERN + ")"
 		+ "|(?<BRACE>" + BRACE_PATTERN + ")"
 		+ "|(?<BRACKET>" + BRACKET_PATTERN + ")"
-		+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
-		+ "|(?<STRING>" + STRING_PATTERN + ")"
-		+ "|(?<COMMENT>" + COMMENT_PATTERN + ")");
+		+ "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")");
 
 	public ZenCodeArea(LspManager lspManager, File file) {
 		this(14, "Times new Roman", lspManager, file);
+
 	}
 
 	public ZenCodeArea(int textSize, String font, LspManager lspManager, File file) {
@@ -121,6 +144,7 @@ public class ZenCodeArea extends CodeArea {
 
 	private void applyHighlighting(StyleSpans<Collection<String>> highlighting) {
 		setStyleSpans(0, highlighting);
+
 		InputMap<KeyEvent> im = InputMap.consume(
 			EventPattern.keyPressed(KeyCode.TAB),
 			e -> this.replaceSelection("    "));
@@ -132,25 +156,28 @@ public class ZenCodeArea extends CodeArea {
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		while (matcher.find()) {
-			String styleClass = matcher.group("KEYWORD") != null ? "keyword"
-			: matcher
-			.group("PAREN") != null
-			? "paren"
-			: matcher.group("BRACE") != null ? "brace"
-			: matcher.group("BRACKET") != null ? "bracket"
-			: matcher.group("SEMICOLON") != null ? "semicolon"
-			: matcher.group("STRING") != null ? "string"
-			: matcher.group("COMMENT") != null ? "comment"
-			: null; /* never happens */
+			String styleClass =
+			matcher.group("COMMENT")    != null ? "comment"    :
+			matcher.group("STRING")     != null ? "string"     :
+			matcher.group("CHAR")       != null ? "string"     :
+			matcher.group("ANNOTATION") != null ? "annotation" :
+			matcher.group("CONTROL")    != null ? "control"    :
+			matcher.group("KEYWORD")    != null ? "keyword"    :
+			matcher.group("CLASSNAME")  != null ? "classname"  :
+			matcher.group("METHOD")     != null ? "method"     :
+			matcher.group("NUMBER")     != null ? "number"     :
+			matcher.group("OPERATOR")   != null ? "operator"   :
+			matcher.group("PAREN")      != null ? "paren"      :
+			matcher.group("BRACE")      != null ? "brace"      :
+			matcher.group("BRACKET")    != null ? "bracket"    :
+			matcher.group("SEMICOLON")  != null ? "semicolon"  :
+			null;
 			assert styleClass != null;
-			spansBuilder.add(
-				Collections.emptyList(), matcher.start() - lastKwEnd);
-			spansBuilder.add(
-				Collections.singleton(styleClass), matcher.end() - matcher.start());
+			spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+			spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
 			lastKwEnd = matcher.end();
 		}
 		spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
-
 		return spansBuilder.create();
 	}
 

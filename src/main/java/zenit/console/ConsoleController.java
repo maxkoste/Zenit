@@ -30,7 +30,6 @@ import netscape.javascript.JSObject;
 import zenit.ConsoleRedirect;
 import zenit.ui.MainController;
 import javafx.concurrent.Worker;
-import zenit.LSP.LspDiagnostic;
 import javafx.scene.control.ListView;
 
 /**
@@ -92,10 +91,8 @@ public class ConsoleController implements Initializable {
 
 	public void setCurrWorkspace(File currWorkspace){
 		if (currWorkspace == null) {
-			System.out.println("[DEBUG CONSOLECONTROLER] Current workspace null setting to default home path");
 			this.currWorkspace = new File(System.getProperty("user.home"));
 		} else {
-			System.out.println("[DEBUG CONSOLECONTROLER] Setting the current Workspace to " + currWorkspace.toString());
 			this.currWorkspace = currWorkspace;
 		}
 	}
@@ -406,17 +403,18 @@ public class ConsoleController implements Initializable {
 			}
 		});
 		problemsAnchorPane = new AnchorPane();
-		problemsAnchorPane.setStyle("-fx-background-color: #2b2b2b;");
+		problemsAnchorPane.setStyle("-fx-background-color: #21252b;"); // Surface
 		fillAnchor(problemsAnchorPane);
 
 		problemsListView = new ListView<>();
 		problemsListView.setStyle(
-				"-fx-background-color: #2b2b2b;" +
-						"-fx-control-inner-background: #2b2b2b;" +
-						"-fx-font-size: 12px;"
+			"-fx-background-color: #21252b;" +          // Surface
+			"-fx-control-inner-background: #21252b;" +  // Surface
+			"-fx-font-size: 12px;" +
+			"-fx-text-fill: #abb2bf;"                   // Text
 		);
 		Label placeholder = new Label("No problems detected");
-		placeholder.setTextFill(Color.web("#888"));
+		placeholder.setTextFill(Color.web("#5c6370")); // Subtle
 		problemsListView.setPlaceholder(placeholder);
 		fillAnchor(problemsListView);
 		problemsAnchorPane.getChildren().add(problemsListView);
