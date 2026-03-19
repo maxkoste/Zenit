@@ -69,35 +69,65 @@ public class JREVersionsController extends AnchorPane {
 	private void updateList() {
 		JVMs = JREVersions.read();
 		ArrayList<String> JVMsString = new ArrayList<String>();
-		
-		for (File JVM : JVMs) {
-			JVMsString.add(JVM.getName());
+
+		File defaultJDK = JREVersions.getDefaultJDKFile();
+		Optional<File> javaHome = JREVersions.getJavaHomeFromEnv();
+
+		// Check if JAVA_HOME is in the manually added JVMs list
+		boolean javaHomeIsManuallyAdded = false;
+		if (javaHome.isPresent()) {
+			for (File JVM : JVMs) {
+				if (JVM.getPath().equals(javaHome.get().getPath())) {
+					javaHomeIsManuallyAdded = true;
+					break;
+				}
+			}
 		}
+
+		for (File JVM : JVMs) {
+			String displayName = JVM.getName();
+			if(defaultJDK != null && JVM.getPath().equals(defaultJDK.getPath())){
+				displayName += " [default]";
+			}
+			if(javaHome.isPresent() && JVM.getPath().equals(javaHome.get().getPath())){
+				displayName += " [JAVA_HOME - system]";
+			}
+
+			JVMsString.add(displayName);
+		}
+
+		if(javaHome.isPresent() && !javaHomeIsManuallyAdded){
+			String javaHomeName = javaHome.get().getName();
+
+			if(defaultJDK != null && javaHome.get().getPath().equals(defaultJDK.getPath())){
+				javaHomeName += " [JAVA_HOME - system] [default]";
+			}
+			else {
+				javaHomeName += " [JAVA_HOME - system]";
+			}
+
+			JVMsString.add(javaHomeName);
+		}
+
 		
 		JDKList.getItems().clear();
 		JDKList.getItems().addAll(JVMsString);
-		
-		File defaultJDK = JREVersions.getDefaultJDKFile();
-		
+
+		JDKList.getItems().sort((o1, o2) -> {
+			return o1.compareTo(o2);
+		});
+
+		//Update label
 		if (defaultJDK != null) {
-			String defaultName = defaultJDK.getName() + " [default]";
-			JDKList.getItems().remove(defaultJDK.getName());
-			JDKList.getItems().add(defaultName);
-			defaultJDKLabel.setText("New projects will use: " + defaultJDK.getName());
+			String labelText = "New projects will use: " + defaultJDK.getName();
+			if(javaHome.isPresent() && javaHome.get().getPath().equals(defaultJDK.getPath())){
+				labelText += " (from JAVA_HOME)";
+			}
+			defaultJDKLabel.setText(labelText);
 		}
 		else {
 			defaultJDKLabel.setText("No default JDK set - projects may fail to compile");
 		}
-
-		Optional<File> javaHome = JREVersions.getJavaHomeFromEnv();
-		if (javaHome.isPresent()) {
-			String javaHomeName = javaHome.get().getName() + " [JAVA_HOME - system]";
-			JDKList.getItems().add(javaHomeName);
-		}
-		
-		JDKList.getItems().sort((o1,o2)->{
-			return o1.compareTo(o2);
-		});
 
 		updateStatusLabel();
 	}
@@ -196,6 +226,27 @@ public class JREVersionsController extends AnchorPane {
 				}
 			}
 		}
+
+		//Check if it's the JAVA_HOME option
+		if (selected.endsWith(" [JAVA_HOME - system]")) {
+			Optional<File> javaHome = JREVersions.getJavaHomeFromEnv();
+			if (javaHome.isPresent()) {
+				selectedFile = javaHome.get();
+			} else {
+				DialogBoxes.errorDialog("JAVA_HOME not found", "",
+						"JAVA_HOME environment variable is not set or invalid.");
+				return;
+			}
+		} else {
+			//It's a manually added JDK
+			for (File JVM : JVMs) {
+				if (JVM.getPath().endsWith(selected)) {
+					selectedFile = JVM;
+					break;
+				}
+			}
+		}
+
 		if (selectedFile != null) {
 			JREVersions.setDefaultJDKFile(selectedFile);
 			updateList();

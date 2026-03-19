@@ -38,6 +38,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	private MenuItem copyItem = new MenuItem("Copy");
 	private MenuItem cutItem  = new MenuItem("Cut");
 	private MenuItem pasteItem = new MenuItem("Paste");
+	private MenuItem refreshItem = new MenuItem("Refresh");
 	
 	/**
 	 * Creates a new {@link TreeContextMenu} that can manipulate a specific {@link
@@ -61,6 +62,30 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	 * @param selectedNode The name of the node in the tree to be inserted dynamically
 	 */
 	private void setContext(String selectedNode) {
+		//Nothing selected, only show "refresh"
+		if (selectedNode == null) {
+			System.out.println("Node is null");
+			createItem.setVisible(false);
+			renameItem.setVisible(false);
+			deleteItem.setVisible(false);
+			copyItem.setVisible(false);
+			cutItem.setVisible(false);
+			pasteItem.setVisible(false);
+			refreshItem.setVisible(true);
+			getItems().remove(importJar);
+			getItems().remove(properties);
+			return;
+		}
+
+		//Something is selected, show all options
+		createItem.setVisible(true);
+		renameItem.setVisible(true);
+		deleteItem.setVisible(true);
+		copyItem.setVisible(true);
+		cutItem.setVisible(true);
+		pasteItem.setVisible(true);
+		refreshItem.setVisible(true);
+
 		String renameItemTitle = String.format("Rename \"%s\"", selectedNode);
 		String deleteItemTitle = String.format("Delete \"%s\"", selectedNode);
 		renameItem.setText(renameItemTitle);
@@ -94,6 +119,9 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		if (selectedItem != null) {
 			setContext(selectedItem.getValue());
 		}
+		else{
+			setContext(null);//Nothing is selected
+		}
 		
 		super.show(node, x, y);
 	}
@@ -105,7 +133,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	private void initContextMenu() {
 		createItem.getItems().add(createClass);
 		createItem.getItems().add(createInterface);
-		getItems().addAll(createItem, renameItem, deleteItem, copyItem, cutItem, pasteItem);
+		getItems().addAll(createItem, renameItem, deleteItem, copyItem, cutItem, pasteItem, refreshItem);
 		createClass.setOnAction(this);
 		createInterface.setOnAction(this);
 		renameItem.setOnAction(this);
@@ -116,7 +144,7 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		copyItem.setOnAction(this);
 		cutItem.setOnAction(this);
 		pasteItem.setOnAction(this);
-
+		refreshItem.setOnAction(this);
 	}
 	
 	/**
@@ -141,6 +169,12 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 	@Override
 	public void handle(ActionEvent actionEvent) {
 		FileTreeItem<String> selectedItem = (FileTreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+
+		if (actionEvent.getSource().equals(refreshItem)) {
+			controller.refreshFileTree((FileTreeItem<String>) treeView.getRoot());
+			return;
+		}
+
 		File selectedFile = selectedItem.getFile();
 		
 		if (actionEvent.getSource().equals(createClass)) {
@@ -169,6 +203,8 @@ public class TreeContextMenu extends ContextMenu implements EventHandler<ActionE
 		} else if (actionEvent.getSource().equals(properties) && selectedItem.getType() == FileTreeItem.PROJECT) {
 			ProjectFile projectFile = new ProjectFile(selectedFile.getPath());
 			controller.showProjectProperties(projectFile);
+		} else if (actionEvent.getSource().equals(refreshItem)) {
+			controller.refreshFileTree((FileTreeItem<String>) treeView.getRoot());
 		} else if (actionEvent.getSource().equals(copyItem)) {
 			clipboard.copy(selectedItem);
 		} else if (actionEvent.getSource().equals(cutItem)) {

@@ -32,9 +32,9 @@ public class CommandBuilder {
 			this.JDK = JDKVerifier.getExecutablePath(JDK, tool);
 		//If default JDK is set
 		} else {
-			String defaultJDK = JREVersions.getDefaultJDKFile().getPath();
-			if (defaultJDK != null) {
-				this.JDK = JDKVerifier.getExecutablePath(defaultJDK, tool);
+			File defaultJDKFile = JREVersions.getDefaultJDKFile();
+			if (defaultJDKFile != null) {
+				this.JDK = JDKVerifier.getExecutablePath(defaultJDKFile.getPath(), tool);
 			}
 		}
 		
