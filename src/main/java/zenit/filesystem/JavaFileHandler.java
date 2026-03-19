@@ -88,8 +88,6 @@ public class JavaFileHandler extends FileHandler {
 				stringBuilder += currentString + "\n";
 				currentString = br.readLine();
 			}
-			System.out.println("[DEBUG] Opening a file at " + file.getAbsolutePath());
-			System.out.println(stringBuilder.toString());
 			return stringBuilder;
 			
 		} catch (IOException ex) {
@@ -113,13 +111,13 @@ public class JavaFileHandler extends FileHandler {
 			throw new IOException(ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Tries to rename the file.
 	 * @param oldFile File to be renamed
 	 * @param newFilename The new filename
 	 * @return The renamed file
-	 * @throws IOException Throws IOException if file already exists with same name or 
+	 * @throws IOException Throws IOException if file already exists with same name or
 	 * if file couldn't be renamed
 	 */
 	protected static File renameFile(File oldFile, String newFilename) throws IOException {

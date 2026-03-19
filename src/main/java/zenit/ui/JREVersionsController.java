@@ -57,8 +57,8 @@ public class JREVersionsController extends AnchorPane {
 			e.printStackTrace();
 		}
 	}
-	
-	private void initialize() {	
+
+	private void initialize() {
 		ifDarkModeChanged(darkmode);
 		
 		updateList();
@@ -138,8 +138,8 @@ public class JREVersionsController extends AnchorPane {
 			if (success) {
 				updateList();
 			} else {
-				DialogBoxes.errorDialog("JDK doesn't contain java or javac", "", "The selected JDK doesn't"
-						+ "contain the needed java or javac executables");
+				DialogBoxes.errorDialog("JDK doesn't contain java or javac", "Invalid JDK selected",
+						"The selected JDK doesn't contain the needed java or javac executables. Please select a valid JDK installation.");
 			}
 		}
 		
@@ -151,8 +151,8 @@ public class JREVersionsController extends AnchorPane {
 		File selectedFile = null;
 		
 		if (selected != null && selected.endsWith(" [default]")) {
-			DialogBoxes.errorDialog("Can't remove default JDK", "", "Can't remove the default"
-					+ "JDK, choose another default JDK to remove this one");
+			DialogBoxes.errorDialog("Can't remove default JDK", "Default JDK cannot be removed",
+					"Can't remove the default JDK. Choose another JDK as default first, then remove this one.");
 			return;
 		}
 		
@@ -202,7 +202,7 @@ public class JREVersionsController extends AnchorPane {
 
 			DialogBoxes.informationDialog("Default JDK updated",
 					"All projects will now use "+ selectedFile.getName()+" by default.\n\n" +
-					"This overrides the JAVA_HOME envionment variable");
+							"This overrides the JAVA_HOME envionment variable");
 		}
 		else{
 			DialogBoxes.errorDialog("No JDK selected", "", "Select a JDK from the list to set as default.");

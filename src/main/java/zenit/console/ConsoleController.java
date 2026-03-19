@@ -34,7 +34,7 @@ import javafx.scene.control.ListView;
 
 /**
  * The controller class for ConsoleArea
- * 
+ *
  * @author siggelabor
  *
  */
@@ -220,7 +220,6 @@ public class ConsoleController implements Initializable {
 	 */
 
 	public void newConsole(ConsoleArea consoleArea) {
-		System.out.println("[DEBUGGING] Creating a new console");
 		consoleAnchorPane = new AnchorPane();
 		consoleArea.setId("consoleArea");
 		consoleAnchorPane.setId("consoleAnchor");
@@ -247,7 +246,6 @@ public class ConsoleController implements Initializable {
 	 */
 	public void newTerminal() {
 
-		System.out.println("[DEBUGGING] creating a new terminal");
 		AnchorPane terminalPane = new AnchorPane();
 		fillAnchor(terminalPane);
 
@@ -259,9 +257,9 @@ public class ConsoleController implements Initializable {
 
 		WebEngine engine = webView.getEngine();
 		engine.load(
-			getClass()
-			.getResource("/xterm/index.html")
-			.toExternalForm()
+				getClass()
+						.getResource("/xterm/index.html")
+						.toExternalForm()
 		);
 
 		terminalPane.getChildren().add(webView);
@@ -298,7 +296,7 @@ public class ConsoleController implements Initializable {
 
 	/**
 	 * sets the anchor of a node to fill parent
-	 * 
+	 *
 	 * @param node to fill to parent anchor
 	 */
 	public void fillAnchor(Node node) {
@@ -374,7 +372,7 @@ public class ConsoleController implements Initializable {
 				newConsole(new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#444"));
 			} else {
 				newConsole(
-					new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
+						new ConsoleArea("Console(" + consoleList.size() + ")", null, "-fx-background-color:#989898"));
 			}
 		});
 
@@ -408,10 +406,10 @@ public class ConsoleController implements Initializable {
 
 		problemsListView = new ListView<>();
 		problemsListView.setStyle(
-			"-fx-background-color: #21252b;" +          // Surface
-			"-fx-control-inner-background: #21252b;" +  // Surface
-			"-fx-font-size: 12px;" +
-			"-fx-text-fill: #abb2bf;"                   // Text
+				"-fx-background-color: #21252b;" +          // Surface
+						"-fx-control-inner-background: #21252b;" +  // Surface
+						"-fx-font-size: 12px;" +
+						"-fx-text-fill: #abb2bf;"                   // Text
 		);
 		Label placeholder = new Label("No problems detected");
 		placeholder.setTextFill(Color.web("#5c6370")); // Subtle

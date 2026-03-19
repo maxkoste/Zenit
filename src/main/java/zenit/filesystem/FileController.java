@@ -110,10 +110,10 @@ public class FileController {
 		if (file == null) {
 			return "";
 		}
-		
+
 		try (
-			var fileReader = new FileReader(file);
-			var bufferedReader = new BufferedReader(fileReader);
+				var fileReader = new FileReader(file);
+				var bufferedReader = new BufferedReader(fileReader);
 		) {
 			StringBuilder builder = new StringBuilder();
 
@@ -270,11 +270,9 @@ public class FileController {
 	 * @return The copied File
 	 */
 	public File importProject(File source) throws IOException {
-		System.out.println("[DEBUGG] Source is located at : " + source.toString());
-		System.out.println("[DEBUGG] Workspace is located at : " + this.workspace.toString());
+		if (source == null) return null;
 
 		if (source.toString().equals(workspace.toString())) {
-			System.out.println("[DEBUGG] Source == to target, Can't import itself");
 			return null;
 		}
 		File target = ProjectHandler.importProject(source, workspace);
@@ -284,8 +282,8 @@ public class FileController {
 	//Library methods
 	
 	/**
-	 * Tries to copy the files in parameter to project's lib-folder (creates one if it doesn't 
-	 * already exist). Adds the build paths to metadata-file. Uses 
+	 * Tries to copy the files in parameter to project's lib-folder (creates one if it doesn't
+	 * already exist). Adds the build paths to metadata-file. Uses
 	 * {@link ProjectHandler#addInternalLibraries(List, ProjectFile)}.
 	 * @param internalLibraryFiles Files to copy and create build paths to. File path should
 	 * exclude project file path. Correct path: {@code lib/library.jar}
@@ -316,7 +314,7 @@ public class FileController {
 	
 	/**
 	 * Tries to add build paths for files in parameter to project's metadata file. Uses
-	 * {@link ProjectHandler#addExternalLibraries(List, ProjectFile)}. 
+	 * {@link ProjectHandler#addExternalLibraries(List, ProjectFile)}.
 	 * @param externalLibraryFiles Files to add, the file paths should contain the full file path
 	 * from root.
 	 * @param projectFile The project to which build paths should be made to. Project must have a
@@ -336,8 +334,8 @@ public class FileController {
 	 * have a metadata-file.
 	 * @return {@code true} if build paths removed successfully, otherwise {@code false}.
 	 */
-	public boolean removeExternalLibraries(List<String> externalLibraryPaths, 
-			ProjectFile projectFile) {
+	public boolean removeExternalLibraries(List<String> externalLibraryPaths,
+										   ProjectFile projectFile) {
 		return ProjectHandler.removeExternalLibraries(externalLibraryPaths, projectFile);
 	}
 	
