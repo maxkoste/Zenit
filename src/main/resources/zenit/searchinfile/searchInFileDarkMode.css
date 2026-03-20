@@ -1,48 +1,40 @@
 #mainAnchorPane {
-	-fx-background-color: #21252b; /* Surface */
-	-fx-padding: 5px;
+	-fx-background-color: #2b2b2b;
+}
+
+.button {
+	-fx-background-color: transparent;
+	-fx-text-fill: #e0e0e0;
+	-fx-font-size: 16px;
+	-fx-cursor: hand;
+}
+
+.button:hover {
+	-fx-background-color: #555555;
+	-fx-background-radius: 4px;
+}
+
+.button:pressed {
+	-fx-background-color: #666666;
 }
 
 #textFieldInputWord {
-	-fx-background-color: #2c313c;  /* Overlay */
-	-fx-text-fill: #abb2bf;         /* Text */
-	-fx-prompt-text-fill: #5c6370; /* Subtle */
-	-fx-highlight-fill: #3e4451;
-	-fx-highlight-text-fill: #ffffff;
-}
-
-#textFieldInputWord:focused {
-	-fx-background-color: #3e4451; /* Selection */
+	-fx-background-color: #3c3c3c;
+	-fx-text-fill: #f0f0f0;
+	-fx-prompt-text-fill: #888888;
+	-fx-border-color: #555555;
+	-fx-border-radius: 3px;
 }
 
 #textFieldReplacementWord {
-	-fx-background-color: #2c313c;  /* Overlay */
-	-fx-text-fill: #abb2bf;         /* Text */
-	-fx-prompt-text-fill: #5c6370; /* Subtle */
-	-fx-highlight-fill: #3e4451;
-	-fx-highlight-text-fill: #ffffff;
+	-fx-background-color: #3c3c3c;
+	-fx-text-fill: #f0f0f0;
+	-fx-prompt-text-fill: #888888;
+	-fx-border-color: #555555;
+	-fx-border-radius: 3px;
 }
 
-#textFieldReplacementWord:focused {
-	-fx-background-color: #3e4451; /* Selection */
-}
-
-#btnUp, #btnDown, #btnEsc {
-	-fx-background-color: #2c313c; /* Overlay */
-	-fx-text-fill: #abb2bf;        /* Text */
-}
-
-#btnUp:hover, #btnDown:hover, #btnEsc:hover {
-	-fx-background-color: #3e4451; /* Selection */
-	-fx-text-fill: #ffffff;
-}
-
-#btnReplaceOne, #btnReplaceAll {
-	-fx-background-color: #61afef; /* Function — blue accent for action buttons */
-	-fx-text-fill: #282c34;        /* Base — dark text on blue */
-}
-
-#btnReplaceOne:hover, #btnReplaceAll:hover {
-	-fx-background-color: #56b6c2; /* Cyan — slightly different on hover */
-	-fx-text-fill: #282c34;
+.label {
+	-fx-text-fill: #cccccc;
+	-fx-font-size: 12px;
 }

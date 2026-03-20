@@ -31,6 +31,9 @@ public class JavaFileHandler extends FileHandler {
 	 * @param file File to be created
 	 * @param content Content to be written to file. May be null.
 	 * @param typeCode If {@code content} is null, writes content from {@link 
+	 * public static final int EMPTY = 99;
+	 * public static final int CLASS = 100;
+	 * public static final int INTERFACE = 101;
 	 * zenit.filesystem.helpers.CodeSnippets CodeSnippets} using this parameter.
 	 * @return Created file if created, otherwise {@link java.io.IOException IOException} is thrown
 	 * @throws IOException Throws IOException if file already exists or it couldn't
@@ -88,8 +91,6 @@ public class JavaFileHandler extends FileHandler {
 				stringBuilder += currentString + "\n";
 				currentString = br.readLine();
 			}
-			System.out.println("[DEBUG] Opening a file at " + file.getAbsolutePath());
-			System.out.println(stringBuilder.toString());
 			return stringBuilder;
 			
 		} catch (IOException ex) {
@@ -113,22 +114,27 @@ public class JavaFileHandler extends FileHandler {
 			throw new IOException(ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Tries to rename the file.
 	 * @param oldFile File to be renamed
 	 * @param newFilename The new filename
 	 * @return The renamed file
-	 * @throws IOException Throws IOException if file already exists with same name or 
+	 * @throws IOException Throws IOException if file already exists with same name or
 	 * if file couldn't be renamed
 	 */
 	protected static File renameFile(File oldFile, String newFilename) throws IOException {
-		
-		File tempFile = FileNameHelpers.getFilepathWithoutTopFile(oldFile); //Removes file name
-		
+
+		File parentDir = oldFile.getParentFile();
+		if(parentDir == null){
+			throw new IOException("Can't find parent directory");
+		}
+
+		if (oldFile.getName().endsWith(".java") && !newFilename.endsWith(".java")) {
+			newFilename = newFilename + ".java";
+		}
 		//Create new file with new name
-		String newFilepath = tempFile.getPath() + "/" + newFilename;
-		File newFile = new File(newFilepath);
+		File newFile = new File(parentDir, newFilename);
 		
 		if (newFile.exists()) {
 			throw new IOException("File already exists");

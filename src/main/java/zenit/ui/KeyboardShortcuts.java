@@ -51,6 +51,9 @@ public final class KeyboardShortcuts {
 //		add(scene, KeyCode.F, KeyCombination.SHORTCUT_DOWN, controller::search);
 		add(scene, KeyCode.SPACE, KeyCombination.CONTROL_DOWN, controller::shortcutsTrigger);
 //		add(scene, KeyCode.DIGIT7, KeyCombination.SHORTCUT_DOWN, controller::commentAndUncomment); 
+		add(scene, KeyCode.F5, KeyCombination.SHIFT_ANY, () -> {
+			controller.refreshFileTree((FileTreeItem<String>) treeView.getSelectionModel().getSelectedItem());
+		});
 		
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent ke) {

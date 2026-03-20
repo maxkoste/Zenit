@@ -39,7 +39,6 @@ public class LspManager {
 	public LspManager() {
 		File serverDir = new File("jdt-language-server");
 		this.serverPath = serverDir.getAbsolutePath();
-		System.out.println("[DEBUG] Server is located at: " + serverPath);
 		this.workspace = new File(System.getProperty("user.home"));
 	}
 
@@ -66,7 +65,6 @@ public class LspManager {
 	}
 
 	public Process startServer() throws IOException {
-		System.out.println("[DEBUG] Starting LSP Server from LSPManager");
 
 		File baseDir = new File(serverPath);
 		File pluginsDir = new File(baseDir, "plugins");
@@ -182,7 +180,6 @@ public class LspManager {
 			String method = obj.has("method")
 					? obj.get("method").getAsString()
 					: "(response id=" + obj.get("id") + ")";
-			System.out.println("[LSP-METHOD] " + method);
 
 			if (!obj.has("method")) {
 				// Svar (response) — kolla om det är initialize-svaret
@@ -246,8 +243,6 @@ public class LspManager {
             {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":%d,"rootUri":"%s","capabilities":{}}}
             """.strip().formatted(ProcessHandle.current().pid(), rootUri);
 
-		System.out.println("[DEBUG] sendInitialize JSON: " + json);
-
 		byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 		String header = "Content-Length: " + bytes.length + "\r\n\r\n";
 
@@ -277,7 +272,6 @@ public class LspManager {
 	}
 
 	public void sendDidChange(String filePath, String content) throws IOException {
-		System.out.println("[DEBUG] sendDidChange() triggered in LspManager");
 		String uri = Path.of(filePath).toUri().toString();
 
 		int version = documentVersion.getOrDefault(uri, 1) + 1;
