@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import zenit.ui.CommentToggler;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -110,8 +111,10 @@ public class ZenCodeArea extends CodeArea {
 		setParagraphGraphicFactory(LineNumberFactory.get(this));
 		multiPlainChanges().successionEnds(Duration.ofMillis(500)).supplyTask(
 			this::computeHighlightingAsync).awaitLatest(multiPlainChanges()).filterMap(t -> {
+
 				if (t.isSuccess()) {
 					return Optional.of(t.get());
+
 				} else {
 					t.getFailure().printStackTrace();
 					return Optional.empty();
@@ -191,4 +194,5 @@ public class ZenCodeArea extends CodeArea {
 		setStyle("-fx-font-family: " + fontFamily + ";" +
 			"-fx-font-size: " + size + ";");
 	}
+
 }
