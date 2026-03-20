@@ -1,16 +1,19 @@
 package zenit.filesystem;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import zenit.exceptions.TypeCodeException;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import zenit.exceptions.TypeCodeException;
 
 /**
  * Unit tests for JavaFileHandler
@@ -21,14 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Saving/overwriting file content
  * - Renaming files
  * - Deleting files
- *
- * Metrics:
- * - WMC: 16 (Low-medium complexity)
- * - OCavg: 1.1 (Low coupling)
- *
- * Related requirements:
- * - FCC100: Can run selected .java file
- * - FUI102: Run button should work with libraries
  */
 public class JavaFileHandlerTest {
 
@@ -56,9 +51,8 @@ public class JavaFileHandlerTest {
         file.delete();
     }
 
-    // -------------------------------------------------------------------------
-    // createFile
-    // -------------------------------------------------------------------------
+
+    //Create file
 
     @Test
     @DisplayName("Should create a .java file with provided content")
@@ -111,9 +105,8 @@ public class JavaFileHandlerTest {
         assertFalse(read.isEmpty(), "File content should not be empty when using a code snippet");
     }
 
-    // -------------------------------------------------------------------------
-    // readFile
-    // -------------------------------------------------------------------------
+
+    //Read file
 
     @Test
     @DisplayName("Should read content from an existing file")
