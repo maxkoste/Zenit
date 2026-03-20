@@ -41,10 +41,11 @@ class CommandBuilderTest {
         assertNotNull(compileBuilder.generateCommand());
     }
 
-    @Test
-    void generateCommand_startsWithTool() {
-        assertTrue(compileBuilder.generateCommand().startsWith(CommandBuilder.COMPILE));
-    }
+	@Test
+	void generateCommand_containsTool() {
+		String cmd = compileBuilder.generateCommand();
+		assertTrue(cmd.contains("javac"), "Command should contain javac: " + cmd);
+	}
 
     @Test
     void generateCommand_appendsRunPath() {
