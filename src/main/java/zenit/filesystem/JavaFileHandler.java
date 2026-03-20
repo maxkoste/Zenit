@@ -31,6 +31,9 @@ public class JavaFileHandler extends FileHandler {
 	 * @param file File to be created
 	 * @param content Content to be written to file. May be null.
 	 * @param typeCode If {@code content} is null, writes content from {@link 
+	 * public static final int EMPTY = 99;
+	 * public static final int CLASS = 100;
+	 * public static final int INTERFACE = 101;
 	 * zenit.filesystem.helpers.CodeSnippets CodeSnippets} using this parameter.
 	 * @return Created file if created, otherwise {@link java.io.IOException IOException} is thrown
 	 * @throws IOException Throws IOException if file already exists or it couldn't

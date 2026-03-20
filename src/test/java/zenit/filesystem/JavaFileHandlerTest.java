@@ -104,7 +104,7 @@ public class JavaFileHandlerTest {
     @Test
     @DisplayName("Should create file using code snippet when content is null")
     public void testCreateFileWithNullContentUsesSnippet() throws IOException, TypeCodeException {
-        File created = JavaFileHandler.createFile(new File(tempDir, "SnippetClass.java"), null, 0);
+        File created = JavaFileHandler.createFile(new File(tempDir, "SnippetClass.java"), null, 100);
 
         assertTrue(created.exists(), "File should be created even when content is null");
         String read = new String(Files.readAllBytes(created.toPath()));
