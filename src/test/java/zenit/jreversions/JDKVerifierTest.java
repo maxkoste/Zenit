@@ -20,14 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Valid and invalid JDK directory structures
  * - OS-specific executable path construction
  * - Edge cases for null and empty JDK path inputs
- *
- * Metrics:
- * - WMC: 10 (Low complexity)
- * - OCavg: 1.0 (Low coupling)
- *
- * Related requirements:
- * - FUF200: Program uses standard JDK
  */
+
 public class JDKVerifierTest {
 
     private File tempDir;
@@ -52,9 +46,8 @@ public class JDKVerifierTest {
         file.delete();
     }
 
-    // -------------------------------------------------------------------------
-    // validJDK
-    // -------------------------------------------------------------------------
+
+    //valid JDK
 
     @Test
     @DisplayName("Should return false for null JDK")
@@ -90,7 +83,6 @@ public class JDKVerifierTest {
     @Test
     @DisplayName("Should return false when only java executable is present")
     public void testValidJDKReturnsFalseWhenOnlyJavaPresent() throws IOException {
-        // Create a structure with only java, not javac
         String os = System.getProperty("os.name");
         File binDir;
 
@@ -109,7 +101,6 @@ public class JDKVerifierTest {
     @Test
     @DisplayName("Should return true when both java and javac executables are present")
     public void testValidJDKReturnsTrueForValidStructure() throws IOException {
-        // Build a minimal valid JDK directory structure for the current OS
         String os = System.getProperty("os.name");
         File binDir;
 
@@ -130,9 +121,8 @@ public class JDKVerifierTest {
                 "validJDK should return true when both java and javac are present");
     }
 
-    // -------------------------------------------------------------------------
-    // getExecutablePath
-    // -------------------------------------------------------------------------
+
+    //get executable path
 
     @Test
     @DisplayName("Should return null for null JDK path")

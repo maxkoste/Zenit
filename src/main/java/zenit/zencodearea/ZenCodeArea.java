@@ -91,7 +91,6 @@ public class ZenCodeArea extends CodeArea {
 
 	public ZenCodeArea(int textSize, String font, LspManager lspManager, File file) {
 		this.currentFile= file;
-		System.out.println("[DEBUG] ZenCodeArea: current file " + this.currentFile.getAbsolutePath());
 		setParagraphGraphicFactory(LineNumberFactory.get(this));
 
 		multiPlainChanges().successionEnds(

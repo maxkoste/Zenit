@@ -1,15 +1,18 @@
 package zenit.filesystem;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 
 /**
  * Unit tests for FolderHandler
@@ -18,14 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Creating single and nested folders
  * - Renaming folders (including reserved name protection)
  * - Deleting folders (including recursive deletion of nested content)
- *
- * Metrics:
- * - WMC: 12 (Low complexity)
- * - OCavg: 1.0 (Low coupling)
- *
- * Related requirements:
- * - FUI102: Run button should work with libraries
- * - FCC100: Can run selected .java file
  */
 public class FolderHandlerTest {
 
@@ -53,9 +48,8 @@ public class FolderHandlerTest {
         file.delete();
     }
 
-    // -------------------------------------------------------------------------
-    // createNewFolder
-    // -------------------------------------------------------------------------
+
+    //Create new folder
 
     @Test
     @DisplayName("Should create a single new folder")
@@ -91,9 +85,8 @@ public class FolderHandlerTest {
                 "Should throw IOException when folder cannot be created");
     }
 
-    // -------------------------------------------------------------------------
-    // renameFolder
-    // -------------------------------------------------------------------------
+
+    //Rename folder
 
     @Test
     @DisplayName("Should rename a folder to a new name")
@@ -153,9 +146,8 @@ public class FolderHandlerTest {
                 "File inside the original folder should exist inside the renamed folder");
     }
 
-    // -------------------------------------------------------------------------
-    // deleteFolder
-    // -------------------------------------------------------------------------
+
+    //Delete folder
 
     @Test
     @DisplayName("Should delete an empty folder")
