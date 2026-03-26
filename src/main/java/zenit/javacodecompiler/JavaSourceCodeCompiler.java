@@ -24,9 +24,9 @@ import zenit.ui.MainController;
  * Java Virtual Machine needs to be installed on the machine for the compiler to work. 
  * Also the correct compiler and java_home paths must be configured.
  * 
- * TODO Change JRE version before compiling/running
+ *
  * 
- * @author Sigge Labor, Alexander Libot
+ * @author Sigge Labor, Alexander Libot, Rasmus Axelsson
  *
  */
 public class JavaSourceCodeCompiler {

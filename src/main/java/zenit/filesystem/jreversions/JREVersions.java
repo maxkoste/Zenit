@@ -14,8 +14,18 @@ import java.util.Optional;
 
 import zenit.Zenit;
 
+/**
+ * Manages the persistence and retrieval of JDK installations used by the application.
+ * JDK entries are serialized to res/JDK/JDK.dat, and a separate default
+ * JDK selection is stored in res/JDK/DefaultJDK.dat.
+ * @author Alexander Libot, Rasmus Axelsson, Max Koste
+ */
 public class JREVersions {
 
+	/**
+	 * Scans the OS-specific JVM directory for installed JDKs and writes them
+	 * to the data file. Creates the data file if it does not already exist.
+	 */
 	public static void createNew() {
 		try {
 			File file = new File("res/JDK/JDK.dat");

@@ -222,6 +222,10 @@ public class MainController extends VBox {
 		return loader;
 	}
 
+	/**
+	 * Checks whether a valid JDK is configured and, if not, prompts the user
+	 * to open the JRE Versions settings dialog
+	 */
 	private void checkJDKConfiguration() {
 		String effectiveJDK = zenit.filesystem.jreversions.JREVersions.getEffectiveJDKPath(null);
 
@@ -256,11 +260,20 @@ public class MainController extends VBox {
 	public void setFileController(FileController fileController) {
 		this.fileController = fileController;
 	}
-	
+
+	/**
+	 * Returns the currently selected item in the file tree view.
+	 *
+	 * @return the selected {@link FileTreeItem}, or null if nothing is selected
+	 */
 	public FileTreeItem<String> getSelectedFileTreeItem() {
 		return (FileTreeItem<String>) treeView.getSelectionModel().getSelectedItem();
 	}
-	
+
+	/**
+	 * Deletes the currently selected file from both the file system and the tree view.
+	 * Does nothing if no item is selected.
+	 */
 	public void deleteFileFromTreeView() {
 		var selectedItem = getSelectedFileTreeItem();
 		
